@@ -9,3 +9,4 @@ def test_loader():
     assert isinstance(content, list)
     assert all(isinstance(page, CPMIDocPage) for page in content)
     assert len(content) > 0
+    print(content)
