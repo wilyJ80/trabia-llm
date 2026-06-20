@@ -1,0 +1,145 @@
+# Carregamento de documentos
+
+- Inicialmente, foi considerado usar a biblioteca `pymupdf4llm` por ser uma opção fácil e leve de OCR, sendo melhor que métodos tradicionais para PDFs potencialmente com seções escaneadas ou em baixa qualidade. Optamos por usar `pymupdf` puro por problemas no uso do `pymupdf4llm`
+
+```py
+[vic@archlinux trabia-llm]$ uv run pytest
+========================================== test session starts ===========================================
+platform linux -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/vic/src/py/uneb/trabia-llm
+configfile: pyproject.toml
+plugins: cov-7.1.0
+collected 1 item                                                                                         
+
+test/ingest/test_loader.py F                                                                       [100%]
+
+================================================ FAILURES ================================================
+______________________________________________ test_loader _______________________________________________
+
+    def test_loader():
+        filepath: str = 'data/relatorio-cpmi-versao-consolidada_231017_100010.pdf'
+        loader: Loader = Loader()
+>       content: str = loader.load(filepath)
+                       ^^^^^^^^^^^^^^^^^^^^^
+
+test/ingest/test_loader.py:6: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/ingest/loader.py:9: in load
+    return pymupdf4llm.to_markdown(
+.venv/lib/python3.12/site-packages/pymupdf4llm/__init__.py:191: in to_markdown
+    return _layout_to_markdown(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/pymupdf4llm/__init__.py:80: in _layout_to_markdown
+    parsed_doc = pymupdf4llm.helpers.document_layout.parse_document(
+.venv/lib/python3.12/site-packages/pymupdf4llm/helpers/document_layout.py:1083: in parse_document
+    ocr_function(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+page = page 104 of <data/relatorio-cpmi-versao-consolidada_231017_100010.pdf, doc# 1>, dpi = 300
+pixmap = Pixmap(DeviceRGB, (0, 0, 2481, 3508), 0), language = 'eng', keep_ocr_text = False
+
+    def exec_ocr(page, dpi=300, pixmap=None, language="eng", keep_ocr_text=False):
+        """Perform OCR on the given page and insert recognized text.
+    
+        If a Pixmap is provided, the DPI parameter is ignored. Otherwise, an RGB
+        Pixmap is created from the page at the specified DPI.
+        The DPI value is also used if extractable text is present.
+        """
+    
+        def adjust_width(text, fontsize, rect):
+            """Compute matrix to adjust text width.
+    
+            We must ensure that inserted text has the width of the rectangle.
+            The computed matrix will do this scaling.
+            """
+            tl = FONT.text_length(text, fontsize)
+            if tl > 0:
+                mat = pymupdf.Matrix(rect.width / tl, 1)
+            else:
+                mat = pymupdf.Matrix(1, 1)
+            return mat
+    
+        text_blocks = page.get_text("dict", flags=pymupdf.TEXT_ACCURATE_BBOXES)["blocks"]
+        # get bboxes with legible significant text on page
+        spans = []  # spans with legible text
+        fffd_spans = []  # spans containing U+FFFD characters.
+        for b in text_blocks:
+            for l in b["lines"]:
+                for s in l["spans"]:
+                    if ocr_text(s):
+                        if keep_ocr_text:
+                            spans.append(s["bbox"])
+                        else:
+                            fffd_spans.append(s["bbox"])
+                        continue
+                    if not REPLACEMENT_UNICODE in s["text"]:
+                        spans.append(s["bbox"])
+                    else:
+                        fffd_spans.append(s["bbox"])
+    
+        if spans:
+            temp_pdf = pymupdf.open()  # create a temporary PDF in memory
+            # insert the page
+            temp_pdf.insert_pdf(
+                page.parent,
+                from_page=page.number,
+                to_page=page.number,
+            )
+            temp_page = temp_pdf[0]
+            for sbbox in spans:
+                # add redaction annotation for each text span
+                temp_page.add_redact_annot(sbbox)
+    
+            # remove text
+            temp_page.apply_redactions(
+                images=pymupdf.PDF_REDACT_IMAGE_NONE,
+                graphics=pymupdf.PDF_REDACT_LINE_ART_NONE,
+                text=pymupdf.PDF_REDACT_TEXT_REMOVE,
+            )
+            # make pixmap from the page where text is removed
+            pixmap = temp_page.get_pixmap(dpi=dpi)
+        # make pixmap if not provided
+        if pixmap is None:
+            pixmap = page.get_pixmap(dpi=dpi)
+    
+        # make numpy array from pixmap
+        img = np.frombuffer(pixmap.samples, dtype=np.uint8).reshape(
+            pixmap.height, pixmap.width, pixmap.n
+        )
+    
+        # for converting box coordinates to page coordinates
+        matrix = pymupdf.Rect(pixmap.irect).torect(page.rect)
+    
+        # Execute RapidOCR, passing any additional keyword arguments.
+        # t0 = time.perf_counter()
+        result = ENGINE.__call__(img, **KWARGS)
+        # t1 = time.perf_counter()
+        # print(f"OCR execution time: {t1-t0:.2f} seconds")
+    
+        if fffd_spans:
+            # FFFD spans should have been recognized by OCR.
+            # We therefore remove them here.
+            for sbbox in fffd_spans:
+                page.add_redact_annot(sbbox)
+            page.apply_redactions(
+                images=pymupdf.PDF_REDACT_IMAGE_NONE,
+                graphics=pymupdf.PDF_REDACT_LINE_ART_NONE,
+                text=pymupdf.PDF_REDACT_TEXT_REMOVE,
+            )
+        # insert the font into the page if not already present
+        page.insert_font(fontname=FONTNAME, fontbuffer=FONT.buffer)
+    
+        # Insert recognized text
+        lines = result[0]
+        confs = result[1]
+>       for line in lines:
+                    ^^^^^
+E       TypeError: 'NoneType' object is not iterable
+
+.venv/lib/python3.12/site-packages/pymupdf4llm/ocr/rapidocr_api.py:137: TypeError
+======================================== short test summary info =========================================
+FAILED test/ingest/test_loader.py::test_loader - TypeError: 'NoneType' object is not iterable
+=========================================== 1 failed in 55.54s ===========================================
+[vic@archlinux trabia-llm]$ 
+
+```
