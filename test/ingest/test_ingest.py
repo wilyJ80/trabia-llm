@@ -18,6 +18,7 @@ def test_ingest():
     assert isinstance(chunks, list)
     assert all(isinstance(page, CPMIDocPage) for page in chunks)
     assert len(chunks) > 0
+    print(len(chunks))
 
     embedder: Embedder = Embedder()
     embedded_chunks: list[CPMIDocPage] = embedder.embed(chunks)
@@ -25,4 +26,3 @@ def test_ingest():
     assert isinstance(embedded_chunks, list)
     assert all(isinstance(page, CPMIDocPage) for page in embedded_chunks)
     assert len(embedded_chunks) > 0
-    print(embedded_chunks)
