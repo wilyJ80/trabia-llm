@@ -148,7 +148,7 @@ FAILED test/ingest/test_loader.py::test_loader - TypeError: 'NoneType' object is
 
 - Inicialmente foram considerados os *embeddings* estáticos do `spaCy`. Dado que *embeddings* estáticos comprimem o campo semântico dos *chunks*, causando perda de informação, foi escolhida provisoriamente a biblioteca `fastembed` para *embeddings* locais. A razão para usar um modelo local de *embeddings* nesse trabalho foi não ter que se preocupar com a implementação de políticas de *rate limiting* e afins para os limites de solicitações por minuto ou diários em modelos de API que a equipe vem enfrentando para grandes documentos. Um experimento interessante que motivou também a escolha foi testar o desempenho do `onnxruntime`, alternativa ao `pytorch` para inferência local, e analisar se ele viabiliza ou não inferência leve o suficiente para ambientes altamente restritos em memória (como *pipelines* CI/CD ou SBCs)
 
-- No entanto, o resultado consumiu **800 MB** de memória, resultado não muito longe do esperado devido ao peso computacional da arquitetura `transformers`. Logo, foram escolhidos os embeddings estáticos do `spaCy`, já que esse requisito de memória é inviável para as restrições atuais.
+- No entanto, o resultado consumiu **800 MB** de memória, resultado não muito longe do esperado devido ao peso computacional da arquitetura `transformers`. Logo, foram escolhidos os embeddings estáticos do `spaCy`, já que esse requisito de memória é inviável para as restrições atuais. Estaremos apostando nos embeddings `word2vec` fornecidos pelas redes neurais convolucionais do `spaCy`.
 
 ```py
 =========================== 1 passed, 1 warning in 43.58s ===========================
