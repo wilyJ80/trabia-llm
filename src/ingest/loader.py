@@ -8,7 +8,8 @@ class Loader:
         return [
             CPMIDocPage(
                 content=page.get_text('text'),
-                page=page.number
+                page=page.number,
+                embeddings=[]
             )
             for page in doc
         ]

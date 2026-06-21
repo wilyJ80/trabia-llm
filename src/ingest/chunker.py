@@ -13,7 +13,8 @@ class Chunker:
             paged_chunks = [
                 CPMIDocPage(
                     content=split,
-                    page=page.page
+                    page=page.page,
+                    embeddings=[]
                 )
                 for split in splits
             ]
