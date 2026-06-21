@@ -146,4 +146,33 @@ FAILED test/ingest/test_loader.py::test_loader - TypeError: 'NoneType' object is
 
 # Embeddings
 
-- Inicialmente foram considerados os *embeddings* estáticos do `spaCy`. Dado que *embeddings* estáticos comprimem o campo semântico dos *chunks*, causando perda de informação, foi escolhida a biblioteca `fastembed` para *embeddings* locais. A razão para usar um modelo local de *embeddings* nesse trabalho foi não ter que se preocupar com a implementação de políticas de *rate limiting* e afins para os limites de solicitações por minuto ou diários em modelos de API. Um experimento interessante que motivou também a escolha foi testar o desempenho do `onnxruntime`, alternativa ao `pytorch` para inferência local, e analisar se ele viabiliza ou não inferência leve o suficiente para ambientes altamente restritos em memória (como *pipelines* CI/CD ou SBCs)
+- Inicialmente foram considerados os *embeddings* estáticos do `spaCy`. Dado que *embeddings* estáticos comprimem o campo semântico dos *chunks*, causando perda de informação, foi escolhida provisoriamente a biblioteca `fastembed` para *embeddings* locais. A razão para usar um modelo local de *embeddings* nesse trabalho foi não ter que se preocupar com a implementação de políticas de *rate limiting* e afins para os limites de solicitações por minuto ou diários em modelos de API que a equipe vem enfrentando para grandes documentos. Um experimento interessante que motivou também a escolha foi testar o desempenho do `onnxruntime`, alternativa ao `pytorch` para inferência local, e analisar se ele viabiliza ou não inferência leve o suficiente para ambientes altamente restritos em memória (como *pipelines* CI/CD ou SBCs)
+
+- No entanto, o resultado consumiu **800 MB** de memória, resultado não muito longe do esperado devido ao peso computacional da arquitetura `transformers`. Logo, foram escolhidos os embeddings estáticos do `spaCy`, já que esse requisito de memória é inviável para as restrições atuais.
+
+```py
+=========================== 1 passed, 1 warning in 43.58s ===========================
+        Command being timed: "uv run pytest"
+        User time (seconds): 629.41
+        System time (seconds): 4.91
+        Percent of CPU this job got: 1423%
+        Elapsed (wall clock) time (h:mm:ss or m:ss): 0:44.55
+        Average shared text size (kbytes): 0
+        Average unshared data size (kbytes): 0
+        Average stack size (kbytes): 0
+        Average total size (kbytes): 0
+        Maximum resident set size (kbytes): 829152
+        Average resident set size (kbytes): 0
+        Major (requiring I/O) page faults: 0
+        Minor (reclaiming a frame) page faults: 135497
+        Voluntary context switches: 127010
+        Involuntary context switches: 13278
+        Swaps: 0
+        File system inputs: 0
+        File system outputs: 8
+        Socket messages sent: 0
+        Socket messages received: 0
+        Signals delivered: 0
+        Page size (bytes): 4096
+        Exit status: 0
+```

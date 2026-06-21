@@ -1,5 +1,6 @@
 from ingest.loader import Loader
 from ingest.chunker import Chunker
+from ingest.embedder import Embedder
 from ingest.models import CPMIDocPage
 
 def test_ingest():
@@ -17,4 +18,11 @@ def test_ingest():
     assert isinstance(chunks, list)
     assert all(isinstance(page, CPMIDocPage) for page in chunks)
     assert len(chunks) > 0
-    print(chunks)
+
+    embedder: Embedder = Embedder()
+    embedded_chunks: list[CPMIDocPage] = embedder.embed(chunks)
+    assert embedded_chunks is not None
+    assert isinstance(embedded_chunks, list)
+    assert all(isinstance(page, CPMIDocPage) for page in embedded_chunks)
+    assert len(embedded_chunks) > 0
+    print(embedded_chunks)
