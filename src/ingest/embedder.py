@@ -1,23 +1,22 @@
-from fastembed import TextEmbedding
+import spacy
 from ingest.models import CPMIDocPage
 
 class Embedder:
     def __init__(self):
         try:
-            self.model = TextEmbedding(model_name='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
+            self.nlp = spacy.load('pt_core_news_lg')
         except Exception as e:
             print(f'[ERROR] Could not load embedding model. {e}')
 
     def embed(self, chunks: list[CPMIDocPage]) -> list[CPMIDocPage]:
         embedded_chunks: list[CPMIDocPage] = []
         for chunk in chunks:
-            embeddings_generator = self.model.embed(chunk.content)
-            embedding = next(iter(embeddings_generator))
+            embeddings = self.nlp(chunk.content)
             embedded_chunks.append(
                 CPMIDocPage(
                     content=chunk.content,
                     page=chunk.page,
-                    embeddings=embedding.tolist()
+                    embeddings=embeddings.vector.tolist()
                 )
             )
 

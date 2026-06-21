@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastembed>=0.8.0",
+    "click>=8.4.1",
     "langchain-text-splitters>=1.1.2",
     "numpy>=2.4.6",
     "pydantic>=2.13.4",
@@ -13,4 +13,5 @@ dependencies = [
     "pymupdf>=1.27.2.3",
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
+    "spacy>=3.8.14",
 ]
