@@ -1,0 +1,19 @@
+x-dev-variables: &dev
+  environment:
+    POSTGRES_USER: ${POSTGRES_USER:-postgres}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mysecretpassword}
+    POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    PG_HOST: ${PG_HOST:-localhost}
+    PG_PORT: ${PG_PORT:-5432}
+
+services:
+  trabia-llm-postgresql-dev:
+    image: pgvector/pgvector:pg17
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+    - ${PG_PORT:-5432}:5432
+    <<: *dev
