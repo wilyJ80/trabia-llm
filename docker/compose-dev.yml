@@ -17,3 +17,20 @@ services:
     ports:
     - ${PG_PORT:-5432}:5432
     <<: *dev
+    networks:
+      - trabia-llm-network
+
+  trabia-llm-migrations-dev:
+    build:
+      context: ..
+      dockerfile: ./Dockerfile
+    <<: *dev
+    environment:
+      - PG_HOST=trabia-llm-postgresql-dev
+      - PG:PORT=5432
+    command: ["uv", "run", "src/migrate.py"]
+    networks:
+      - trabia-llm-network
+
+networks:
+  trabia-llm-network:

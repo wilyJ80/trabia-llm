@@ -27,6 +27,6 @@ echo "[INFO] Starting database..."
 docker compose -f ./docker/compose-dev.yml up --wait trabia-llm-postgresql-dev
 
 echo "[INFO] Running migrations..."
-# docker compose run --rm tees-migrations
+docker compose -f ./docker/compose-dev.yml run --rm trabia-llm-migrations-dev
 
 echo "[INFO] Service OK"
