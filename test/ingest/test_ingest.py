@@ -12,6 +12,9 @@ def test_ingest():
     assert all(isinstance(page, CPMIDocPage) for page in content)
     assert len(content) > 0
 
+    # INFO: get only part of the content to speed up tests
+    content = content[:15]
+
     chunker: Chunker = Chunker()
     chunks: list[CPMIDocPage] = chunker.chunk(content)
     assert chunks is not None
