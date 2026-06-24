@@ -1,5 +1,5 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from ingest.models import CPMIDocPage
+from domain.cpmidoc.models import CPMIDocPage
 
 class Chunker:
     def chunk(self, pages: list[CPMIDocPage]) -> list[CPMIDocPage]:

@@ -1,6 +1,6 @@
 import pymupdf
 from pymupdf import Document
-from ingest.models import CPMIDocPage
+from domain.cpmidoc.models import CPMIDocPage
 
 class Loader:
     def load(self, filepath: str) -> list[CPMIDocPage]:

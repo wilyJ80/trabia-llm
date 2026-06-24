@@ -1,7 +1,7 @@
 from ingest.loader import Loader
 from ingest.chunker import Chunker
 from ingest.embedder import Embedder
-from ingest.models import CPMIDocPage
+from domain.cpmidoc.models import CPMIDocPage
 
 def test_ingest():
     filepath: str = 'data/relatorio-cpmi-versao-consolidada_231017_100010.pdf'

@@ -1,5 +1,5 @@
 import spacy
-from ingest.models import CPMIDocPage
+from domain.cpmidoc.models import CPMIDocPage
 
 class Embedder:
     def __init__(self):
