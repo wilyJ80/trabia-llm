@@ -4,6 +4,10 @@
 
 - Add info to `.env` based on `env.example`
 
+## Locally
+
+- Ingest with `uv run src/run_ingestion.py`
+
 # Development
 
 - `uv` installed
