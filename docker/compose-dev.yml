@@ -27,7 +27,7 @@ services:
     <<: *dev
     environment:
       - PG_HOST=trabia-llm-postgresql-dev
-      - PG:PORT=5432
+      - PG_PORT=5432
     command: ["uv", "run", "src/migrate.py"]
     networks:
       - trabia-llm-network
