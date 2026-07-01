@@ -1,5 +1,6 @@
 import spacy
 from domain.cpmidoc.models import CPMIDocPage
+from tqdm import tqdm
 
 class Embedder:
     def __init__(self):
@@ -10,7 +11,7 @@ class Embedder:
 
     def embed(self, chunks: list[CPMIDocPage]) -> list[CPMIDocPage]:
         embedded_chunks: list[CPMIDocPage] = []
-        for chunk in chunks:
+        for chunk in tqdm(chunks):
             embeddings = self.nlp(chunk.content)
             embedded_chunks.append(
                 CPMIDocPage(

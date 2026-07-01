@@ -1,5 +1,6 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from domain.cpmidoc.models import CPMIDocPage
+from tqdm import tqdm
 
 class Chunker:
     def chunk(self, pages: list[CPMIDocPage]) -> list[CPMIDocPage]:
@@ -8,7 +9,7 @@ class Chunker:
             chunk_overlap=200
         )
         chunks: list[CPMIDocPage] = []
-        for page in pages:
+        for page in tqdm(pages):
             splits: list[str] = splitter.split_text(page.content)
             paged_chunks = [
                 CPMIDocPage(

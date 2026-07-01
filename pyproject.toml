@@ -15,6 +15,7 @@ dependencies = [
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
     "spacy>=3.8.14",
+    "tqdm>=4.68.3",
     "ty>=0.0.52",
     "yoyo-migrations>=9.0.0",
 ]

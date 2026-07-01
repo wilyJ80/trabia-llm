@@ -1351,6 +1351,7 @@ dependencies = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "spacy" },
+    { name = "tqdm" },
     { name = "ty" },
     { name = "yoyo-migrations" },
 ]
@@ -1367,6 +1368,7 @@ requires-dist = [
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "pytest-cov", specifier = ">=7.1.0" },
     { name = "spacy", specifier = ">=3.8.14" },
+    { name = "tqdm", specifier = ">=4.68.3" },
     { name = "ty", specifier = ">=0.0.52" },
     { name = "yoyo-migrations", specifier = ">=9.0.0" },
 ]
