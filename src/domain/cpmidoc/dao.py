@@ -18,8 +18,31 @@ class CPMIDocDao:
                 cur.execute(sql)
             conn.commit()
 
-    def get_count(self):
-        pass
+    def select_count(self) -> int:
+        """
+        For test assertions
+        """
+        with self.pool.connection() as conn:
+            with conn.cursor() as cur:
+                sql = """
+                SELECT COUNT(*)
+                FROM chunk
+                """
+                row = cur.execute(sql).fetchone()
+                return row[0] if row else 0
 
-    def insert_doc(self, doc: list[CPMIDocPage]):
-        pass
+    def insert_doc(self, doc: CPMIDocPage) -> int:
+        with self.pool.connection() as conn:
+            with conn.cursor() as cur:
+                sql = """
+                INSERT INTO chunk (
+                    snippet, embedding, page
+                )
+                VALUES (
+                %s, %s, %s
+                )
+                """
+                cur.execute(
+                    sql, (doc.content, doc.embeddings, doc.page,)
+                )
+                return cur.rowcount

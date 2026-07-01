@@ -2,6 +2,9 @@ from ingest.loader import Loader
 from ingest.chunker import Chunker
 from ingest.embedder import Embedder
 from domain.cpmidoc.models import CPMIDocPage
+from domain.cpmidoc.dao import CPMIDocDao
+from psycopg_pool import ConnectionPool
+from settings import Settings
 
 def test_ingest():
     # INFO: Load data source
@@ -33,6 +36,17 @@ def test_ingest():
     assert all(isinstance(page, CPMIDocPage) for page in embedded_chunks)
     assert len(embedded_chunks) > 0
 
-    # INFO: store content
+    # INFO: db setup
+    settings: Settings = Settings()
+    pool: ConnectionPool = ConnectionPool(
+        conninfo=settings.DAO_URL(), min_size=1, max_size=10, open=False
+    )
+    pool.open()
+    dao: CPMIDocDao = CPMIDocDao(pool)
+    assert dao.select_count() == 0
 
-    # INFO: get content back and check if matches
+    # INFO: store content
+    for chunk in embedded_chunks:
+        dao.insert_doc(chunk)
+
+    assert dao.select_count() > 0
