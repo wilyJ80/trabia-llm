@@ -1,7 +1,7 @@
 from ingest.loader import Loader
 from ingest.chunker import Chunker
 from ingest.embedder import Embedder
-from domain.cpmidoc.models import CPMIDocPage
+from domain.cpmidoc.models import CPMIDocPage, CPMIDocResult
 from domain.cpmidoc.dao import CPMIDocDao
 from psycopg_pool import ConnectionPool
 from settings import Settings
@@ -50,3 +50,10 @@ def test_ingest():
         dao.insert_doc(chunk)
 
     assert dao.select_count() > 0
+
+    # INFO: check if query works
+    embedded_query: list[int | float] = embedder.embed_query('Congresso')
+    result: list[CPMIDocResult] = dao.select_similarity(embedded_query, settings.K)
+    assert result is not None
+    assert len(result) > 0
+    print(result)

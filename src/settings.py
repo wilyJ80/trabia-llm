@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     PG_HOST: str = Field(...)
     PG_PORT: str = Field(...)
 
+    K: int = Field(...)
 
     def MIGRATION_URL(self) -> str:
         return f"postgresql+psycopg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.PG_HOST}:{self.PG_PORT}/{self.POSTGRES_DB}"

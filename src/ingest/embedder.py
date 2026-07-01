@@ -22,3 +22,6 @@ class Embedder:
             )
 
         return embedded_chunks
+
+    def embed_query(self, query: str) -> list[int | float]:
+        return self.nlp(query).vector.tolist()

@@ -1,5 +1,6 @@
+from psycopg.rows import class_row
 import psycopg_pool
-from domain.cpmidoc.models import CPMIDocPage
+from domain.cpmidoc.models import CPMIDocPage, CPMIDocResult
 from psycopg_pool import ConnectionPool
 
 class CPMIDocDao:
@@ -46,3 +47,16 @@ class CPMIDocDao:
                     sql, (doc.content, doc.embeddings, doc.page,)
                 )
                 return cur.rowcount
+
+    def select_similarity(self, query_embedding: list[float], limit: int) -> list[CPMIDocResult]:
+        with self.pool.connection() as conn:
+            with conn.cursor(row_factory=class_row(CPMIDocResult)) as cur:
+                sql = """
+                SELECT snippet, page, embedding <=> %s::halfvec AS distance
+                FROM chunk
+                ORDER BY distance
+                LIMIT %s;
+                """
+                cur.execute(sql, (query_embedding, limit,))
+                docs: list[CPMIDocResult] = cur.fetchall()
+                return docs
