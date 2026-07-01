@@ -10,6 +10,6 @@ class LLM:
             api_key=api_key, model=model
         ).with_structured_output(schema=AIAnswer)
 
-    def ask(self, query: str) -> AIAnswer:
-        response: AIAnswer = self.model.invoke(query)
+    def ask(self, prompt: str) -> AIAnswer:
+        response: AIAnswer = self.model.invoke(prompt)
         return response
