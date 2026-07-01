@@ -5,8 +5,12 @@ from domain.cpmidoc.models import CPMIDocPage, CPMIDocResult
 from domain.cpmidoc.dao import CPMIDocDao
 from psycopg_pool import ConnectionPool
 from settings import Settings
+from ai.llm import LLM
+from ai.models import AIAnswer
+from domain.cpmidoc.service import CPMIDocService
+from psycopg_pool import ConnectionPool
 
-def test_ingest():
+def test_ai_integration():
     # INFO: Load data source
     filepath: str = 'data/relatorio-cpmi-versao-consolidada_231017_100010.pdf'
     loader: Loader = Loader()
@@ -17,7 +21,7 @@ def test_ingest():
     assert len(content) > 0
 
     # INFO: get only part of the content to speed up tests
-    content = content[:5]
+    content = content[:15]
 
     # INFO: chop chunks
     chunker: Chunker = Chunker()
@@ -26,7 +30,6 @@ def test_ingest():
     assert isinstance(chunks, list)
     assert all(isinstance(page, CPMIDocPage) for page in chunks)
     assert len(chunks) > 0
-    print(len(chunks))
 
     # INFO: generate embeddings
     embedder: Embedder = Embedder()
@@ -56,4 +59,32 @@ def test_ingest():
     result: list[CPMIDocResult] = dao.select_similarity(embedded_query, settings.K)
     assert result is not None
     assert len(result) > 0
-    print(result)
+
+    # INFO: AI answers with structured output and grounded info
+    settings: Settings = Settings()
+    llm: LLM = LLM(
+        settings.GOOGLE_API_KEY, settings.CHAT_MODEL
+    )
+
+    # INFO: Manual question step (vector search won't be a tool)
+    service: CPMIDocService = CPMIDocService(pool)
+    query: str = 'Congresso'
+    search_results: list[str] = service.get_from_knowledge_base(query, 5)
+    prompt: str = f"""
+    <system>
+    Responda o usuário com base no contexto retornado.
+    </system>
+    <context>
+    {"\n\n".join(search_results)}
+    </context>
+    <user>
+    Do que se trata a base de conhecimento apresentada?
+    </user>
+    """
+
+    response: AIAnswer = llm.ask(prompt)
+    assert response is not None
+    assert len(response.content) > 0
+    assert isinstance(response, AIAnswer)
+
+    print(response) # INFO: for debugging
