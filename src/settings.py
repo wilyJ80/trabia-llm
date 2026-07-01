@@ -11,6 +11,9 @@ class Settings(BaseSettings):
 
     K: int = Field(...)
 
+    GOOGLE_API_KEY: str = Field(...)
+    CHAT_MODEL: str = Field(...)
+
     def MIGRATION_URL(self) -> str:
         return f"postgresql+psycopg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.PG_HOST}:{self.PG_PORT}/{self.POSTGRES_DB}"
 
