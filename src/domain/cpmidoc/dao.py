@@ -1,3 +1,4 @@
+import psycopg_pool
 from domain.cpmidoc.models import CPMIDocPage
 from psycopg_pool import ConnectionPool
 
@@ -9,7 +10,13 @@ class CPMIDocDao:
         """
         For setup/teardown
         """
-        pass
+        with self.pool.connection() as conn:
+            with conn.cursor() as cur:
+                sql = """
+                DELETE FROM chunk
+                """
+                cur.execute(sql)
+            conn.commit()
 
     def get_count(self):
         pass

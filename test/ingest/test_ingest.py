@@ -4,6 +4,7 @@ from ingest.embedder import Embedder
 from domain.cpmidoc.models import CPMIDocPage
 
 def test_ingest():
+    # INFO: Load data source
     filepath: str = 'data/relatorio-cpmi-versao-consolidada_231017_100010.pdf'
     loader: Loader = Loader()
     content: list[CPMIDocPage] = loader.load(filepath)
@@ -13,8 +14,9 @@ def test_ingest():
     assert len(content) > 0
 
     # INFO: get only part of the content to speed up tests
-    content = content[:15]
+    content = content[:5]
 
+    # INFO: chop chunks
     chunker: Chunker = Chunker()
     chunks: list[CPMIDocPage] = chunker.chunk(content)
     assert chunks is not None
@@ -23,9 +25,14 @@ def test_ingest():
     assert len(chunks) > 0
     print(len(chunks))
 
+    # INFO: generate embeddings
     embedder: Embedder = Embedder()
     embedded_chunks: list[CPMIDocPage] = embedder.embed(chunks)
     assert embedded_chunks is not None
     assert isinstance(embedded_chunks, list)
     assert all(isinstance(page, CPMIDocPage) for page in embedded_chunks)
     assert len(embedded_chunks) > 0
+
+    # INFO: store content
+
+    # INFO: get content back and check if matches
