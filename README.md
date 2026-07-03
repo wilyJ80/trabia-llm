@@ -28,7 +28,7 @@
 
 - Ingest with `uv run src/run_ingestion.py`
 
-- Run main with ``
+- Run main with `uv run src/main.py`
 
 # TODO:
 
