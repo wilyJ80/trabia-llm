@@ -34,6 +34,12 @@
 
 - [x] Assert total chunk size for report, add this info in knowledge base section of report
 
+- [x] structured output
+
+- [ ] schema validation
+
+- [ ] incomplete/invalid answer
+
 - [ ] Report: loading, chunking, overlap, and why
 
 - [ ] Report: embeddings model, if same provider or not, and why
@@ -49,9 +55,3 @@
 - [ ] Report: definicao do problema, base documental, pipeline de ingestao, arquitetura da solucao, modelos e componentes utilizados, protocolo experimental, resultados, analise critica, conclusao, referencias.
 
 - [ ] Slides: problema atacado, arquitetura da solucao, base documental, pipeline de ingestao, recuperacao vetorial, validacao ou mecanismo hibrido, resultados experimentais, principais falhas
-
-- [ ] structured output
-
-- [ ] schema validation
-
-- [ ] incomplete/invalid answer
