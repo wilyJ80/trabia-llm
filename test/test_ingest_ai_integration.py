@@ -82,7 +82,7 @@ def test_ai_integration():
     </user>
     """
 
-    response: AIAnswer = llm.ask(prompt)
+    response: AIAnswer | None = llm.ask(prompt)
     assert response is not None
     assert len(response.content) > 0
     assert isinstance(response, AIAnswer)

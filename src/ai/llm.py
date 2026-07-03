@@ -3,6 +3,7 @@ from langchain_core.messages import AIMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from settings import Settings
 from ai.models import AIAnswer
+from pydantic import ValidationError
 
 class LLM:
     def __init__(self, api_key: str, model: str) -> None:
@@ -10,6 +11,10 @@ class LLM:
             api_key=api_key, model=model
         ).with_structured_output(schema=AIAnswer)
 
-    def ask(self, prompt: str) -> AIAnswer:
-        response: AIAnswer = self.model.invoke(prompt)
-        return response
+    def ask(self, prompt: str) -> AIAnswer | None:
+        try:
+            response: AIAnswer = self.model.invoke(prompt)
+            return response
+        except ValidationError as e:
+            print(f"LLM returned invalid data structure: {e}")
+            return None  # Or handle your fallback logic here

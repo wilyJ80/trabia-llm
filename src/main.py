@@ -45,8 +45,8 @@ def main():
     </user>
     """
 
-    response: AIAnswer = llm.ask(prompt)
-    print(response)
+    response: AIAnswer | None = llm.ask(prompt)
+    print(response) if response else print('[ERROR] Could not ask LLM')
 
 if __name__ == "__main__":
     main()

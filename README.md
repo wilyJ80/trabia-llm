@@ -36,9 +36,9 @@
 
 - [x] structured output
 
-- [ ] schema validation
+- [x] schema validation
 
-- [ ] incomplete/invalid answer
+- [x] incomplete/invalid answer
 
 - [ ] Report: loading, chunking, overlap, and why
 
