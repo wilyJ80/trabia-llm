@@ -62,6 +62,14 @@
     - [ ] resultados, 
     - [ ] analise critica, 
     - [ ] conclusao, 
-    - [ ] referencias.
+    - [x] referencias.
 
-- [ ] Slides: problema atacado, arquitetura da solucao, base documental, pipeline de ingestao, recuperacao vetorial, validacao ou mecanismo hibrido, resultados experimentais, principais falhas
+- [ ] Slides: 
+    - [x] problema atacado, 
+    - [x] arquitetura da solucao, 
+    - [x] base documental, 
+    - [x] pipeline de ingestao, 
+    - [x] recuperacao vetorial, 
+    - [x] validacao ou mecanismo hibrido, 
+    - [ ] resultados experimentais, 
+    - [ ] principais falhas
