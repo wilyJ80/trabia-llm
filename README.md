@@ -32,7 +32,7 @@
 
 # TODO:
 
-- [ ] Assert total chunk size for report, add this info in knowledge base section of report
+- [x] Assert total chunk size for report, add this info in knowledge base section of report
 
 - [ ] Report: loading, chunking, overlap, and why
 
