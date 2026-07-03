@@ -117,4 +117,19 @@ class AIAnswer(BaseModel):
 
 # Resultados Experimentais
 
+## Experimento: acertos x total
+
+| Categoria | Acertos | Total |
+| --- | --- | --- |
+| casos faceis | 3 | 6 |
+| casos medios | 4 | 7 |
+| casos ambiguos | 3 | 6 |
+| casos onde a base de conhecimento e insuficiente | 5 | 6 |
+| casos que testam os limites da aplicacao | 5 | 5 |
+| **Total** | **20** | **30** |
+
 # Principais Falhas
+
+# Considerações sobre uso de IA
+
+# Dúvidas?
