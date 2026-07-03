@@ -32,13 +32,16 @@ def main():
     assert len(search_results) > 0
     prompt: str = f"""
     <system>
+    O contexto a seguir vem de busca semântica.
     Responda o usuário com base no contexto retornado.
+    Há a possibilidade do contexto não ser relevante,
+    dado que vem de uma busca semântica direta.
     </system>
     <context>
     {"\n\n".join(search_results)}
     </context>
     <user>
-    Do que se trata a base de conhecimento apresentada?
+    {query}
     </user>
     """
 
