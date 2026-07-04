@@ -1,4 +1,17 @@
 ---
+title: "Trabalho IA 3: IA Generativa"
+subtitle: "Tema 2: *Output* Estruturado"
+author:
+    - "Brunna Moura"
+    - "Carlos Cruz"
+    - "Rafael Queiroz"
+    - "Victor Bitencourt"
+institute: "Universidade do Estado da Bahia (UNEB)"
+date: "4 de Julho de 2026"
+theme: "CambridgeUS"
+navigation: "empty"
+colortheme: "wolverine"
+---
 
 # Problema atacado
 
@@ -31,12 +44,15 @@ Coloque uma imagem das bibliotecas utilizadas aqui!
 
 - Carregamento de arquivos: `pymupdf` - um dos melhores carregadores de PDF do mercado, se destacando para PDFs com representação XML presente *(tagged PDFs)*. Pela integridade do documento fonte, a biblioteca cumpriu bem sua tarefa. Contras: licença estritamente AGPL.
 - Segmentação de *chunks:* `langchain-text-splitters`, utilizando o `RecursiveCharacterTextSplitter`. Chunks de tamanho 2000 com *overlap* de 200.
+
+# Arquitetura da Solução
+
+## Explicação sobre as bibliotecas
+
 - *Embeddings:* modelo local de redes neurais convolucionais `pt_core_news_lg`, fornecido pela biblioteca `spaCy`, pela leveza em processamento local e dispensa de limites de API decorrente. Evidentemente, o mesmo modelo para *embedding* dos *chunks* é o mesmo modelo utilizado para *embedding* das perguntas do usuário, que é o correto a se fazer.
 - Modelo de LLM: `gemini-3.1-flash-lite`, melhor modelo "econômico" da plataforma Gemini API hoje para tarefas simples e diretas como RAG de pergunta-e-resposta. Conecta-se ao modelo via biblioteca `langchain-google-genai`.
 
 # Pipeline de Ingestão
-
-## Lógica de execução
 
 - A pipeline de ingestão é feita ao executar o módulo `src/run_ingestion.py`. É feito: 
     - o carregamento do text do documento PDF, 
@@ -88,6 +104,8 @@ LIMIT %s;
 
 O formato do prompt é montado manualmente, com a pergunta do usuário no final. Foi feito dessa forma por ser uma boa prática: prompts no final com partes fixas no início se beneficiam do *prompt caching* fornecido pelas APIs. A seguir, o template de prompt montado pela equipe, em um formato XML, que costuma ser o formato mais bem entendido pelas LLMs, dado que delimita os limites de cada seção com tags, o que é satisfatório para a forma como a LLM processa texto: de forma linear.
 
+# Recuperação Vetorial: Pergunta
+
 ```
 <system>
 O contexto a seguir vem de busca semântica.
@@ -112,7 +130,8 @@ from pydantic import BaseModel, Field
 
 class AIAnswer(BaseModel):
     content: str = Field(description="Sua resposta")
-    sources: str | None = Field(description="Todas as fontes para embasar a resposta")
+    sources: str | None = Field(description="""
+    Todas as fontes para embasar a resposta""")
 ```
 
 # Resultados Experimentais
@@ -121,15 +140,23 @@ class AIAnswer(BaseModel):
 
 | Categoria | Acertos | Total |
 | --- | --- | --- |
-| casos faceis | 3 | 6 |
-| casos medios | 4 | 7 |
-| casos ambiguos | 3 | 6 |
-| casos onde a base de conhecimento e insuficiente | 5 | 6 |
+| casos fáceis | 3 | 6 |
+| casos médios | 4 | 7 |
+| casos ambíguos | 3 | 6 |
+| casos onde a base de conhecimento é insuficiente | 5 | 6 |
 | casos que testam os limites da aplicacao | 5 | 5 |
 | **Total** | **20** | **30** |
 
 # Principais Falhas
 
+- Embeddings ruins
+
+- Continua...
+
 # Considerações sobre uso de IA
 
+- (Só copiar o que já anotei)
+
 # Dúvidas?
+
+![robodobahia](./robodobahia.png)
