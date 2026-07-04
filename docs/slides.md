@@ -8,9 +8,10 @@ author:
     - "Victor Bitencourt"
 institute: "Universidade do Estado da Bahia (UNEB)"
 date: "4 de Julho de 2026"
-theme: "CambridgeUS"
+theme: "Pittsburgh"
 navigation: "empty"
-colortheme: "wolverine"
+colortheme: "crane"
+fonttheme: "structuresmallcapsserif"
 ---
 
 # Problema atacado
@@ -76,7 +77,8 @@ O banco é otimizado, ao utilizar-se um esquema que utiliza quantização escala
 
 ```sql
 CREATE TABLE chunk (
-	id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	id INTEGER PRIMARY KEY 
+        GENERATED ALWAYS AS IDENTITY,
 	snippet TEXT NOT NULL,
 	embedding halfvec(300) NOT NULL,
 	page INTEGER NOT NULL
@@ -94,7 +96,8 @@ CREATE TABLE chunk (
 ## Consulta SQL
 
 ```sql
-SELECT snippet, page, embedding <=> %s::halfvec AS distance
+SELECT snippet, page, embedding <=> %s::halfvec 
+AS distance
 FROM chunk
 ORDER BY distance
 LIMIT %s;
@@ -106,7 +109,7 @@ O formato do prompt é montado manualmente, com a pergunta do usuário no final.
 
 # Recuperação Vetorial: Pergunta
 
-```
+```xml
 <system>
 O contexto a seguir vem de busca semântica.
 Responda o usuário com base no contexto retornado.
@@ -125,7 +128,7 @@ dado que vem de uma busca semântica direta.
 
 A validação do objeto retornado já é feita internamente pelo framework `langchain`, utilizado no trabalho. No presente trabalho, a implementação de validação é feita no caso de erros de solicitação à API do modelo. Em termos qualitativos, o formato do objeto a ser retornado para aplicação, correspondente à resposta da IA com as fontes, que consiste no output estruturado proposto no trabalho, aceita nenhuma fonte como resultado. Essa é a forma com que a aplicação lida com respostas possivelmente não encontradas. A seguir, o formato de objeto Pydantic esperado que o LLM retorne.
 
-```
+```py
 from pydantic import BaseModel, Field
 
 class AIAnswer(BaseModel):
