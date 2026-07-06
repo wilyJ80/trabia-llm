@@ -22,12 +22,6 @@ fonttheme: "structuresmallcapsserif"
 
 # Base Documental
 
-## Documento Fonte
-
-Coloque uma imagem da capa do documento aqui!
-
-# Base Documental
-
 ## Informações
 
 - A base documental consiste no relatório da CPMI de 8 de janeiro de 2023, quando houve tentativa de golpe de Estado no Brasil.
@@ -37,7 +31,7 @@ Coloque uma imagem da capa do documento aqui!
 
 ## Bibliotecas utilizadas
 
-Coloque uma imagem das bibliotecas utilizadas aqui!
+![collage](collage.png)
 
 # Arquitetura da Solução
 
@@ -45,6 +39,7 @@ Coloque uma imagem das bibliotecas utilizadas aqui!
 
 - Carregamento de arquivos: `pymupdf` - um dos melhores carregadores de PDF do mercado, se destacando para PDFs com representação XML presente *(tagged PDFs)*. Pela integridade do documento fonte, a biblioteca cumpriu bem sua tarefa. Contras: licença estritamente AGPL.
 - Segmentação de *chunks:* `langchain-text-splitters`, utilizando o `RecursiveCharacterTextSplitter`. Chunks de tamanho 2000 com *overlap* de 200.
+- Conexão com banco PostgreSQL: `psycopg`
 
 # Arquitetura da Solução
 
