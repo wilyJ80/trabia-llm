@@ -35,7 +35,7 @@ def main():
     # INFO: Manual question step (vector search won't be a tool)
     service: CPMIDocService = CPMIDocService(pool)
     query: str = sys.argv[1]
-    search_results: list[str] = service.get_from_knowledge_base(query, 5)
+    search_results: list[str] = service.get_from_knowledge_base(query, settings.K)
     assert search_results is not None
     assert len(search_results) > 0
     prompt: str = f"""

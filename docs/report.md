@@ -87,9 +87,15 @@ Bibliotecas: `langchain-google-genai` para se conectar à API do Gemini, `langch
 
 ## Protocolo Experimental
 
+Foram criados dois *scripts,* o `run_evaluation.py` e o `run_evaluation_k15.py`, para comparar os resultados para diferentes valores de *top-k.* Os casos de avaliação são carregados do arquivo `test_cases.json`.
+
+Os relatórios gerados pelos *scripts* documentam os prompts, categorias (fáceis/médios/ambíguos/etc) e as respostas.
+
+Um *score* foi atribuído às respostas retornadas.
+
 ## Resultados
 
-### Resumo de Desempenho (Acertos/Total)
+### Resumo de Desempenho (Acertos/Total) k=5
 
 | Categoria | Acertos | Total |
 | --- | --- | --- |
@@ -100,14 +106,37 @@ Bibliotecas: `langchain-google-genai` para se conectar à API do Gemini, `langch
 | casos que testam os limites da aplicacao | 5 | 5 |
 | **Total** | **20** | **30** |
 
+### Resumo de Desempenho (Acertos/Total) k=15
+
+| Categoria | Acertos | Total |
+| --- | --- | --- |
+| casos fáceis | 3 | 6 |
+| casos médios | 6 | 7 |
+| casos ambíguos | 3 | 6 |
+| casos onde a base de conhecimento é insuficiente | 6 | 6 |
+| casos que testam os limites da aplicacao | 5 | 5 |
+| **Total** | **23** | **30** |
+
 ## Análise Crítica
+
+O valor de *top-k* mais alto influenciou positivamente nos resultados, mas ainda assim, ficou longe do ideal.
+
+Acredita-se que os *embeddings* de baixa qualidade decorrentes da arquitetura *word2vec* utilizada pelo spaCy ao gerar os *embeddings* tenha sido uma possível causa desse problema - o *word2vec* comprime o resultado semântico do *embedding* da passagem processada, o que pode levar a perda de conteúdo semântico a ser comparado via similaridade por cosseno.
 
 ## Conclusão
 
+O trabalho de IA Generativa se mostrou um pouco diferente dos demais trabalhos mais voltados para a área de *machine learning,* por ser voltado fortemente à integração de camadas de aplicação, como ETL e camada de solicitações de API a modelos de IA de provedores *cloud.* Ainda assim, a necessidade de configuração adequada dos parâmetros da aplicação se mostrou um fator crucial que não deve ser ignorado na IA Generativa também.
+
 ## Considerações sobre uso de IA
+
+O código experimental de comparativo entre valores *top-K* e de avaliação de desempenho foram feitos de forma assistida por agentes de IA, com base no código existente. O arquivo [./docs/protocolo_experimental.txt](./docs/protocolo_experimental.txt) mostra a íntegra da conversa. O agente de IA também criou os casos de teste.
+
+O arquivo [./docs/uso_ia_generativa.json](./docs/uso_ia_generativa.json) mostra a íntegra de algumas conversas e links de conversas usadas durante o desenvolvimento.
+
+Todo o resto do desenvolvimento foi feito à mão, com parte do código fortemente pautada em cima de trabalhos anteriores similares feitos ao longo do semestre letivo dos discentes (em especial, da disciplina de Tópicos Especiais de Engenharia de *Software*). O mesmo vale para o relatório e slides, escritos em *Markdown.*
 
 ## Referências
 
-[geminiapi](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite?hl=pt-br)
-[scalar](https://qdrant.tech/articles/scalar-quantization/)
-[word2vec](https://spacy.io/models/pt)
+[https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite?hl=pt-br](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite?hl=pt-br)
+[https://qdrant.tech/articles/scalar-quantization/](https://qdrant.tech/articles/scalar-quantization/)
+[https://spacy.io/models/pt](https://spacy.io/models/pt)

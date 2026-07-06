@@ -139,7 +139,7 @@ class AIAnswer(BaseModel):
 
 # Resultados Experimentais
 
-## Experimento: acertos x total
+## Experimento: acertos x total (k=5)
 
 | Categoria | Acertos | Total |
 | --- | --- | --- |
@@ -150,15 +150,32 @@ class AIAnswer(BaseModel):
 | casos que testam os limites da aplicacao | 5 | 5 |
 | **Total** | **20** | **30** |
 
+## Experimento: acertos x total (k=15)
+
+| Categoria | Acertos | Total |
+| --- | --- | --- |
+| casos fáceis | 3 | 6 |
+| casos médios | 6 | 7 |
+| casos ambíguos | 3 | 6 |
+| casos onde a base de conhecimento é insuficiente | 6 | 6 |
+| casos que testam os limites da aplicacao | 5 | 5 |
+| **Total** | **23** | **30** |
+
 # Principais Falhas
 
-- Embeddings ruins
+- A equipe mostrou competência exemplar ao criar código de qualidade excepcional. Não houveram falhas lógicas ou execução detectadas pelo uso comum do programa. A pipeline de testes robusta cobre todo o ETL e pergunta ao LLM, e é uma prática que consiste em um exemplo a ser seguido por todos os demais.
 
-- Continua...
+- Em termos de qualidade de resultados, os `embeddings` gerados pela arquitetura `word2vec` do spaCy se mostraram como possível elo fraco no produto final. Ao mudar o valor de `k` de 5 para 15, houveram melhoras nos resultados (20 x 23), mas ainda se distanciando do ideal de 30.
+
+- Considerou-se utilizar, sim, um modelo melhor de embedding (ex: `gemini-embedding-001` via Gemini API) para uma comparação melhor, porque é sabido que são grandemente superiores em qualidade, utilizando a arquitetura `transformers`. Mas como a especificação do trabalho menciona escolher um critério de comparação, ficamos por aqui. Isso é um trabalho de graduação, não uma tese de mestrado!
 
 # Considerações sobre uso de IA
 
-- (Só copiar o que já anotei)
+- O código experimental de comparativo entre valores *top-K* e de avaliação de desempenho foram feitos de forma assistida por agentes de IA, com base no código existente. O arquivo `./docs/protocolo_experimental.txt` mostra a íntegra da conversa.
+
+- O arquivo `./docs/uso_ia_generativa.json` mostra a íntegra de algumas conversas e links de conversas usadas durante o desenvolvimento.
+
+- Todo o resto do desenvolvimento foi feito à mão, com parte do código fortemente pautada em cima de trabalhos anteriores similares feitos ao longo do semestre letivo dos discentes (em especial, da disciplina de Tópicos Especiais de Engenharia de *Software*). O mesmo vale para o relatório e slides, escritos em *Markdown.*
 
 # Dúvidas?
 

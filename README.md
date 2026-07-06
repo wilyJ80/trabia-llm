@@ -48,28 +48,28 @@
 
 - [x] Report: validation
 
-- [ ] Report: comparison between versions: RAG/No RAG, comparison between chunking strategies, or top-k, or embedding model
+- [x] Report: comparison between versions: RAG/No RAG, comparison between chunking strategies, or top-k, or embedding model
 
-- [ ] 30 case testing: easy cases, medium cases, ambiguous cases, insufficient knowledge base cases, cases that test the limits of the application
+- [x] 30 case testing: easy cases, medium cases, ambiguous cases, insufficient knowledge base cases, cases that test the limits of the application
 
-- [ ] Report: 
+- [x] Report: 
     - [x] definicao do problema, 
     - [x] base documental, 
     - [x] pipeline de ingestao, 
     - [x] arquitetura da solucao, 
     - [x] modelos e componentes utilizados, 
-    - [ ] protocolo experimental, 
-    - [ ] resultados, 
-    - [ ] analise critica, 
-    - [ ] conclusao, 
+    - [x] protocolo experimental, 
+    - [x] resultados, 
+    - [x] analise critica, 
+    - [x] conclusao, 
     - [x] referencias.
 
-- [ ] Slides: 
+- [x] Slides: 
     - [x] problema atacado, 
     - [x] arquitetura da solucao, 
     - [x] base documental, 
     - [x] pipeline de ingestao, 
     - [x] recuperacao vetorial, 
     - [x] validacao ou mecanismo hibrido, 
-    - [ ] resultados experimentais, 
-    - [ ] principais falhas
+    - [x] resultados experimentais, 
+    - [x] principais falhas
