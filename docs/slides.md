@@ -65,7 +65,7 @@ Coloque uma imagem das bibliotecas utilizadas aqui!
 
 ## Diagrama
 
-Coloque um diagrama Graphviz do fluxo de execução aqui!
+![graphviz](./architecture.dot.svg)
 
 # Recuperação Vetorial: Armazenamento
 
@@ -178,6 +178,8 @@ class AIAnswer(BaseModel):
 - O código experimental de comparativo entre valores *top-K* e de avaliação de desempenho foram feitos de forma assistida por agentes de IA, com base no código existente. O arquivo `./docs/protocolo_experimental.txt` mostra a íntegra da conversa.
 
 - O arquivo `./docs/uso_ia_generativa.json` mostra a íntegra de algumas conversas e links de conversas usadas durante o desenvolvimento.
+
+- O diagrama de arquitetura foi fornecido por uma IA, em código DOT (Graphviz).
 
 - Todo o resto do desenvolvimento foi feito à mão, com parte do código fortemente pautada em cima de trabalhos anteriores similares feitos ao longo do semestre letivo dos discentes (em especial, da disciplina de Tópicos Especiais de Engenharia de *Software*). O mesmo vale para o relatório e slides, escritos em *Markdown.*
 

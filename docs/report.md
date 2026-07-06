@@ -133,6 +133,8 @@ O código experimental de comparativo entre valores *top-K* e de avaliação de 
 
 O arquivo [./docs/uso_ia_generativa.json](./docs/uso_ia_generativa.json) mostra a íntegra de algumas conversas e links de conversas usadas durante o desenvolvimento.
 
+- O diagrama de arquitetura foi fornecido por uma IA, em código DOT (Graphviz).
+
 Todo o resto do desenvolvimento foi feito à mão, com parte do código fortemente pautada em cima de trabalhos anteriores similares feitos ao longo do semestre letivo dos discentes (em especial, da disciplina de Tópicos Especiais de Engenharia de *Software*). O mesmo vale para o relatório e slides, escritos em *Markdown.*
 
 ## Referências

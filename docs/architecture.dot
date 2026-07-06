@@ -1,0 +1,56 @@
+digraph trabia_llm_architecture {
+    // General Graph Settings
+    rankdir=LR;
+    node [shape=box, style="filled,rounded", fontname="Helvetica", fontsize=12, penwidth=0.5];
+    edge [fontname="Helvetica", fontsize=10, color="#555555"];
+    compound=true;
+
+    // Define Colors
+    color_ingestion = "#E3F2FD"; // Light blue
+    color_query = "#FFF3E0";     // Light orange
+    color_storage = "#E8F5E9";   // Light green
+    color_border = "#9E9E9E";
+
+    // Nodes
+    PDF [label="Base de Dados\n(PDFs)", shape=note, fillcolor="#FFEBEE", color=color_border];
+
+    // Ingestion Cluster
+    subgraph cluster_etl {
+        label="ETL Pipeline (run_ingestion.py)";
+        bgcolor=color_ingestion;
+        style=filled;
+        color=color_border;
+
+        Loader [label="Loader\n(src/ingest/loader.py)"];
+        Chunker [label="Chunker\n(src/ingest/chunker.py)"];
+        Embedder_Ingest [label="Embedder\n(src/ingest/embedder.py)"];
+    }
+
+    // Storage
+    DB [label="PostgreSQL\n(Vector DB)", shape=cylinder, fillcolor=color_storage, color=color_border];
+
+    // Query Cluster
+    subgraph cluster_query {
+        label="Processamento de Consulta (main.py)";
+        bgcolor=color_query;
+        style=filled;
+        color=color_border;
+
+        User [label="Usuário", shape=ellipse, fillcolor="#FFFFFF"];
+        Embedder_Query [label="Embedder\n(Compartilhado)"];
+        LLM [label="LLM\n(src/ai/llm.py)"];
+        Response [label="Resposta", shape=ellipse, fillcolor="#FFFFFF"];
+    }
+
+    // Ingestion Edges
+    PDF -> Loader;
+    Loader -> Chunker;
+    Chunker -> Embedder_Ingest;
+    Embedder_Ingest -> DB [label="Armazena Vetores"];
+
+    // Query Edges
+    User -> Embedder_Query [label="Pergunta"];
+    Embedder_Query -> DB [label="Busca Vetorial"];
+    DB -> LLM [label="Contexto Recuperado"];
+    LLM -> Response [label="Gera Resposta"];
+}
