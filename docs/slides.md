@@ -150,6 +150,8 @@ class AIAnswer(BaseModel):
 | casos que testam os limites da aplicacao | 5 | 5 |
 | **Total** | **20** | **30** |
 
+# Resultados Experimentais
+
 ## Experimento: acertos x total (k=15)
 
 | Categoria | Acertos | Total |
@@ -166,6 +168,8 @@ class AIAnswer(BaseModel):
 - A equipe mostrou competência exemplar ao criar código de qualidade excepcional. Não houveram falhas lógicas ou execução detectadas pelo uso comum do programa. A pipeline de testes robusta cobre todo o ETL e pergunta ao LLM, e é uma prática que consiste em um exemplo a ser seguido por todos os demais.
 
 - Em termos de qualidade de resultados, os `embeddings` gerados pela arquitetura `word2vec` do spaCy se mostraram como possível elo fraco no produto final. Ao mudar o valor de `k` de 5 para 15, houveram melhoras nos resultados (20 x 23), mas ainda se distanciando do ideal de 30.
+
+# Principais Falhas
 
 - Considerou-se utilizar, sim, um modelo melhor de embedding (ex: `gemini-embedding-001` via Gemini API) para uma comparação melhor, porque é sabido que são grandemente superiores em qualidade, utilizando a arquitetura `transformers`. Mas como a especificação do trabalho menciona escolher um critério de comparação, ficamos por aqui. Isso é um trabalho de graduação, não uma tese de mestrado!
 

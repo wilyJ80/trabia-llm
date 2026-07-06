@@ -52,7 +52,7 @@ A busca semântica compara o embedding da pergunta do usuário com o que está n
 
 O formato do prompt é montado manualmente, com a pergunta do usuário no final. Foi feito dessa forma por ser uma boa prática: prompts no final com partes fixas no início se beneficiam do *prompt caching* fornecido pelas APIs. A seguir, o template de prompt montado pela equipe, em um formato XML, que costuma ser o formato mais bem entendido pelas LLMs, dado que delimita os limites de cada seção com tags, o que é satisfatório para a forma como a LLM processa texto: de forma linear.
 
-```
+```xml
 <system>
 O contexto a seguir vem de busca semântica.
 Responda o usuário com base no contexto retornado.
@@ -71,7 +71,7 @@ dado que vem de uma busca semântica direta.
 
 A validação do objeto retornado já é feita internamente pelo framework `langchain`, utilizado no trabalho. No presente trabalho, a implementação de validação é feita no caso de erros de solicitação à API do modelo. Em termos qualitativos, o formato do objeto a ser retornado para aplicação, correspondente à resposta da IA com as fontes, que consiste no output estruturado proposto no trabalho, aceita nenhuma fonte como resultado. Essa é a forma com que a aplicação lida com respostas possivelmente não encontradas. A seguir, o formato de objeto Pydantic esperado que o LLM retorne.
 
-```
+```py
 from pydantic import BaseModel, Field
 
 class AIAnswer(BaseModel):
@@ -83,7 +83,7 @@ class AIAnswer(BaseModel):
 
 Conforme mencionado, o modelo de LLM via API `gemini-3.1-flash-lite` e o modelo de embeddings local utilizando `word2vec`, o `pt_core_news_lg`.
 
-Bibliotecas: `langchain-google-genai` para se conectar à API do Gemini, `langchain-text-splitters` para realizar o *chunking,* `psycopg` para se conectar ao banco PostgreSQL, `pymupdf` para carregar o conteúdo do PDFem *string,* e `spaCy` para carregar o modelo de embeddings local.
+Bibliotecas: `langchain-google-genai` para se conectar à API do Gemini, `langchain-text-splitters` para realizar o *chunking,* `psycopg` para se conectar ao banco PostgreSQL, `pymupdf` para carregar o conteúdo do PDF em *string,* e `spaCy` para carregar o modelo de embeddings local.
 
 ## Protocolo Experimental
 
