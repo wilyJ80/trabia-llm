@@ -29,7 +29,7 @@ fonttheme: "structuresmallcapsserif"
 
 # Print de Execução
 
-![print](print_small.png)
+![print](print_medium.png)
 
 # Arquitetura da Solução
 
@@ -125,15 +125,24 @@ dado que vem de uma busca semântica direta.
 
 # Validação ou Mecanismo Híbrido
 
-A validação do objeto retornado já é feita internamente pelo framework `langchain`, utilizado no trabalho. No presente trabalho, a implementação de validação é feita no caso de erros de solicitação à API do modelo. Em termos qualitativos, o formato do objeto a ser retornado para aplicação, correspondente à resposta da IA com as fontes, que consiste no output estruturado proposto no trabalho, aceita nenhuma fonte como resultado. Essa é a forma com que a aplicação lida com respostas possivelmente não encontradas. A seguir, o formato de objeto Pydantic esperado que o LLM retorne.
+A validação do objeto retornado já é feita internamente pelo framework `langchain`, utilizado no trabalho. No presente trabalho, a implementação de validação é feita no caso de erros de solicitação à API do modelo. Em termos qualitativos, o formato do objeto a ser retornado para aplicação, correspondente à resposta da IA com as fontes, que consiste no output estruturado proposto no trabalho, aceita nenhuma fonte como resultado. Essa é a forma com que a aplicação lida com respostas possivelmente não encontradas.
+
+A seguir, o formato de objeto Pydantic esperado que o LLM retorne.
+
+# Validação ou Mecanismo Híbrido
 
 ```py
 from pydantic import BaseModel, Field
 
+class Sources(BaseModel):
+    claim: str = Field(description="""
+    Informação encontrada""")
+    page: int = Field(description="Página associada")
+
 class AIAnswer(BaseModel):
     content: str = Field(description="Sua resposta")
-    sources: str | None = Field(description="""
-    Todas as fontes para embasar a resposta""")
+    sources: list[Sources] = Field(description="""
+    Fontes da resposta encontradas""")
 ```
 
 # Resultados Experimentais
