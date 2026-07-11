@@ -1,75 +1,75 @@
-# Prerequisites
+# Pré-requisitos
 
-- Add info to `.env` based on `env.example`
+- Adicione as informações ao arquivo `.env` com base no `env.example`
 
-- `uv` installed: [uv](https://docs.astral.sh/uv/getting-started/installation/)
+- `uv` instalado: [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-- install dependencies with `uv sync`
+- Instale as dependências com `uv sync`
 
-- install project as editable with `uv pip install -e .`
+- Instale o projeto em modo editável com `uv pip install -e .`
 
-- Convenience script for starting DB and migrating located in `./docker/dev.sh`
+- Script de conveniência para iniciar o banco de dados e realizar migrações localizado em `./docker/dev.sh`
 
-- To use it:
+- Para utilizá-lo:
 
     - `chmod +x ./docker/dev.sh`
 
     - `./docker/dev.sh`
 
-    - **Or** use an existing PGVector database and run migrations manually:
+    - **Ou** utilize um banco de dados PGVector existente e execute as migrações manualmente:
 
         - `uv run src/migrate.py`
 
-- Install embedding model with the command:
+- Instale o modelo de *embeddings* com o comando:
 
     - `uv run spacy download pt_core_news_lg`
 
-# Running
+# Execução
 
-- Ingest with `uv run src/run_ingestion.py`
+- Realize a ingestão com `uv run src/run_ingestion.py`
 
-- Run main with `uv run src/main.py`
+- Execute o programa principal com `uv run src/main.py`
 
 # TODO:
 
-- [x] Assert total chunk size for report, add this info in knowledge base section of report
+- [x] Verificar tamanho total dos *chunks* para o relatório; adicionar essa informação à seção de base de conhecimento do relatório
 
-- [x] structured output
+- [x] Saída estruturada
 
-- [x] schema validation
+- [x] Validação de esquema
 
-- [x] incomplete/invalid answer
+- [x] Resposta incompleta/inválida
 
-- [x] Report: loading, chunking, overlap, and why
+- [x] Relatório: carregamento, divisão em *chunks* (chunking), sobreposição (*overlap*) e justificativa
 
-- [x] Report: embeddings model, if same provider or not, and why
+- [x] Relatório: modelo de *embeddings*, se é o mesmo provedor ou não, e justificativa
 
-- [x] Report: how vector DB query was vectorized, how similarity was used, how many snippets were returned, and how snippets were added to prompt in the app
+- [x] Relatório: como a consulta ao banco vetorial foi vetorizada, como a similaridade foi utilizada, quantos trechos (*snippets*) foram retornados e como eles foram adicionados ao *prompt* na aplicação
 
-- [x] Report: validation
+- [x] Relatório: validação
 
-- [x] Report: comparison between versions: RAG/No RAG, comparison between chunking strategies, or top-k, or embedding model
+- [x] Relatório: comparação entre versões (RAG vs. sem RAG), comparação entre estratégias de divisão em *chunks*, parâmetros *top-k* ou modelos de *embeddings*
 
-- [x] 30 case testing: easy cases, medium cases, ambiguous cases, insufficient knowledge base cases, cases that test the limits of the application
+- [x] Testes com 30 casos: casos simples, casos médios, casos ambíguos, casos com base de conhecimento insuficiente, casos que testam os limites da aplicação
 
-- [x] Report: 
-    - [x] definicao do problema, 
+- [x] Relatório: 
+    - [x] definição do problema, 
     - [x] base documental, 
-    - [x] pipeline de ingestao, 
-    - [x] arquitetura da solucao, 
+    - [x] *pipeline* de ingestão, 
+    - [x] arquitetura da solução, 
     - [x] modelos e componentes utilizados, 
     - [x] protocolo experimental, 
     - [x] resultados, 
-    - [x] analise critica, 
-    - [x] conclusao, 
-    - [x] referencias.
+    - [x] analisar criticamente, 
+    - [x] conclusão, 
+    - [x] referências.
 
 - [x] Slides: 
     - [x] problema atacado, 
-    - [x] arquitetura da solucao, 
-    - [x] base documental, 
-    - [x] pipeline de ingestao, 
-    - [x] recuperacao vetorial, 
-    - [x] validacao ou mecanismo hibrido, 
+    - [x] arquitetura da solução, 
+    - [x] documental base, 
+    - [x] pipeline de ingestão, 
+    - [x] recuperação vetorial, 
+    - [x] validação ou mecanismo híbrido, 
     - [x] resultados experimentais, 
     - [x] principais falhas
