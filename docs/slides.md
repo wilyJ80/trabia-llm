@@ -27,6 +27,10 @@ fonttheme: "structuresmallcapsserif"
 - A base documental consiste no relatório da CPMI de 8 de janeiro de 2023, quando houve tentativa de golpe de Estado no Brasil.
 - A base documental foi escolhida estrategicamente, tratando de um assunto possivelmente conhecido por modelos de IA, no entanto, esperando-se no presente trabalho que a mesma traga fontes para sustentar seus resultados, fornecendo uma análise crítica do desempenho do modelo de LLM no fornecimento confiável e embasado de informações.
 
+# Print de Execução
+
+![print](print_small.png)
+
 # Arquitetura da Solução
 
 ## Bibliotecas utilizadas

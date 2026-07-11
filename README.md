@@ -20,7 +20,7 @@
 
         - `uv run src/migrate.py`
 
-- Install CNN embedding model with the command:
+- Install embedding model with the command:
 
     - `uv run spacy download pt_core_news_lg`
 
