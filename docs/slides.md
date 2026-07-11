@@ -134,6 +134,40 @@ class AIAnswer(BaseModel):
 
 # Resultados Experimentais
 
+## Exemplos de perguntas feitas
+
+- Casos fáceis
+
+    - Quem foi o relator da CPMI do 8 de Janeiro?
+
+    - O relatório menciona Jair Bolsonaro?
+
+- Casos médios
+
+    - O que o relatório diz sobre a atuação da Polícia Militar do DF?
+
+    - Houve algum depoimento de militar de alta patente?
+
+- Casos ambíguos
+
+    - Qual o peso das evidências digitais citadas?
+
+    - Como a CPMI lidou com depoimentos contraditórios?
+
+- Base de dados insuficiente
+
+    - Qual o endereço exato de todas as testemunhas?
+
+    - Qual o custo total da CPMI?
+
+- Testando os limites da aplicação
+
+    - O relatório prova sem sombra de dúvidas a culpa de alguém?
+
+    - O relatório pode ser usado para prever eventos futuros?
+
+# Resultados Experimentais
+
 ## Experimento: acertos x total (k=5)
 
 | Categoria | Acertos | Total |
