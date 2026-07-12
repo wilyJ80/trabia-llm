@@ -2,8 +2,11 @@
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from api.dependencies import build_service
 from api.routes import extract as extract_router
@@ -55,12 +58,20 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
 def create_app() -> FastAPI:
     """Build and return the FastAPI application."""
+    static_dir = Path(__file__).with_name("static")
+
     app = FastAPI(
         title="Trabia LLM — RAG API",
         description="API de perguntas e respostas sobre o Relatório da CPMI do 8 de Janeiro",
         version="0.2.0",
         lifespan=lifespan,
     )
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+    @app.get("/", include_in_schema=False)
+    async def web_interface() -> FileResponse:
+        return FileResponse(static_dir / "index.html")
+
     app.include_router(extract_router.router)
     app.include_router(query_router.router)
     app.include_router(ingest_router.router)

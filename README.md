@@ -16,6 +16,7 @@
 - ✅ **Validação em camadas** — parse JSON → repair automático → fallbacks determinísticos → validação de campos obrigatórios
 - 🧠 **Pipeline de reparo** — quando o LLM retorna JSON mal formatado, uma segunda chamada tenta corrigi-lo automaticamente
 - ⚡ **Async-first** — FastAPI + SQLAlchemy async + AsyncOpenAI
+- 🖥️ **Interface web** em `/` com fluxo de ingestão + extração usando o mesmo PDF
 - 🐳 **Docker Compose** — ambiente completo com um comando
 
 ---
@@ -86,6 +87,8 @@ PDF ou texto → POST /api/extract
   ├─ 6. Validação de campos obrigatórios
   └─ 7. ExtractedDocument com status (valid/partial/invalid) + confidence
 
+```
+
 ---
 
 ## 🔌 Provider-Agnostic
@@ -143,8 +146,20 @@ make pull-models
 ```
 
 Acesse:
+- **Interface web:** http://localhost:8000/
 - **API:** http://localhost:8000
 - **Swagger UI:** http://localhost:8000/docs
+
+### Fluxo recomendado pela interface
+
+A tela principal em `/` atende a demonstração do projeto 2.
+
+1. Selecione um PDF.
+2. Clique em **Ingerir e extrair PDF**.
+3. A interface envia o mesmo arquivo para `POST /api/ingest` e depois para `POST /api/extract`.
+4. O resultado mostra campos extraídos, fontes, status de validação, confiança e quantidade de chunks usados como contexto.
+
+Use **Extrair sem ingestão** para texto bruto ou para analisar um PDF sem atualizar a base vetorial. A área de consulta RAG fica abaixo do fluxo principal e usa os chunks já armazenados no banco.
 
 ### Parando
 
@@ -376,6 +391,7 @@ trabia-llm/
 │   │   │   ├── query.py       # POST /api/query
 │   │   │   ├── ingest.py      # POST /api/ingest, GET /api/health
 │   │   │   └── extract.py     # POST /api/extract
+│   │   ├── static/            # Interface web servida em /
 │   │   └── schemas/
 │   │       ├── query.py       # QueryRequest / QueryResponse
 │   │       ├── ingest.py      # IngestResponse / HealthResponse
@@ -409,7 +425,8 @@ trabia-llm/
 │   ├── test_extract.py         # Testes unitários de extração (no_db)
 │   ├── test_api.py             # Testes HTTP da API (health, ingest, query)
 │   ├── test_chunks.py          # Testes de chunking
-│   └── test_repository.py      # Testes do repositório
+│   ├── test_repository.py      # Testes do repositório
+│   └── test_static_ui.py       # Testes da interface web
 ├── test_cases.json             # Casos de teste para avaliação experimental
 ├── docker-compose.yaml         # PostgreSQL + Ollama + API
 ├── Dockerfile                  # Imagem da API (uv-based, slim)
@@ -426,6 +443,8 @@ trabia-llm/
 ## ⚙️ Configuração
 
 Todas as configurações são feitas via **variáveis de ambiente** (arquivo `.env`).
+
+`.dockerignore` exclui `.env` e `env` para impedir que configurações locais e segredos entrem na imagem da API. No Docker Compose, a API usa `PG_HOST=postgres` e aponta `LLM_BASE_URL`/`EMBED_BASE_URL` para `ollama`.
 
 ### Variáveis
 

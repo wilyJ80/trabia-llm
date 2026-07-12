@@ -61,4 +61,4 @@ class Settings(BaseSettings):
             f"@{self.PG_HOST}:{self.PG_PORT}/{self.POSTGRES_DB}"
         )
 
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trabia LLM | RAG</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Ir para a consulta</a>
+    <div class="page-shell">
+      <header class="topbar" aria-label="Cabecalho">
+        <div>
+          <p class="eyebrow">RAG sobre o relatorio da CPMI</p>
+          <h1>Trabia LLM</h1>
+        </div>
+        <nav class="top-actions" aria-label="Links principais">
+          <a href="/docs">Swagger</a>
+          <a href="/api/health">Health</a>
+        </nav>
+      </header>
+
+      <main id="main">
+        <section class="primary-workflow" aria-label="Fluxo principal">
+          <div class="workflow-grid">
+            <section class="extract-panel" aria-labelledby="extract-title">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Projeto 2</p>
+                  <h2 id="extract-title">Ingerir e extrair</h2>
+                </div>
+                <output id="extract-status" class="status-pill" aria-live="polite">Pronto</output>
+              </div>
+
+              <form id="extract-form" class="extract-form">
+                <label class="file-drop">
+                  <span id="extract-file-label">Selecionar PDF</span>
+                  <input id="extract-file" name="file" type="file" accept="application/pdf" />
+                </label>
+
+                <label for="extract-text">Texto bruto</label>
+                <textarea
+                  id="extract-text"
+                  name="text"
+                  rows="6"
+                  placeholder="Cole aqui um trecho quando quiser extrair sem PDF."
+                ></textarea>
+
+                <div class="control-grid">
+                  <label>
+                    Embedder
+                    <select name="embedder">
+                      <option value="openai">OpenAI compativel</option>
+                      <option value="spacy">spaCy</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Top K
+                    <input name="top_k" type="number" min="0" max="50" value="5" />
+                  </label>
+                </div>
+
+                <div class="action-row">
+                  <button
+                    class="primary-action"
+                    type="submit"
+                    name="mode"
+                    value="ingest_extract"
+                  >
+                    <span>Ingerir e extrair PDF</span>
+                    <span aria-hidden="true">-&gt;</span>
+                  </button>
+                  <button
+                    class="secondary-action"
+                    type="submit"
+                    name="mode"
+                    value="extract_only"
+                  >
+                    Extrair sem ingestao
+                  </button>
+                </div>
+                <output id="workflow-status" class="form-note" aria-live="polite"></output>
+              </form>
+            </section>
+
+            <section class="extract-result-panel" aria-labelledby="extract-result-title">
+              <div class="answer-header">
+                <div>
+                  <p class="eyebrow">Validacao</p>
+                  <h2 id="extract-result-title">Resultado estruturado</h2>
+                </div>
+                <div class="badge-row" aria-label="Resumo da extracao">
+                  <span id="extract-validation" class="status-pill">--</span>
+                  <span id="extract-confidence" class="status-pill">--</span>
+                </div>
+              </div>
+
+              <div id="extract-result" class="extract-result empty-state">
+                Envie um PDF uma vez para a interface ingerir, extrair campos e exibir a
+                validacao estruturada.
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="support-workflow" aria-label="Consulta e status">
+          <section class="query-panel" aria-labelledby="query-title">
+            <div class="section-heading">
+              <p class="eyebrow">Consulta</p>
+              <h2 id="query-title">Pergunte a base vetorial</h2>
+            </div>
+
+            <form id="query-form" class="query-form">
+              <label for="question">Pergunta</label>
+              <textarea
+                id="question"
+                name="question"
+                rows="6"
+                required
+                minlength="1"
+                placeholder="Ex.: O que o relatorio diz sobre os atos de 8 de janeiro?"
+              ></textarea>
+
+              <div class="control-grid">
+                <label>
+                  Embedder
+                  <select name="embedder" id="embedder">
+                    <option value="openai">OpenAI compativel</option>
+                    <option value="spacy">spaCy</option>
+                  </select>
+                </label>
+
+                <label>
+                  Top K
+                  <input id="top-k" name="top_k" type="number" min="1" max="50" value="5" />
+                </label>
+              </div>
+
+              <div class="prompt-strip" aria-label="Perguntas de exemplo">
+                <button type="button" data-example="Do que se trata o relatorio?">
+                  Visao geral
+                </button>
+                <button type="button" data-example="Quais atores sao citados no relatorio?">
+                  Atores citados
+                </button>
+                <button type="button" data-example="O relatorio menciona o 8 de Janeiro?">
+                  8 de Janeiro
+                </button>
+              </div>
+
+              <button class="secondary-action" type="submit">Consultar RAG</button>
+            </form>
+          </section>
+
+          <section class="answer-panel" aria-labelledby="answer-title">
+            <div class="answer-header">
+              <div>
+                <p class="eyebrow">Resposta</p>
+                <h2 id="answer-title">Resultado da consulta</h2>
+              </div>
+              <output id="query-status" class="status-pill" aria-live="polite">Pronto</output>
+            </div>
+
+            <article class="answer-box">
+              <p id="answer-content" class="empty-state">
+                Envie uma pergunta para ver a resposta do modelo e as fontes usadas.
+              </p>
+            </article>
+
+            <div class="sources-block">
+              <div class="sources-heading">
+                <h3>Fontes citadas</h3>
+                <span id="source-count">0</span>
+              </div>
+              <ol id="sources-list" class="sources-list"></ol>
+            </div>
+          </section>
+
+          <aside class="side-rail" aria-label="Operacoes">
+            <section class="health-card">
+              <div>
+                <p class="eyebrow">Status</p>
+                <h2>Base vetorial</h2>
+              </div>
+              <dl class="metric-grid">
+                <div>
+                  <dt>Chunks</dt>
+                  <dd id="chunks-count">--</dd>
+                </div>
+                <div>
+                  <dt>LLM</dt>
+                  <dd id="llm-status">--</dd>
+                </div>
+              </dl>
+              <button type="button" class="secondary-action" id="refresh-health">
+                Atualizar status
+              </button>
+            </section>
+          </aside>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

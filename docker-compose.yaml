@@ -3,8 +3,8 @@ x-dev-variables: &dev
     POSTGRES_USER: ${POSTGRES_USER:-postgres}
     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mysecretpassword}
     POSTGRES_DB: ${POSTGRES_DB:-postgres}
-    PG_HOST: ${PG_HOST:-postgres}
-    PG_PORT: ${PG_PORT:-5432}
+    PG_HOST: postgres
+    PG_PORT: 5432
     # LLM (OpenAI-compatível) — defaults apontam pro Ollama local
     LLM_BASE_URL: ${LLM_BASE_URL:-http://ollama:11434/v1}
     LLM_API_KEY: ${LLM_API_KEY:-ollama}
