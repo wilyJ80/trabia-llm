@@ -405,12 +405,20 @@ trabia-llm/
 │   └── settings.py            # Config (pydantic-settings, env vars)
 │
 ├── tests/                     # Testes com pytest
-├── docker-compose.yaml        # PostgreSQL + Ollama + API
-├── Dockerfile                 # Imagem da API (uv-based, slim)
-├── Makefile                   # Comandos úteis
-├── pyproject.toml             # Dependências e metadados
-├── env.example                # Template de configuração
-└── alembic.ini                # Config do Alembic
+│   ├── conftest.py             # Fixtures compartilhadas
+│   ├── test_extract.py         # Testes unitários de extração (no_db)
+│   ├── test_api.py             # Testes HTTP da API (health, ingest, query)
+│   ├── test_chunks.py          # Testes de chunking
+│   └── test_repository.py      # Testes do repositório
+├── test_cases.json             # Casos de teste para avaliação experimental
+├── docker-compose.yaml         # PostgreSQL + Ollama + API
+├── Dockerfile                  # Imagem da API (uv-based, slim)
+├── Makefile                    # Comandos úteis
+├── pyproject.toml              # Dependências, ruff, pytest config
+├── .env                        # Config ativa (gitignorado)
+├── env.example                 # Template de configuração
+├── .gitignore                  # Arquivos ignorados pelo git
+└── alembic.ini                 # Config do Alembic
 ```
 
 ---
@@ -468,6 +476,7 @@ EMBED_MODEL=nomic-embed-text:latest
 | `make test` | Roda testes no container |
 | `make test-local` | Roda testes localmente |
 | `make revision msg="descrição"` | Cria nova migration Alembic |
+| `make ingest` | Roda pipeline de ingestão do PDF |
 | `make clean` | Remove containers + volumes + imagens |
 | `make reset` | Clean + build + up |
 
@@ -475,12 +484,24 @@ EMBED_MODEL=nomic-embed-text:latest
 
 ## 🧪 Testes
 
+O projeto usa **pytest** com suporte a async e marker `no_db` para testes que não precisam de banco.
+
+| Arquivo | Descrição | Marcação |
+|---------|-----------|----------|
+| `tests/test_extract.py` | Testes unitários de extração (parse, repair, fallbacks, confidence) | `no_db` |
+| `tests/test_api.py` | Testes HTTP contra a API rodando (health, ingest, query) | — |
+| `tests/test_chunks.py` | Testes de chunking | — |
+| `tests/test_repository.py` | Testes do repositório pgvector | — |
+
 ```bash
 # Dentro do container (recomendado)
 make test
 
 # Localmente (requer PostgreSQL + Ollama rodando)
 make test-local
+
+# Testes sem banco (rápidos, não precisam de containers)
+PYTHONPATH=src uv run pytest tests/test_extract.py -v
 ```
 
 ---
@@ -513,6 +534,7 @@ As migrações do banco (Alembic) rodam **automaticamente na inicialização da 
 | **Chunking** | LangChain RecursiveCharacterTextSplitter |
 | **ORM** | SQLAlchemy 2.0 (async) |
 | **Migrações** | Alembic |
+| **Linter/Formatter** | Ruff (F, E, W, I + format) |
 | **Container** | Docker Compose (uv-based slim image) |
 
 ---
