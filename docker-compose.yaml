@@ -1,0 +1,63 @@
+x-dev-variables: &dev
+  environment:
+    POSTGRES_USER: ${POSTGRES_USER:-postgres}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mysecretpassword}
+    POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    PG_HOST: ${PG_HOST:-postgres}
+    PG_PORT: ${PG_PORT:-5432}
+    # LLM (OpenAI-compatível) — defaults apontam pro Ollama local
+    LLM_BASE_URL: ${LLM_BASE_URL:-http://ollama:11434/v1}
+    LLM_API_KEY: ${LLM_API_KEY:-ollama}
+    LLM_MODEL: ${LLM_MODEL:-phi4-mini:latest}
+    # Embeddings (OpenAI-compatível)
+    EMBED_BASE_URL: ${EMBED_BASE_URL:-http://ollama:11434/v1}
+    EMBED_API_KEY: ${EMBED_API_KEY:-ollama}
+    EMBED_MODEL: ${EMBED_MODEL:-nomic-embed-text:latest}
+    K: ${K:-5}
+
+services:
+  # ── Vector Database ─────────────────────────────────────────────
+  postgres:
+    image: pgvector/pgvector:pg17
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "${PG_PORT:-5432}:5432"
+    <<: *dev
+    networks:
+      - trabia-llm-network
+
+  # ── Local LLM ───────────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - trabia-llm-network
+
+  # ── RAG API (migrations run on startup via lifespan) ────────────
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    <<: *dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    networks:
+      - trabia-llm-network
+
+volumes:
+  ollama_data:
+
+networks:
+  trabia-llm-network:
