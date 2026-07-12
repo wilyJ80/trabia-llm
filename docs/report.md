@@ -58,28 +58,17 @@ O `RAGService` concentra as operações principais:
 - `query`: vetoriza a pergunta, recupera trechos similares e pede uma resposta ao LLM.
 - `extract`: recebe o documento, recupera contexto opcional e pede um JSON estruturado ao LLM.
 
-O armazenamento vetorial usa PostgreSQL com pgvector. O projeto mantém tabelas
-separadas para cada tipo de embedding:
+O armazenamento vetorial usa PostgreSQL com pgvector, acessado por SQLAlchemy.
+A aplicação define dois models ORM em `src/infra/models.py`: `ChunkModel`, usado
+pela tabela `chunk` com embeddings OpenAI-compatíveis de 768 dimensões, e
+`ChunkSpacyModel`, usado pela tabela `chunk_spacy` com embeddings spaCy de 300
+dimensões. Cada model registra o texto do chunk, a página de origem e o vetor
+associado.
 
-```sql
-CREATE TABLE chunk (
-    id INTEGER PRIMARY KEY,
-    snippet TEXT NOT NULL,
-    embedding vector(768) NOT NULL,
-    page INTEGER NOT NULL
-);
-
-CREATE TABLE chunk_spacy (
-    id INTEGER PRIMARY KEY,
-    snippet TEXT NOT NULL,
-    embedding vector(300) NOT NULL,
-    page INTEGER NOT NULL
-);
-```
-
-A separação evita misturar vetores de dimensionalidades diferentes e permite
-comparar o comportamento do sistema com embeddings OpenAI-compatíveis e com
-embeddings locais do spaCy.
+As migrations do Alembic criam as tabelas correspondentes no banco. Essa separação
+evita misturar vetores de dimensionalidades diferentes e permite comparar o
+comportamento do sistema com embeddings OpenAI-compatíveis e com embeddings locais
+do spaCy.
 
 ## Recuperação Vetorial
 
