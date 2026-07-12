@@ -12,6 +12,9 @@
 - 🧬 **Embedders múltiplos** — OpenAI-compatível (768d) **ou** spaCy (300d) para experimentos comparativos
 - 🧪 **Tabelas separadas por embedder** — dados não se misturam, comparação justa
 - 📋 **Respostas estruturadas** com conteúdo + fontes citadas com páginas
+- 📑 **Extração estruturada de documentos** — extrai campos como tipo, título, eventos, atores, organizações, fatos e evidências de PDFs ou texto bruto
+- ✅ **Validação em camadas** — parse JSON → repair automático → fallbacks determinísticos → validação de campos obrigatórios
+- 🧠 **Pipeline de reparo** — quando o LLM retorna JSON mal formatado, uma segunda chamada tenta corrigi-lo automaticamente
 - ⚡ **Async-first** — FastAPI + SQLAlchemy async + AsyncOpenAI
 - 🐳 **Docker Compose** — ambiente completo com um comando
 
@@ -70,6 +73,18 @@ Upload PDF → POST /api/ingest
   ├─ 4. Repositório armazena chunk + vetor no pgvector
   └─ 5. Confirmação com total de chunks
 ```
+
+### Fluxo de extração (Extract)
+
+```
+PDF ou texto → POST /api/extract
+  ├─ 1. PDFLoader extrai texto (se PDF) ou usa texto enviado
+  ├─ 2. (Opcional) Embedder busca chunks similares como contexto externo
+  ├─ 3. LLM extrai campos estruturados (json_mode)
+  ├─ 4. Parse do JSON → reparo se necessário
+  ├─ 5. Fallbacks determinísticos para campos óbvios
+  ├─ 6. Validação de campos obrigatórios
+  └─ 7. ExtractedDocument com status (valid/partial/invalid) + confidence
 
 ---
 
@@ -214,6 +229,70 @@ Resposta:
 }
 ```
 
+### `POST /api/extract` — Extrair dados estruturados
+
+Extrai campos estruturados de um PDF ou texto bruto usando LLM com validação em múltiplas camadas.
+
+**Parâmetros (multipart/form-data):**
+
+| Parâmetro | Tipo | Padrão | Descrição |
+|-----------|------|--------|-----------|
+| `file` | `File` | opcional | Arquivo PDF para extração |
+| `text` | `string` | `""` | Texto bruto para extração |
+| `top_k` | `int` | `5` | Chunks de contexto externo (0 = sem RAG) |
+| `embedder` | `string` | `"openai"` | `"openai"` (768d) ou `"spacy"` (300d) |
+
+> Envie pelo menos um dos dois: `file` (PDF) **ou** `text` (texto bruto), ou ambos.
+
+```bash
+# Extrair de um PDF
+curl -X POST http://localhost:8000/api/extract \
+  -F "file=@relatorio.pdf" \
+  -F "top_k=5" \
+  -F "embedder=openai"
+
+# Extrair de texto bruto
+curl -X POST http://localhost:8000/api/extract \
+  -F "text=O relatório trata da CPMI do 8 de Janeiro..." \
+  -F "top_k=3"
+```
+
+Resposta:
+```json
+{
+  "extraction": {
+    "document_type": "relatorio",
+    "title": "Relatório da CPMI",
+    "main_event": "Comissão Parlamentar Mista de Inquérito",
+    "dates": ["2023-01-08"],
+    "actors": ["Jair Bolsonaro", "Walter Delgatti"],
+    "organizations": ["CPMI", "Polícia Federal"],
+    "facts": [
+      "Relatório aponta omissão do ex-presidente",
+      "Documento sugere conduta criminosa"
+    ],
+    "evidence": [
+      "Trecho da página 486"
+    ],
+    "categories": ["político", "investigação"],
+    "sources": [
+      {"claim": "Relatório aponta omissão", "page": 486}
+    ],
+    "missing_required_fields": [],
+    "validation_status": "valid",
+    "validation_errors": [],
+    "confidence": "alta"
+  },
+  "context_chunks_used": 5,
+  "embedder_used": "openai",
+  "params_used": {
+    "sources": ["relatorio.pdf"],
+    "top_k": 5,
+    "embedder": "openai"
+  }
+}
+```
+
 ### `GET /api/health` — Status
 
 ```bash
@@ -295,19 +374,21 @@ trabia-llm/
 │   │   ├── dependencies.py    # DI: build_service(), get_service()
 │   │   ├── routes/
 │   │   │   ├── query.py       # POST /api/query
-│   │   │   └── ingest.py      # POST /api/ingest, GET /api/health
+│   │   │   ├── ingest.py      # POST /api/ingest, GET /api/health
+│   │   │   └── extract.py     # POST /api/extract
 │   │   └── schemas/
 │   │       ├── query.py       # QueryRequest / QueryResponse
-│   │       └── ingest.py      # IngestResponse / HealthResponse
+│   │       ├── ingest.py      # IngestResponse / HealthResponse
+│   │       └── extract.py     # ExtractResponse
 │   │
 │   ├── core/                  # Domínio (Ports & Models)
-│   │   ├── models.py          # Chunk, ChunkResult, Source, AIAnswer
-│   │   ├── prompt.py          # System prompt + build_rag_prompt()
-│   │   ├── service.py         # RAGService (orquestrador)
+│   │   ├── models.py          # Chunk, ChunkResult, Source, AIAnswer, ExtractedDocument
+│   │   ├── prompt.py          # System prompt + build_rag_prompt() + build_extraction_prompt()
+│   │   ├── service.py         # RAGService (query + extract + embed_and_store)
 │   │   └── port/
 │   │       ├── repository_port.py  # Interface do banco vetorial
 │   │       ├── embedder_port.py    # Interface do embedder
-│   │       └── llm_port.py         # Interface do LLM
+│   │       └── llm_port.py         # Interface do LLM (ask + ask_text)
 │   │
 │   ├── infra/                 # Adaptadores (implementações concretas)
 │   │   ├── database.py        # Async engine + session factory
