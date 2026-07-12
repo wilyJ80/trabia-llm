@@ -90,6 +90,25 @@ def test_parse_extraction_accepts_portuguese_keys_and_objects():
     assert extraction.sources[0].page == 2
 
 
+def test_parse_extraction_with_null_confidence_defaults_to_baixa():
+    """Null confidence should normalize to 'baixa', not crash validation."""
+    raw = """
+    {
+      "document_type": "relatorio",
+      "title": "Teste",
+      "main_event": "Evento",
+      "facts": ["Fato"],
+      "sources": [{"claim": "Fato", "page": 1}],
+      "confidence": null
+    }
+    """
+
+    extraction = RAGService._validate_extraction(RAGService._parse_extraction(raw))
+
+    assert extraction.validation_status == "valid"
+    assert extraction.confidence == "baixa"
+
+
 def test_extraction_fallbacks_fill_obvious_required_fields():
     extraction = RAGService._parse_extraction('{"facts": []}')
     document_text = """Relatório: T3 IA

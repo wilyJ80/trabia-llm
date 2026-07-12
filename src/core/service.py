@@ -201,7 +201,9 @@ class RAGService:
         normalized["sources"] = [RAGService._normalize_source(source) for source in sources]
 
         confidence = normalized.get("confidence")
-        if isinstance(confidence, str):
+        if confidence is None:
+            normalized["confidence"] = "baixa"
+        elif isinstance(confidence, str):
             confidence = confidence.lower().strip()
             if confidence in {"alta", "alto", "high"}:
                 normalized["confidence"] = "alta"
