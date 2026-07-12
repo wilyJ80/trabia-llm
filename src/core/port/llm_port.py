@@ -12,3 +12,13 @@ class LLMPort(ABC):
     async def ask(self, prompt: str) -> AIAnswer:
         """Send a prompt to the LLM and return a structured answer."""
         ...
+
+    @abstractmethod
+    async def ask_text(
+        self,
+        prompt: str,
+        max_tokens: int = 2048,
+        json_mode: bool = False,
+    ) -> str:
+        """Send a prompt to the LLM and return the raw text response."""
+        ...

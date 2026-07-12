@@ -34,16 +34,35 @@ class OpenAILLM(LLMPort):
 
     async def ask(self, prompt: str) -> AIAnswer:
         """Send the assembled prompt and parse the structured reply."""
-        response = await self._client.chat.completions.create(
-            model=self._model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.1,
-            max_tokens=2048,
-        )
-
-        content = response.choices[0].message.content or ""
+        content = await self.ask_text(prompt)
         answer, sources = self._parse_response(content)
         return AIAnswer(content=answer, sources=sources)
+
+    async def ask_text(
+        self,
+        prompt: str,
+        max_tokens: int = 2048,
+        json_mode: bool = False,
+    ) -> str:
+        """Send the assembled prompt and return the raw text response."""
+        request = {
+            "model": self._model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.1,
+            "max_tokens": max_tokens,
+        }
+        if json_mode:
+            request["response_format"] = {"type": "json_object"}
+
+        try:
+            response = await self._client.chat.completions.create(**request)
+        except Exception:
+            if not json_mode:
+                raise
+            request.pop("response_format", None)
+            response = await self._client.chat.completions.create(**request)
+
+        return response.choices[0].message.content or ""
 
     # ------------------------------------------------------------------
     # Response parsing — shared with the old OllamaLLM adapter

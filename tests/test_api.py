@@ -135,13 +135,13 @@ class TestIngest:
         assert resp.status_code == 422
 
     def test_ingest_invalid_embedder(self, client: httpx.Client, pdf_bytes: bytes):
-        """Invalid embedder name should be rejected with 400."""
+        """Invalid embedder name should be rejected with 422."""
         resp = client.post(
             "/api/ingest",
             files={"file": ("relatorio.pdf", pdf_bytes, "application/pdf")},
             data={"chunk_size": 2000, "chunk_overlap": 200, "embedder": "invalid"},
         )
-        assert resp.status_code == 400
+        assert resp.status_code == 422
 
 
 # ── POST /api/query ──────────────────────────────────────────────────────────
@@ -236,8 +236,8 @@ class TestQuery:
         )
         assert resp.status_code == 422
 
-    def test_query_invalid_embedder_defaults_to_openai(self, client: httpx.Client):
-        """Invalid embedder name should default to 'openai' gracefully."""
+    def test_query_invalid_embedder_rejected(self, client: httpx.Client):
+        """Invalid embedder name should be rejected by schema validation."""
         resp = client.post(
             "/api/query",
             json={
@@ -246,9 +246,7 @@ class TestQuery:
                 "embedder": "invalid_embedder",
             },
         )
-        assert resp.status_code == 200
-        data = resp.json()
-        assert data["embedder_used"] == "openai"
+        assert resp.status_code == 422
 
 
 # ── End-to-end: Ingest → Query ───────────────────────────────────────────────

@@ -1,5 +1,7 @@
 """Pydantic schemas for the Query endpoint."""
 
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 from core.models import AIAnswer
@@ -10,7 +12,7 @@ class QueryRequest(BaseModel):
 
     question: str = Field(..., min_length=1, description="Pergunta do usuário")
     top_k: int = Field(default=5, ge=1, le=50, description="Número de trechos a recuperar")
-    embedder: str = Field(
+    embedder: Literal["openai", "spacy"] = Field(
         default="openai",
         description="Tipo de embedding usado na busca: 'openai' (768d, padrão) ou 'spacy' (300d)",
     )

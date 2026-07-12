@@ -37,7 +37,11 @@ async def repo(session_factory) -> PgVectorRepository:
 
 
 @pytest_asyncio.fixture(autouse=True)
-async def cleanup(repo: PgVectorRepository) -> AsyncGenerator[None, None]:
+async def cleanup(request, repo: PgVectorRepository) -> AsyncGenerator[None, None]:
+    if request.node.get_closest_marker("no_db"):
+        yield
+        return
+
     await repo.delete_all()
     yield
     await repo.delete_all()

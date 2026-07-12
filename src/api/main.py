@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from api.dependencies import build_service
+from api.routes import extract as extract_router
 from api.routes import ingest as ingest_router
 from api.routes import query as query_router
 from infra.database import create_engine_and_session
@@ -60,6 +61,7 @@ def create_app() -> FastAPI:
         version="0.2.0",
         lifespan=lifespan,
     )
+    app.include_router(extract_router.router)
     app.include_router(query_router.router)
     app.include_router(ingest_router.router)
     return app

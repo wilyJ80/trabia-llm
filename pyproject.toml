@@ -44,6 +44,9 @@ where = ["src"]
 testpaths = ["tests"]
 pythonpath = ["src"]
 asyncio_mode = "auto"
+markers = [
+    "no_db: tests that do not require database cleanup",
+]
 
 [dependency-groups]
 dev = [

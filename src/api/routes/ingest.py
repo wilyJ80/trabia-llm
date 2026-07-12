@@ -2,6 +2,7 @@
 
 import os
 import tempfile
+from typing import Literal
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
@@ -19,7 +20,7 @@ async def ingest(
     file: UploadFile = File(..., description="Arquivo PDF para ingestão"),
     chunk_size: int = Form(default=2000, ge=500, le=8000, description="Tamanho de cada chunk"),
     chunk_overlap: int = Form(default=200, ge=0, le=1000, description="Sobreposição entre chunks"),
-    embedder: str = Form(
+    embedder: Literal["openai", "spacy"] = Form(
         default=EMBEDDER_OPENAI,
         description="Tipo de embedding: 'openai' (768d) ou 'spacy' (300d)",
     ),
@@ -39,12 +40,6 @@ async def ingest(
           -F "chunk_overlap=200" \
           -F "embedder=openai"
     """
-    if embedder not in (EMBEDDER_OPENAI, "spacy"):
-        raise HTTPException(
-            status_code=400,
-            detail=f"embedder deve ser '{EMBEDDER_OPENAI}' ou 'spacy'.",
-        )
-
     # Validate file type by extension
     if not file.filename or not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Apenas arquivos PDF são aceitos.")

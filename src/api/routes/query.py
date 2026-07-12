@@ -3,7 +3,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from api.dependencies import (
-    EMBEDDER_OPENAI,
     build_service,
     get_session_factory,
 )
@@ -26,10 +25,9 @@ async def query(
     Use ``embedder="openai"`` to query the main chunk table (768d),
     or ``embedder="spacy"`` to query the chunk_spacy table (300d).
     """
-    embedder = body.embedder if body.embedder in ("openai", "spacy") else EMBEDDER_OPENAI
     try:
-        service = build_service(session_factory, embedder_type=embedder)
+        service = build_service(session_factory, embedder_type=body.embedder)
         answer = await service.query(body.question, top_k=body.top_k)
-        return QueryResponse(answer=answer, embedder_used=embedder)
+        return QueryResponse(answer=answer, embedder_used=body.embedder)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

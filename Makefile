@@ -31,7 +31,7 @@ dev: ## Full dev startup: build → start → (migrations automáticas na API)
 	docker compose -f docker-compose.yaml down --remove-orphans
 	docker compose -f docker-compose.yaml build
 	docker compose -f docker-compose.yaml up -d ollama postgres
-	@sleep 2
+	@python -c "import time; time.sleep(2)"
 	$(MAKE) pull-models
 	docker compose -f docker-compose.yaml up -d api
 	@echo "API pronta em http://localhost:8000"
