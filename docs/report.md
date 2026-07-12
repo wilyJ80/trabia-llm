@@ -194,6 +194,37 @@ apareceu nos casos médios e nas perguntas com base insuficiente. Nos casos
 ambíguos, o desempenho caiu, indicando que mais contexto também pode introduzir
 trechos concorrentes e dificultar a resposta.
 
+### Avaliação qualitativa da extração
+
+O grupo também comparou a saída estruturada da interface com o PDF da CPMI, usando
+`top_k=5` e alternando entre os embedders `openai` e `spacy`. Nos dois casos, a
+aplicação retornou `validation_status=valid`, usou 5 chunks de contexto e
+identificou o tipo do documento, o título e o evento principal.
+
+O status da interface mostrou 1995 chunks na base do embedder `openai` e 1519
+chunks na base do embedder `spacy`. Como o projeto usa tabelas separadas para
+cada embedder, esses valores descrevem o estado das bases vetoriais no momento do
+teste. Eles não medem qualidade do embedding. Para comparar os embedders com maior
+controle, as duas tabelas precisam receber o mesmo corpus, com o mesmo
+`chunk_size`, o mesmo overlap e o mesmo processo de ingestão.
+
+Com o embedder `openai`, a interface indicou confiança baixa. A extração
+identificou atores como Olival Marques e André Fernandes, mas deixou datas,
+organizações, categorias e fontes sem identificação. O campo de fatos também
+mostrou um problema de normalização: parte das entradas apareceu como strings com
+estrutura de objeto, por exemplo contendo `fact` e `source` dentro do texto.
+
+Com o embedder `spacy`, a interface indicou confiança média. A extração preencheu
+mais campos, incluindo organizações, categorias, evidências e fontes. Ao mesmo
+tempo, a saída trouxe ruído: `Combat Armor` apareceu como ator, e alguns fatos
+vieram de trechos do sumário ou de títulos internos do documento, não de fatos
+substantivos.
+
+Essa amostra mostra que a troca de embedder altera o contexto recuperado e afeta a
+completude dos campos extraídos. Ela também mostra que o status `valid` mede a
+presença e o formato dos campos obrigatórios, enquanto a qualidade semântica dos
+valores exige análise humana ou métricas específicas por campo.
+
 ## Testes e Reprodutibilidade
 
 O repositório inclui testes com pytest. Os testes unitários cobrem chunking,
