@@ -6,9 +6,15 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
-from api.dependencies import EMBEDDER_OPENAI, build_service, get_service, get_session_factory
+from api.dependencies import (
+    EMBEDDER_OPENAI,
+    EMBEDDER_SPACY,
+    build_service,
+    get_session_factory,
+)
 from api.schemas.ingest import HealthResponse, IngestResponse
-from core.service import RAGService
+from infra.models import ChunkModel, ChunkSpacyModel
+from infra.repository import PgVectorRepository
 from ingest.chunker import TextChunker
 from ingest.loader import PDFLoader
 
@@ -87,11 +93,29 @@ async def ingest(
 
 @router.get("/health", response_model=HealthResponse)
 async def health(
-    service: RAGService = Depends(get_service),
+    embedder: Literal["openai", "spacy"] = EMBEDDER_OPENAI,
+    session_factory=Depends(get_session_factory),
 ) -> HealthResponse:
     """Check application health status."""
     try:
-        chunks = await service.chunk_count()
-        return HealthResponse(status="ok", chunks_count=chunks, llm_connected=True)
+        openai_repository = PgVectorRepository(session_factory, model_class=ChunkModel)
+        spacy_repository = PgVectorRepository(session_factory, model_class=ChunkSpacyModel)
+        chunks_by_embedder = {
+            EMBEDDER_OPENAI: await openai_repository.count_chunks(),
+            EMBEDDER_SPACY: await spacy_repository.count_chunks(),
+        }
+        return HealthResponse(
+            status="ok",
+            chunks_count=chunks_by_embedder[embedder],
+            llm_connected=True,
+            embedder_used=embedder,
+            chunks_by_embedder=chunks_by_embedder,
+        )
     except Exception:
-        return HealthResponse(status="error", chunks_count=0, llm_connected=False)
+        return HealthResponse(
+            status="error",
+            chunks_count=0,
+            llm_connected=False,
+            embedder_used=embedder,
+            chunks_by_embedder={EMBEDDER_OPENAI: 0, EMBEDDER_SPACY: 0},
+        )

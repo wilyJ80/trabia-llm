@@ -12,9 +12,21 @@ const extractConfidence = document.querySelector("#extract-confidence");
 const extractFile = document.querySelector("#extract-file");
 const extractFileLabel = document.querySelector("#extract-file-label");
 const workflowStatus = document.querySelector("#workflow-status");
-const chunksCount = document.querySelector("#chunks-count");
+const chunksOpenaiCount = document.querySelector("#chunks-openai-count");
+const chunksSpacyCount = document.querySelector("#chunks-spacy-count");
 const llmStatus = document.querySelector("#llm-status");
 const refreshHealthButton = document.querySelector("#refresh-health");
+const embedderSelects = document.querySelectorAll('select[name="embedder"]');
+
+function getSelectedEmbedder() {
+  return document.querySelector('select[name="embedder"]')?.value || "openai";
+}
+
+function syncEmbedders(value) {
+  embedderSelects.forEach((select) => {
+    select.value = value;
+  });
+}
 
 function setStatus(node, message, isError = false) {
   node.textContent = message;
@@ -143,13 +155,18 @@ async function parseResponse(response) {
 }
 
 async function refreshHealth() {
+  const embedder = getSelectedEmbedder();
   refreshHealthButton.disabled = true;
   try {
-    const payload = await fetch("/api/health").then(parseResponse);
-    chunksCount.textContent = String(payload.chunks_count ?? 0);
+    const payload = await fetch(`/api/health?embedder=${encodeURIComponent(embedder)}`).then(
+      parseResponse,
+    );
+    chunksOpenaiCount.textContent = String(payload.chunks_by_embedder?.openai ?? 0);
+    chunksSpacyCount.textContent = String(payload.chunks_by_embedder?.spacy ?? 0);
     llmStatus.textContent = payload.llm_connected ? "OK" : "Falha";
   } catch (error) {
-    chunksCount.textContent = "--";
+    chunksOpenaiCount.textContent = "--";
+    chunksSpacyCount.textContent = "--";
     llmStatus.textContent = "Falha";
   } finally {
     refreshHealthButton.disabled = false;
@@ -278,4 +295,10 @@ document.querySelectorAll("[data-example]").forEach((button) => {
 });
 
 refreshHealthButton.addEventListener("click", refreshHealth);
+embedderSelects.forEach((select) => {
+  select.addEventListener("change", () => {
+    syncEmbedders(select.value);
+    refreshHealth();
+  });
+});
 refreshHealth();

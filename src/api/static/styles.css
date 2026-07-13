@@ -477,6 +477,10 @@ button:disabled {
   border-radius: var(--radius);
 }
 
+.metric-grid div:last-child {
+  grid-column: 1 / -1;
+}
+
 .metric-grid dt {
   color: var(--muted);
   font-size: 0.76rem;

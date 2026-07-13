@@ -20,3 +20,8 @@ class HealthResponse(BaseModel):
     status: str = Field(default="ok", description="Status da aplicação")
     chunks_count: int = Field(default=0, description="Total de chunks no banco")
     llm_connected: bool = Field(default=False, description="Se o provedor de LLM está acessível")
+    embedder_used: str = Field(default="openai", description="Embedder usado para contar chunks")
+    chunks_by_embedder: dict[str, int] = Field(
+        default_factory=dict,
+        description="Total de chunks por tabela vetorial",
+    )

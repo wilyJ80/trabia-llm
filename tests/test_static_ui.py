@@ -31,3 +31,6 @@ def test_static_assets_are_served():
     assert "/api/query" in js_response.text
     assert "/api/ingest" in js_response.text
     assert "/api/extract" in js_response.text
+    assert "chunks-openai-count" in js_response.text
+    assert "chunks-spacy-count" in js_response.text
+    assert "chunks_by_embedder" in js_response.text
