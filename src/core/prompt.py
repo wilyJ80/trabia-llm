@@ -30,6 +30,23 @@ Pergunta:
 {query}"""
 
 
+DIRECT_PROMPT = """Você é um assistente especializado em responder perguntas gerais.
+
+Instruções:
+- Responda com base no seu conhecimento.
+- Se você não souber a resposta, diga claramente que não sabe.
+- Responda sempre em português.
+"""
+
+
+def build_direct_prompt(query: str) -> str:
+    """Build a simple prompt without RAG context for direct LLM queries."""
+    return f"""{DIRECT_PROMPT}
+
+Pergunta:
+{query}"""
+
+
 EXTRACTION_PROMPT = """Voce e um extrator estruturado de informacoes para uma aplicacao academica de LLM com validacao.
 
 Extraia informacoes do documento do usuario e retorne APENAS um objeto JSON valido, sem markdown, sem explicacoes fora do JSON.

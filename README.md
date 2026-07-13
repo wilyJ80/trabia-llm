@@ -10,13 +10,14 @@
 - 🔍 **Busca vetorial** via pgvector (similaridade por cosseno)
 - 🤖 **LLM intercambiável** — funciona com Ollama, OpenAI, Groq, Gemini, Together AI, etc.
 - 🧬 **Embedders múltiplos** — OpenAI-compatível (768d) **ou** spaCy (300d) para experimentos comparativos
+- 🚫 **Modo Sem RAG** — consulta o LLM diretamente sem busca vetorial, para comparação
 - 🧪 **Tabelas separadas por embedder** — dados não se misturam, comparação justa
 - 📋 **Respostas estruturadas** com conteúdo + fontes citadas com páginas
 - 📑 **Extração estruturada de documentos** — extrai campos como tipo, título, eventos, atores, organizações, fatos e evidências de PDFs ou texto bruto
 - ✅ **Validação em camadas** — parse JSON → repair automático → fallbacks determinísticos → validação de campos obrigatórios
 - 🧠 **Pipeline de reparo** — quando o LLM retorna JSON mal formatado, uma segunda chamada tenta corrigi-lo automaticamente
 - ⚡ **Async-first** — FastAPI + SQLAlchemy async + AsyncOpenAI
-- 🖥️ **Interface web** em `/` com fluxo de ingestão + extração usando o mesmo PDF
+- 🖥️ **Interface web** em `/` com toggle PDF/Texto, acordeão de configurações e health bar
 - 🐳 **Docker Compose** — ambiente completo com um comando
 
 ---
@@ -210,7 +211,7 @@ Resposta:
 
 ### `POST /api/query` — Perguntar
 
-Faz uma pergunta sobre o documento usando RAG.
+Faz uma pergunta sobre o documento usando RAG ou consulta o LLM diretamente.
 
 **Parâmetros (JSON body):**
 
@@ -218,7 +219,7 @@ Faz uma pergunta sobre o documento usando RAG.
 |-----------|------|--------|-----------|
 | `question` | `string` | obrigatório | Pergunta do usuário |
 | `top_k` | `int` | `5` | Número de trechos a recuperar (1–50) |
-| `embedder` | `string` | `"openai"` | `"openai"` para tabela 768d, `"spacy"` para tabela 300d |
+| `embedder` | `string` | `"none"` | `"openai"` (768d), `"spacy"` (300d) ou `"none"` (sem RAG) |
 
 ```bash
 curl -X POST http://localhost:8000/api/query \
@@ -310,15 +311,28 @@ Resposta:
 
 ### `GET /api/health` — Status
 
+Retorna o status da aplicação e contagem de chunks por embedder.
+
+**Parâmetros (query string):**
+
+| Parâmetro | Tipo | Padrão | Descrição |
+|-----------|------|--------|-----------|
+| `embedder` | `string` | `"openai"` | Embedder usado para o campo `chunks_count` |
+
 ```bash
-curl http://localhost:8000/api/health
+curl http://localhost:8000/api/health?embedder=openai
 ```
 
 ```json
 {
   "status": "ok",
-  "chunks_count": 4230,
-  "llm_connected": true
+  "chunks_count": 1533,
+  "llm_connected": true,
+  "embedder_used": "openai",
+  "chunks_by_embedder": {
+    "openai": 1533,
+    "spacy": 0
+  }
 }
 ```
 

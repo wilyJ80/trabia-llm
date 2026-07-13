@@ -12,9 +12,9 @@ class QueryRequest(BaseModel):
 
     question: str = Field(..., min_length=1, description="Pergunta do usuário")
     top_k: int = Field(default=5, ge=1, le=50, description="Número de trechos a recuperar")
-    embedder: Literal["openai", "spacy"] = Field(
-        default="openai",
-        description="Tipo de embedding usado na busca: 'openai' (768d, padrão) ou 'spacy' (300d)",
+    embedder: Literal["openai", "spacy", "none"] = Field(
+        default="none",
+        description="Tipo: 'openai' (768d), 'spacy' (300d) ou 'none' (sem RAG, apenas LLM)",
     )
 
 

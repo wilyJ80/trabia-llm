@@ -1,45 +1,14 @@
-import json
-import os
-import subprocess
-import time
+"""
+Script de avaliação experimental com Top K = 15 (comparativo vs padrão K=5).
 
+Uso:
+    uv run python run_evaluation_k15.py
 
-def run_evaluation():
-    with open("test_cases.json", "r") as f:
-        cases = json.load(f)
+Gera docs/performance_report_k15.md com os mesmos 30 casos testados
+contra os 3 embedders (openai, spacy, none) usando K=15.
+"""
 
-    # Use K=15
-    new_env = {**os.environ, "PYTHONPATH": "src", "K": "15"}
-
-    report_content = "# Relatório de Desempenho do RAG - CPMI 8 de Janeiro (K=15)\n\n"
-    report_content += "| Prompt | Categoria | Resposta | Score |\n"
-    report_content += "| --- | --- | --- | --- |\n"
-
-    for case in cases:
-        prompt = case["prompt"]
-        category = case["category"]
-
-        # Avoid rate limiting
-        time.sleep(1)
-
-        # Execute headless.py with K=15 enforced
-        result = subprocess.run(
-            ["uv", "run", "src/headless.py", prompt], env=new_env, capture_output=True, text=True
-        )
-
-        response = result.stdout.strip()
-        if result.returncode != 0:
-            response = f"[ERROR] {result.stderr.strip()}"
-
-        # Add empty column for Score
-        report_content += f"| {prompt} | {category} | {response} | |\n"
-        print(f"Processed: {prompt[:50]}...")
-
-    with open("docs/performance_report_k15.md", "w") as f:
-        f.write(report_content)
-
-    print("Report generated in docs/performance_report_k15.md")
-
+from run_evaluation import run_k15
 
 if __name__ == "__main__":
-    run_evaluation()
+    run_k15()

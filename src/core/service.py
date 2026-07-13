@@ -37,13 +37,21 @@ class RAGService:
         # 2. Retrieve relevant chunks
         results = await self._repository.search_similar(query_vector, top_k)
 
-        # 3. Format snippets with clear page markers
+        # 3. Check if any relevant context was found
+        if not results:
+            raise ValueError(
+                "Nenhum trecho relevante encontrado na base vetorial para este embedder. "
+                "Ingira um PDF primeiro ou selecione 'Sem RAG (so LLM)' para "
+                "consultar o modelo diretamente."
+            )
+
+        # 4. Format snippets with clear page markers
         snippets = [f"--- Trecho da página {r.page} ---\n{r.snippet}" for r in results]
 
-        # 4. Build the prompt
+        # 5. Build the prompt
         prompt = build_rag_prompt(question, snippets)
 
-        # 5. Ask the LLM
+        # 6. Ask the LLM
         return await self._llm.ask(prompt)
 
     async def extract(self, document_text: str, top_k: int = 5) -> tuple[ExtractedDocument, int]:

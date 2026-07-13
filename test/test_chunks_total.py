@@ -1,4 +1,3 @@
-
 from domain.cpmidoc.models import CPMIDocPage
 from ingest.chunker import Chunker
 from ingest.loader import Loader
