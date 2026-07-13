@@ -1,15 +1,12 @@
-from ingest.loader import Loader
-from ingest.chunker import Chunker
-from ingest.embedder import Embedder
-from domain.cpmidoc.models import CPMIDocPage, CPMIDocResult
-from domain.cpmidoc.dao import CPMIDocDao
+import sys
+
 from psycopg_pool import ConnectionPool
-from settings import Settings
+
 from ai.llm import LLM
 from ai.models import AIAnswer
 from domain.cpmidoc.service import CPMIDocService
-from psycopg_pool import ConnectionPool
-import sys
+from settings import Settings
+
 
 def main():
     # Check if arguments were passed
@@ -28,9 +25,7 @@ def main():
 
     # INFO: AI answers with structured output and grounded info
     settings: Settings = Settings()
-    llm: LLM = LLM(
-        settings.GOOGLE_API_KEY, settings.CHAT_MODEL
-    )
+    llm: LLM = LLM(settings.GOOGLE_API_KEY, settings.CHAT_MODEL)
 
     # INFO: Manual question step (vector search won't be a tool)
     service: CPMIDocService = CPMIDocService(pool)
@@ -54,7 +49,8 @@ def main():
     """
 
     response: AIAnswer | None = llm.ask(prompt)
-    print(response) if response else print('[ERROR] Could not ask LLM')
+    print(response) if response else print("[ERROR] Could not ask LLM")
+
 
 if __name__ == "__main__":
     main()

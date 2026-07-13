@@ -1,13 +1,15 @@
 import spacy
-from domain.cpmidoc.models import CPMIDocPage
 from tqdm import tqdm
+
+from domain.cpmidoc.models import CPMIDocPage
+
 
 class Embedder:
     def __init__(self):
         try:
-            self.nlp = spacy.load('pt_core_news_lg')
+            self.nlp = spacy.load("pt_core_news_lg")
         except Exception as e:
-            print(f'[ERROR] Could not load embedding model. {e}')
+            print(f"[ERROR] Could not load embedding model. {e}")
 
     def embed(self, chunks: list[CPMIDocPage]) -> list[CPMIDocPage]:
         embedded_chunks: list[CPMIDocPage] = []
@@ -15,9 +17,7 @@ class Embedder:
             embeddings = self.nlp(chunk.content)
             embedded_chunks.append(
                 CPMIDocPage(
-                    content=chunk.content,
-                    page=chunk.page,
-                    embeddings=embeddings.vector.tolist()
+                    content=chunk.content, page=chunk.page, embeddings=embeddings.vector.tolist()
                 )
             )
 

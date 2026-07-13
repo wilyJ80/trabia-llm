@@ -1,18 +1,12 @@
-from ingest.loader import Loader
+
+from domain.cpmidoc.models import CPMIDocPage
 from ingest.chunker import Chunker
-from ingest.embedder import Embedder
-from domain.cpmidoc.models import CPMIDocPage, CPMIDocResult
-from domain.cpmidoc.dao import CPMIDocDao
-from psycopg_pool import ConnectionPool
-from settings import Settings
-from ai.llm import LLM
-from ai.models import AIAnswer
-from domain.cpmidoc.service import CPMIDocService
-from psycopg_pool import ConnectionPool
+from ingest.loader import Loader
+
 
 def test_ai_integration():
     # INFO: Load data source
-    filepath: str = 'data/relatorio-cpmi-versao-consolidada_231017_100010.pdf'
+    filepath: str = "data/relatorio-cpmi-versao-consolidada_231017_100010.pdf"
     loader: Loader = Loader()
     content: list[CPMIDocPage] = loader.load(filepath)
     assert content is not None

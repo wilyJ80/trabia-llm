@@ -1,7 +1,9 @@
-from settings import Settings
 import pytest
-from domain.cpmidoc.dao import CPMIDocDao
 from psycopg_pool import ConnectionPool
+
+from domain.cpmidoc.dao import CPMIDocDao
+from settings import Settings
+
 
 @pytest.fixture(autouse=True)
 def cleanup():
