@@ -3,23 +3,24 @@
 # ── Services ──────────────────────────────────────────────────────
 
 up: ## Start all services (PostgreSQL + Ollama + API)
-	docker compose -f docker-compose.yaml up -d
+	@docker compose -f docker-compose.yaml up -d
 
 down: ## Stop and remove all services
-	docker compose -f docker-compose.yaml down
+	@echo "stoping and removing all services"
+	@docker compose -f docker-compose.yaml down
 
 build: ## Build (or rebuild) the API image
-	docker compose -f docker-compose.yaml build
+	@docker compose -f docker-compose.yaml build
 
 pull: pull-models ## Pull base images + Ollama models
-	docker compose -f docker-compose.yaml pull
+	@docker compose -f docker-compose.yaml pull
 
 pull-models: ## Baixar modelos do Ollama (LLM + embedding) — necessário na primeira vez
-	docker compose -f docker-compose.yaml up -d ollama
+	@docker compose -f docker-compose.yaml up -d ollama
 	@echo "Baixando phi4-mini:latest (~2.5GB)..."
-	docker compose -f docker-compose.yaml exec -T ollama ollama pull phi4-mini:latest
+	@docker compose -f docker-compose.yaml exec -T ollama ollama pull phi4-mini:latest
 	@echo "Baixando nomic-embed-text:latest (~137MB)..."
-	docker compose -f docker-compose.yaml exec -T ollama ollama pull nomic-embed-text:latest
+	@docker compose -f docker-compose.yaml exec -T ollama ollama pull nomic-embed-text:latest
 	@echo "Modelos baixados!"
 
 logs: ## Tail logs from all services
@@ -28,12 +29,12 @@ logs: ## Tail logs from all services
 # ── Development ──────────────────────────────────────────────────
 
 dev: ## Full dev startup: build → start → (migrations automáticas na API)
-	docker compose -f docker-compose.yaml down --remove-orphans
-	docker compose -f docker-compose.yaml build
-	docker compose -f docker-compose.yaml up -d ollama postgres
-	@python -c "import time; time.sleep(2)"
-	$(MAKE) pull-models
-	docker compose -f docker-compose.yaml up -d api
+	@docker compose -f docker-compose.yaml down --remove-orphans
+	@docker compose -f docker-compose.yaml build
+	@docker compose -f docker-compose.yaml up -d ollama postgres
+	@uv run python -c "import time; time.sleep(2)"
+	@$(MAKE) pull-models
+	@docker compose -f docker-compose.yaml up -d api
 	@echo "API pronta em http://localhost:8000"
 	@echo "Swagger docs em http://localhost:8000/docs"
 

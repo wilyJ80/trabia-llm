@@ -218,11 +218,20 @@ extractFile.addEventListener("change", () => {
   extractFileLabel.textContent = extractFile.files[0]?.name || "Selecionar PDF";
 });
 
+// Track which submit button was clicked (more reliable than event.submitter)
+let formSubmitMode = "ingest_extract";
+
+extractForm.querySelectorAll("button[name=mode]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    formSubmitMode = btn.value;
+  });
+});
+
 extractForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const sourceData = new FormData(extractForm);
-  const mode = event.submitter?.value || "ingest_extract";
+  const mode = formSubmitMode;
   const file = extractFile.files[0];
   const text = String(sourceData.get("text") || "").trim();
   const embedder = String(sourceData.get("embedder") || "openai");

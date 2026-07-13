@@ -1,8 +1,9 @@
-from settings import Settings
-from ingest.embedder import Embedder
 from psycopg_pool import ConnectionPool
+
 from domain.cpmidoc.dao import CPMIDocDao
 from domain.cpmidoc.models import CPMIDocResult
+from ingest.embedder import Embedder
+
 
 class CPMIDocService:
     def __init__(self, pool: ConnectionPool):

@@ -1,7 +1,8 @@
 from psycopg.rows import class_row
-import psycopg_pool
-from domain.cpmidoc.models import CPMIDocPage, CPMIDocResult
 from psycopg_pool import ConnectionPool
+
+from domain.cpmidoc.models import CPMIDocPage, CPMIDocResult
+
 
 class CPMIDocDao:
     def __init__(self, pool: ConnectionPool):
@@ -44,7 +45,12 @@ class CPMIDocDao:
                 )
                 """
                 cur.execute(
-                    sql, (doc.content, doc.embeddings, doc.page,)
+                    sql,
+                    (
+                        doc.content,
+                        doc.embeddings,
+                        doc.page,
+                    ),
                 )
                 return cur.rowcount
 
@@ -57,6 +63,12 @@ class CPMIDocDao:
                 ORDER BY distance
                 LIMIT %s;
                 """
-                cur.execute(sql, (query_embedding, limit,))
+                cur.execute(
+                    sql,
+                    (
+                        query_embedding,
+                        limit,
+                    ),
+                )
                 docs: list[CPMIDocResult] = cur.fetchall()
                 return docs

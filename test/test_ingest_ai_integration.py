@@ -1,18 +1,19 @@
-from ingest.loader import Loader
-from ingest.chunker import Chunker
-from ingest.embedder import Embedder
-from domain.cpmidoc.models import CPMIDocPage, CPMIDocResult
-from domain.cpmidoc.dao import CPMIDocDao
 from psycopg_pool import ConnectionPool
-from settings import Settings
+
 from ai.llm import LLM
 from ai.models import AIAnswer
+from domain.cpmidoc.dao import CPMIDocDao
+from domain.cpmidoc.models import CPMIDocPage, CPMIDocResult
 from domain.cpmidoc.service import CPMIDocService
-from psycopg_pool import ConnectionPool
+from ingest.chunker import Chunker
+from ingest.embedder import Embedder
+from ingest.loader import Loader
+from settings import Settings
+
 
 def test_ai_integration():
     # INFO: Load data source
-    filepath: str = 'data/relatorio-cpmi-versao-consolidada_231017_100010.pdf'
+    filepath: str = "data/relatorio-cpmi-versao-consolidada_231017_100010.pdf"
     loader: Loader = Loader()
     content: list[CPMIDocPage] = loader.load(filepath)
     assert content is not None
@@ -55,20 +56,18 @@ def test_ai_integration():
     assert dao.select_count() > 0
 
     # INFO: check if query works
-    embedded_query: list[int | float] = embedder.embed_query('Congresso')
+    embedded_query: list[int | float] = embedder.embed_query("Congresso")
     result: list[CPMIDocResult] = dao.select_similarity(embedded_query, settings.K)
     assert result is not None
     assert len(result) > 0
 
     # INFO: AI answers with structured output and grounded info
     settings: Settings = Settings()
-    llm: LLM = LLM(
-        settings.GOOGLE_API_KEY, settings.CHAT_MODEL
-    )
+    llm: LLM = LLM(settings.GOOGLE_API_KEY, settings.CHAT_MODEL)
 
     # INFO: Manual question step (vector search won't be a tool)
     service: CPMIDocService = CPMIDocService(pool)
-    query: str = 'Congresso'
+    query: str = "Congresso"
     search_results: list[str] = service.get_from_knowledge_base(query, 5)
     prompt: str = f"""
     <system>
@@ -87,4 +86,4 @@ def test_ai_integration():
     assert len(response.content) > 0
     assert isinstance(response, AIAnswer)
 
-    print(response) # INFO: for debugging
+    print(response)  # INFO: for debugging
