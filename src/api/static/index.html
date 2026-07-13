@@ -4,15 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Trabia LLM | RAG</title>
-    <link rel="stylesheet" href="/static/styles.css?v=20260712-2" />
-    <script src="/static/app.js?v=20260712-2" defer></script>
+    <link rel="stylesheet" href="/static/styles.css?v=20260712-3" />
+    <script src="/static/app.js?v=20260712-3" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Ir para a consulta</a>
     <div class="page-shell">
       <header class="topbar" aria-label="Cabecalho">
         <div>
-          <p class="eyebrow">RAG sobre o relatorio da CPMI</p>
+          <p class="eyebrow">RAG sobre documentos ingeridos</p>
           <h1>Trabia LLM</h1>
         </div>
         <nav class="top-actions" aria-label="Links principais">
@@ -109,7 +109,7 @@
           <section class="query-panel" aria-labelledby="query-title">
             <div class="section-heading">
               <p class="eyebrow">Consulta</p>
-              <h2 id="query-title">Pergunte a base vetorial</h2>
+              <h2 id="query-title">Consulte a base vetorial</h2>
             </div>
 
             <form id="query-form" class="query-form">
@@ -120,7 +120,7 @@
                 rows="6"
                 required
                 minlength="1"
-                placeholder="Ex.: O que o relatorio diz sobre os atos de 8 de janeiro?"
+                placeholder="Ex.: Quais sao os principais pontos do documento ingerido?"
               ></textarea>
 
               <div class="control-grid">
@@ -139,14 +139,14 @@
               </div>
 
               <div class="prompt-strip" aria-label="Perguntas de exemplo">
-                <button type="button" data-example="Do que se trata o relatorio?">
+                <button type="button" data-example="Quais sao os principais pontos do documento ingerido?">
                   Visao geral
                 </button>
-                <button type="button" data-example="Quais atores sao citados no relatorio?">
+                <button type="button" data-example="Quais atores sao citados no documento?">
                   Atores citados
                 </button>
-                <button type="button" data-example="O relatorio menciona o 8 de Janeiro?">
-                  8 de Janeiro
+                <button type="button" data-example="Quais datas importantes aparecem no documento?">
+                  Datas importantes
                 </button>
               </div>
 
