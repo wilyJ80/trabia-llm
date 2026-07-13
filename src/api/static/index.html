@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trabia LLM | RAG</title>
+    <link rel="stylesheet" href="/static/styles.css?v=20260713-1" />
+    <script src="/static/app.js?v=20260713-1" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Ir para conteudo principal</a>
+    <div class="page-shell">
+      <!-- ============================================
+           TOPBAR — brand + health bar + nav links
+           ============================================ -->
+      <header class="topbar" aria-label="Cabecalho">
+        <div class="topbar-brand">
+          <p class="eyebrow">Sistema de busca semantica</p>
+          <h1>Trabia LLM</h1>
+        </div>
+
+        <div class="topbar-meta">
+          <div class="health-bar" aria-label="Status da base vetorial">
+            <div class="health-stat">
+              <span class="health-stat-label">OpenAI</span>
+              <span id="chunks-openai-count" class="health-stat-value">--</span>
+            </div>
+            <span class="health-sep" aria-hidden="true"></span>
+            <div class="health-stat">
+              <span class="health-stat-label">spaCy</span>
+              <span id="chunks-spacy-count" class="health-stat-value">--</span>
+            </div>
+            <span class="health-sep" aria-hidden="true"></span>
+            <div class="health-stat health-stat-llm">
+              <span class="health-dot" id="health-dot" title="Status LLM"></span>
+              <span class="health-stat-label">LLM</span>
+              <span id="llm-status" class="health-stat-value health-llm-value">--</span>
+            </div>
+
+            <button type="button" class="health-refresh-btn" id="refresh-health" title="Atualizar status">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+            </button>
+
+            <small class="health-timestamp" id="health-timestamp" aria-live="polite"></small>
+          </div>
+
+          <nav class="top-actions" aria-label="Links principais">
+            <a href="/docs">Swagger</a>
+            <a href="/api/health">Health</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="main">
+        <!-- ============================================
+             EXTRACTION WORKFLOW
+             ============================================ -->
+        <section class="primary-workflow" aria-label="Extracao e ingestao">
+          <div class="workflow-grid">
+
+            <!-- LEFT: Extract Panel -->
+            <section class="extract-panel card" aria-labelledby="extract-title">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Etapa 1</p>
+                  <h2 id="extract-title">Ingerir e extrair</h2>
+                </div>
+                <output id="extract-status" class="status-pill" aria-live="polite">Pronto</output>
+              </div>
+
+              <form id="extract-form" class="extract-form">
+                <!-- Input mode toggle -->
+                <div class="input-mode-toggle" role="radiogroup" aria-label="Tipo de entrada">
+                  <button type="button" class="toggle-btn active" data-mode="file" role="radio" aria-checked="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    Arquivo PDF
+                  </button>
+                  <button type="button" class="toggle-btn" data-mode="text" role="radio" aria-checked="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Texto bruto
+                  </button>
+                </div>
+
+                <!-- File drop zone (visible when mode=file) -->
+                <label class="file-drop" id="file-drop-zone" data-input-mode="file">
+                  <svg class="file-drop-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  <span class="file-drop-text">
+                    <span id="extract-file-label">Selecionar PDF</span>
+                    <span class="file-drop-hint">ou arraste e solte aqui</span>
+                  </span>
+                  <input id="extract-file" name="file" type="file" accept="application/pdf" />
+                </label>
+
+                <!-- Text input (visible when mode=text) -->
+                <label for="extract-text" data-input-mode="text" hidden>
+                  <span class="label-text">Texto bruto</span>
+                  <textarea
+                    id="extract-text"
+                    name="text"
+                    rows="6"
+                    placeholder="Cole aqui um trecho do documento para extrair campos sem ingerir PDF."
+                  ></textarea>
+                </label>
+
+                <!-- Advanced settings accordion (all config params) -->
+                <details class="advanced-settings" open>
+                  <summary class="advanced-summary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="advanced-chevron">
+                      <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                    <span>Configuracoes avancadas</span>
+                  </summary>
+                  <div class="advanced-body">
+                    <label>
+                      <span class="label-text">Embedder</span>
+                      <select name="embedder">
+                        <option value="openai">OpenAI compativel</option>
+                        <option value="spacy">spaCy</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span class="label-text">Top K</span>
+                      <input name="top_k" type="number" min="0" max="50" value="5" />
+                    </label>
+                    <label>
+                      <span class="label-text">Chunk size</span>
+                      <input name="chunk_size" type="number" min="500" max="8000" value="2000" title="Quantidade de caracteres por trecho (chunk). Valores maiores captam mais contexto; valores menores permitem busca mais precisa." />
+                      <span class="field-hint">Tamanho de cada trecho (500-8000)</span>
+                    </label>
+                    <label>
+                      <span class="label-text">Chunk overlap</span>
+                      <input name="chunk_overlap" type="number" min="0" max="1000" value="200" title="Sobreposicao de caracteres entre trechos consecutivos. Ajuda a nao perder contexto no limite entre chunks." />
+                      <span class="field-hint">Sobreposicao entre trechos (0-1000)</span>
+                    </label>
+                    <label class="reset-collection-control">
+                      <input name="reset_collection" type="checkbox" checked />
+                      <span class="label-text">Substituir base</span>
+                      <span class="field-hint">Limpa a colecao do embedder antes da ingestao</span>
+                    </label>
+                  </div>
+                </details>
+
+                <!-- Progress stepper -->
+                <div id="extract-stepper" class="stepper" aria-hidden="true" hidden>
+                  <div class="stepper-step" data-step="1">
+                    <span class="stepper-indicator">1</span>
+                    <span class="stepper-label">Ingerir</span>
+                  </div>
+                  <div class="stepper-line"></div>
+                  <div class="stepper-step" data-step="2">
+                    <span class="stepper-indicator">2</span>
+                    <span class="stepper-label">Extrair</span>
+                  </div>
+                  <div class="stepper-line"></div>
+                  <div class="stepper-step" data-step="3">
+                    <span class="stepper-indicator">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </span>
+                    <span class="stepper-label">Pronto</span>
+                  </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="action-row">
+                  <button class="primary-action" type="submit" name="mode" value="ingest_extract">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    <span id="primary-action-label">Ingerir e extrair PDF</span>
+                  </button>
+                  <button class="secondary-action" type="submit" name="mode" value="extract_only">
+                    So extrair
+                  </button>
+                </div>
+
+                <output id="workflow-status" class="form-note" aria-live="polite"></output>
+              </form>
+            </section>
+
+            <!-- RIGHT (now full width): Extract Result -->
+            <section class="extract-result-panel card" aria-labelledby="extract-result-title">
+              <div class="answer-header">
+                <div>
+                  <p class="eyebrow">Resultado</p>
+                  <h2 id="extract-result-title">Extracao estruturada</h2>
+                </div>
+                <div class="badge-row" aria-label="Validacao">
+                  <span id="extract-validation" class="status-pill">--</span>
+                  <span id="extract-confidence" class="status-pill">--</span>
+                </div>
+              </div>
+
+              <div id="extract-result" class="extract-result empty-state">
+                <div class="empty-state-content">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="empty-state-icon">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                  </svg>
+                  <p class="empty-state-title">Nenhum documento processado</p>
+                  <p class="empty-state-hint">Envie um PDF para ingerir na base vetorial e extrair campos como tipo, titulo, atores, datas e evidencias automaticamente.</p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ============================================
+             QUERY WORKFLOW
+             ============================================ -->
+        <section class="support-workflow" aria-label="Consulta a base vetorial">
+          <div class="query-grid">
+            <!-- LEFT: Query Form -->
+            <section class="query-panel card" aria-labelledby="query-title">
+              <div class="section-heading">
+                <p class="eyebrow">Etapa 2</p>
+                <h2 id="query-title">Consultar base vetorial</h2>
+              </div>
+
+              <form id="query-form" class="query-form">
+                <label for="question">
+                  <span class="label-text">Pergunta</span>
+                  <textarea
+                    id="question"
+                    name="question"
+                    rows="5"
+                    required
+                    minlength="1"
+                    placeholder="Ex.: Quais sao os principais pontos abordados no documento?"
+                  ></textarea>
+                </label>
+
+                <div class="control-grid compact">
+                  <label>
+                    <span class="label-text">Embedder</span>
+                    <select name="embedder" id="embedder">
+                      <option value="none" selected>Sem RAG (so LLM)</option>
+                      <option value="openai">OpenAI compativel</option>
+                      <option value="spacy">spaCy</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span class="label-text">Top K</span>
+                    <input id="top-k" name="top_k" type="number" min="1" max="50" value="5" />
+                  </label>
+                </div>
+
+                <div class="prompt-strip" aria-label="Perguntas de exemplo">
+                  <button type="button" data-example="Quais sao os principais pontos abordados no documento?">Visao geral</button>
+                  <button type="button" data-example="Quais atores sao citados no documento?">Atores</button>
+                  <button type="button" data-example="Quais datas importantes aparecem no documento?">Datas</button>
+                  <button type="button" data-example="Quais organizacoes sao mencionadas?">Organizacoes</button>
+                </div>
+
+                <button class="secondary-action" type="submit">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  Consultar RAG
+                </button>
+              </form>
+            </section>
+
+            <!-- RIGHT: Answer -->
+            <section class="answer-panel card" aria-labelledby="answer-title">
+              <div class="answer-header">
+                <div>
+                  <p class="eyebrow">Resposta</p>
+                  <h2 id="answer-title">Resultado da consulta</h2>
+                </div>
+                <output id="query-status" class="status-pill" aria-live="polite">Pronto</output>
+              </div>
+
+              <article class="answer-box">
+                <div id="loading-spinner" class="loading-overlay" hidden>
+                  <div class="spinner"></div>
+                </div>
+                <div id="answer-content" class="empty-state">
+                  <div class="empty-state-content">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="empty-state-icon">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                      <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <p class="empty-state-title">Nenhuma consulta realizada</p>
+                    <p class="empty-state-hint">Digite uma pergunta ou clique nos exemplos acima para buscar na base vetorial.</p>
+                  </div>
+                </div>
+              </article>
+
+              <div class="sources-block">
+                <div class="sources-heading">
+                  <h3>Fontes citadas</h3>
+                  <span id="source-count" class="source-badge">0</span>
+                </div>
+                <ol id="sources-list" class="sources-list"></ol>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+  </body>
+</html>

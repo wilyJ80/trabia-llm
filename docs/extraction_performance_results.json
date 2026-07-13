@@ -1,0 +1,3107 @@
+{
+  "metadata": {
+    "executed_at": "2026-07-13T17:01:48-03:00",
+    "api_base": "http://localhost:8000/api",
+    "case_count": 30,
+    "embedder": "spacy",
+    "top_k": [
+      0,
+      5
+    ],
+    "corpus": "data\\relatorio-cpmi-versao-consolidada_231017_100010.pdf",
+    "chunks_stored": 1533,
+    "chunk_size": 2000,
+    "chunk_overlap": 200
+  },
+  "results": [
+    {
+      "case_id": "easy_01",
+      "category": "facil",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 38.673,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 9,
+      "expected_total": 9,
+      "expected_coverage": 1.0,
+      "extraction": {
+        "document_type": "relatório",
+        "title": "RELATORIO DE AUDITORIA DE SEGURANÇA",
+        "main_event": "Resultado da auditoria de segurança apresentada ao Departamento de Tecnologia",
+        "dates": [
+          "10/05/2026",
+          "17/05/2026"
+        ],
+        "actors": [
+          "Ana Souza"
+        ],
+        "organizations": [
+          "Departamento de Tecnologia",
+          "segurança"
+        ],
+        "facts": [
+          "Ana Souza apresentou o resultado da auditoria.",
+          "Equipe identificou duas contas sem autenticacao em dois fatores.",
+          "Correcao determinada até 17/05/2026."
+        ],
+        "evidence": [],
+        "categories": [
+          "Auditoria",
+          "Segurança"
+        ],
+        "sources": [
+          {
+            "claim": "RELATORIO DE AUDITORIA DE SEGURANÇA",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "easy_02",
+      "category": "facil",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 15.959,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 5,
+      "expected_total": 10,
+      "expected_coverage": 0.5,
+      "extraction": {
+        "document_type": "comunicado",
+        "title": "ATAS DA REUNIO DO CONSORCILLO",
+        "main_event": "A reuniao ocorreu em 12 de junho de 2026.",
+        "dates": [
+          "12 de junho de 2026"
+        ],
+        "actors": [
+          "Bruno Lima",
+          "Carla Mendes"
+        ],
+        "organizations": [],
+        "facts": [
+          "o calendario academico da Universidade Horizonte foi aprovado por unanimidade"
+        ],
+        "evidence": [],
+        "categories": [
+          "universidades",
+          "agenda"
+        ],
+        "sources": [],
+        "missing_required_fields": [
+          "main_event"
+        ],
+        "inferred_fields": [
+          "main_event"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "easy_03",
+      "category": "facil",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 21.046,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 7,
+      "expected_coverage": 0.8571,
+      "extraction": {
+        "document_type": "edital",
+        "title": "EDITAL 07/2026 - BOLSAS DE PESQUISA",
+        "main_event": "Oferta de bolsas do Instituto Aurora para pesquisa",
+        "dates": [
+          "30/08/2026",
+          "15/09/2026"
+        ],
+        "actors": [],
+        "organizations": [
+          "Instituto Aurora"
+        ],
+        "facts": [
+          "O Instituto Aurora oferece 20 bolsas.",
+          "As inscricoes terminam em 30/08/2026",
+          "O resultado sera publicado em 15/09/2026"
+        ],
+        "evidence": [],
+        "categories": [
+          "Bolsas de Pesquisa",
+          "Educação"
+        ],
+        "sources": [
+          {
+            "claim": "EDITAL 07/2026 - BOLSAS DE PESQUISA",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "easy_04",
+      "category": "facil",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 18.742,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 8,
+      "expected_total": 9,
+      "expected_coverage": 0.8889,
+      "extraction": {
+        "document_type": "noticia",
+        "title": "HOSPITAL MUNICIPAL INAUGURA NOVA ALA",
+        "main_event": "Inauguração do Hospital Municipal de Lago Azul",
+        "dates": [
+          "3 de abril de 2026"
+        ],
+        "actors": [
+          "Prefeito Marina Alves"
+        ],
+        "organizations": [
+          "Prefeitura de Lago Azul",
+          "Hospital Municipal de Lago Azul"
+        ],
+        "facts": [
+          "NOTICIA: HOSPITAL MUNICIPAL INAUGURA NOVA ALA A Prefeitura de Lago Azul inaugurou em 3 de abril de 2026 uma ala com 12 leitos.",
+          "A prefeita Marina Alves participou da cerimonia."
+        ],
+        "evidence": [],
+        "categories": [
+          "Inauguração Hospitalar",
+          "Governança Local",
+          "Saúde Pública"
+        ],
+        "sources": [
+          {
+            "claim": "A Prefeitura de Lago Azul inaugurou em 3 de abril de 2026 uma ala com 12 leitos.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "facts"
+        ],
+        "inferred_fields": [
+          "facts"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "easy_05",
+      "category": "facil",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 23.883,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 8,
+      "expected_coverage": 0.75,
+      "extraction": {
+        "document_type": "memorando",
+        "title": "Manutencao Eletrica - Fico Sem Energia",
+        "main_event": "Fica sem energia no predio",
+        "dates": [
+          "22/07/2026"
+        ],
+        "actors": [],
+        "organizations": [
+          "Setor de Infraestrutura",
+          "Diretoria Administrativa"
+        ],
+        "facts": [
+          "O predio ficara sem energia das 8h às 10h.",
+          "Data da incident: 22/07/2026",
+          "Motivo: troca do transformador."
+        ],
+        "evidence": [],
+        "categories": [
+          "Manutenção",
+          "Energia"
+        ],
+        "sources": [
+          {
+            "claim": "Setor de Infraestrutura",
+            "page": 0
+          },
+          {
+            "claim": "Diretoria Administrativa",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "easy_06",
+      "category": "facil",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 26.602,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 7,
+      "expected_total": 8,
+      "expected_coverage": 0.875,
+      "extraction": {
+        "document_type": "comunicado",
+        "title": "João Ribeiro vence o Prêmio Jovem Cientista de 2026",
+        "main_event": "vitoria do Joao Ribeiro no Prêmio Jovem Cientista de 2026",
+        "dates": [
+          "9/11/2026"
+        ],
+        "actors": [
+          "João Ribeiro",
+          "Fundação Caminhos"
+        ],
+        "organizations": [
+          "Fundação Caminhos",
+          "Prêmio Jovem Cientista de 2026"
+        ],
+        "facts": [
+          "COMUNICADO DE RESULTADO A Fundacao Caminhos informa que Joao Ribeiro venceu o Premio Jovem Cientista de 2026.",
+          "A premiacao ocorrera em Salvador no dia 9/11/2026."
+        ],
+        "evidence": [
+          "comunicado de resultado da Fundação Caminhos"
+        ],
+        "categories": [
+          "premios",
+          "ciencia",
+          "jovens cientistas"
+        ],
+        "sources": [
+          {
+            "claim": "João Ribeiro venceu o Prêmio Jovem Cientista de 2026.",
+            "page": 0
+          },
+          {
+            "claim": "A premiacao ocorrera em Salvador no dia 9/11/2026.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "facts"
+        ],
+        "inferred_fields": [
+          "facts"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "medium_01",
+      "category": "medio",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 27.975,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 7,
+      "expected_total": 9,
+      "expected_coverage": 0.7778,
+      "extraction": {
+        "document_type": "oficio",
+        "title": "Solicitação da Secretaria de Mobilidade para o Plano Revisado de Operação da Via Norte",
+        "main_event": "A Secretaria de Mobilidade solicita ao Consorcio Via Norte a entrega do plano revisado de operacao.",
+        "dates": [
+          "31/2026",
+          "5 de outubro"
+        ],
+        "actors": [
+          "Secretaria de Mobilidade",
+          "Consorcio Via Norte"
+        ],
+        "organizations": [
+          "Secretaria de Mobilidade",
+          "Consorcio Via Norte"
+        ],
+        "facts": [
+          "A Secretaria de Mobilidade solicitou ao Consorcio Via Norte a entrega do plano revisado de operacao.",
+          "O pedido decorre de três atrasos registrados em setembro de 2026."
+        ],
+        "evidence": [],
+        "categories": [
+          "Mobilidade",
+          "Operação"
+        ],
+        "sources": [
+          {
+            "claim": "OFICIO 31/2026",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "medium_02",
+      "category": "medio",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 29.297,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 11,
+      "expected_total": 11,
+      "expected_coverage": 1.0,
+      "extraction": {
+        "document_type": "contrato",
+        "title": "CONTRATO DE FORNECIMENTO 44-A - Cooperação com Escola Parque para Kits de Alimentos",
+        "main_event": "Fornecimento de kits de alimentos a Escola Parque",
+        "dates": [
+          "14/02/2026"
+        ],
+        "actors": [
+          "Lucia Matos"
+        ],
+        "organizations": [
+          "Cooperativa Sol Nascente",
+          "Escola Parque"
+        ],
+        "facts": [
+          "{\"text\": \"500 kits de alimentos foram fornecidos.\"}",
+          "{\"text\": \"O valor do contrato é R$ 75.000.\"}",
+          "{\"text\": \"Vigência do contrato: seis meses.\"}"
+        ],
+        "evidence": [],
+        "categories": [
+          "contrato",
+          "fornecimento"
+        ],
+        "sources": [
+          {
+            "claim": "Fonte citada",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "medium_03",
+      "category": "medio",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 15.023,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 4,
+      "expected_total": 9,
+      "expected_coverage": 0.4444,
+      "extraction": {
+        "document_type": "perigo",
+        "title": "PARECER TECNICO SOBRE A PONTE CENTRAL",
+        "main_event": "conclusão da vistoria e recomendação para limitação do peso dos veiculos na ponte central",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "a estrutura pode operar após a vistoria realizada em 2/03/2026.",
+          "o engenheiro Paulo Nunes fez a vivistoria.",
+          "recomendou limitar o peso dos veiculos à 20 toneladas."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "medium_04",
+      "category": "medio",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 18.627,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 5,
+      "expected_total": 9,
+      "expected_coverage": 0.5556,
+      "extraction": {
+        "document_type": "documento",
+        "title": "Impacto da irrigacao por gotejamento no semiarido",
+        "main_event": "studie do impacto da irrigação por gotejamento em propriedades semaridas",
+        "dates": [
+          "2025"
+        ],
+        "actors": [],
+        "organizations": [
+          "Universidade do Sertao"
+        ],
+        "facts": [
+          "redução media de 28% no consumo de água"
+        ],
+        "evidence": [],
+        "categories": [
+          "irrigação",
+          "gotejamento",
+          "consumo de água"
+        ],
+        "sources": [
+          {
+            "claim": "Resumo do estudo da Universidade do Sertao",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type"
+        ],
+        "inferred_fields": [
+          "document_type"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type."
+        ],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "medium_05",
+      "category": "medio",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 25.059,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 7,
+      "expected_total": 9,
+      "expected_coverage": 0.7778,
+      "extraction": {
+        "document_type": "boletim de ocorrência",
+        "title": "BOLETIM DE OCORRENCIA 9081 - Furto em Terminal Rodoviário Serra Clara",
+        "main_event": "Furto de notebook no terminal rodoviario Serra Clara",
+        "dates": [
+          "18/01/2026",
+          "19h42"
+        ],
+        "actors": [
+          "Renata Costa",
+          "Polícia Civil de Serra Clara"
+        ],
+        "organizations": [],
+        "facts": [
+          "Renata Costa informou a Policia Civil de Serra Clara sobre o furto.",
+          "O fato foi registrado pelas câmeras no terminal rodoviário."
+        ],
+        "evidence": [
+          "{\"trecho\": \"Cameras registraram o fato as 19h42.\", \"page\": 0}"
+        ],
+        "categories": [
+          "Furto",
+          "Registro de ocorrência"
+        ],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "medium_06",
+      "category": "medio",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 17.469,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 9,
+      "expected_coverage": 0.6667,
+      "extraction": {
+        "document_type": "reato",
+        "title": "Plano de Projeto Farol",
+        "main_event": "modernização do portal de servicos da Agência Digital",
+        "dates": [
+          "1/09/2026"
+        ],
+        "actors": [
+          "Marquinhos Leal"
+        ],
+        "organizations": [
+          "Agência Digital",
+          "Equipe de oito pessoas"
+        ],
+        "facts": [
+          "{\"content\": \"O projeto tem um orcamento aprovado e de R$ 320 mil.\"}"
+        ],
+        "evidence": [],
+        "categories": [
+          "modernização",
+          "serviços da agência digital"
+        ],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "medium_07",
+      "category": "medio",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 24.865,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 7,
+      "expected_total": 8,
+      "expected_coverage": 0.875,
+      "extraction": {
+        "document_type": "noticia",
+        "title": "RESOLUCAO 12 DO CONSELHO MUNICIPAL - Aprovacao do Cadastro Público de Artistas",
+        "main_event": "Aprovação da criação de um cadastro público de artistas pelo Conselho Municipal de Cultura.",
+        "dates": [
+          "25/06/2026"
+        ],
+        "actors": [],
+        "organizations": [
+          "Conselho Municipal de Cultura",
+          "Secretaria de Cultura"
+        ],
+        "facts": [
+          "O Conselho Municipal de Cultura aprovou a criação de um cadastro público de artistas.",
+          "A Secretaria de Cultura publicara o formulário em ate 30 dias após a aprovação."
+        ],
+        "evidence": [],
+        "categories": [
+          "Cultura",
+          "Cadastro Público de Artistas"
+        ],
+        "sources": [
+          {
+            "claim": "RESOLUCAO 12 DO CONSELHO MUNICIPAL",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "ambiguous_01",
+      "category": "ambiguo",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 17.148,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 3,
+      "expected_total": 7,
+      "expected_coverage": 0.4286,
+      "extraction": {
+        "document_type": "memorando",
+        "title": "MINUTA - RELATORIO PRELIMINAR DO PROJETO ORION",
+        "main_event": "Relatório Preliminar do Projeto Orion",
+        "dates": [],
+        "actors": [
+          "Equipe",
+          "Diretoria Financeira"
+        ],
+        "organizations": [],
+        "facts": [
+          "Economia estimada de 11% encontrada na equipe.",
+          "O cálculo da economia ainda está sujeito a revisão pela Diretoria Financeira."
+        ],
+        "evidence": [],
+        "categories": [
+          "economia",
+          "revisao do projeto"
+        ],
+        "sources": [
+          {
+            "claim": "Economia estimada de 11% encontrada na equipe.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "ambiguous_02",
+      "category": "ambiguo",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 23.846,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 8,
+      "expected_total": 9,
+      "expected_coverage": 0.8889,
+      "extraction": {
+        "document_type": "registro de entrega",
+        "title": "REGISTRO DE ENTREGA - Equipamento Recebido e Garantia Iniciada",
+        "main_event": "Recepção do equipamento em uma empresa, início da garantia.",
+        "dates": [
+          "01/04/2026",
+          "03/04/2026"
+        ],
+        "actors": [
+          "Denise Rocha"
+        ],
+        "organizations": [],
+        "facts": [
+          "Equipamento foi recebido em 01/04/2026",
+          "Termo assinado em 03/04/2026",
+          "Garantia começou na primeira data de entrega"
+        ],
+        "evidence": [
+          "REGISTRO DE ENTREGA"
+        ],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Equipamento foi recebido em 01/04/2026",
+            "page": 0
+          },
+          {
+            "claim": "Termo assinado em 03/04/2026",
+            "page": 0
+          },
+          {
+            "claim": "Garantia começou na primeira data de entrega",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "ambiguous_03",
+      "category": "ambiguo",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 16.206,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 4,
+      "expected_total": 8,
+      "expected_coverage": 0.5,
+      "extraction": {
+        "document_type": "comunicado",
+        "title": "Informe Sobre o Programa Semente",
+        "main_event": "informação sobre o programa Semente",
+        "dates": [],
+        "actors": [
+          "Rosa Freire"
+        ],
+        "organizations": [
+          "Semente",
+          "Associacao Vale Vivo"
+        ],
+        "facts": [
+          "Semente recebeu 300 inscripções.",
+          "O programa Semente é uma iniciativa da Associacao Vale Vivo."
+        ],
+        "evidence": [],
+        "categories": [
+          "Educação",
+          "Iniciativas Sociais"
+        ],
+        "sources": [
+          {
+            "claim": "Rosa Freire informou sobre o número de inscripções no programa Semente.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "ambiguous_04",
+      "category": "ambiguo",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 17.817,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 8,
+      "expected_coverage": 0.75,
+      "extraction": {
+        "document_type": "comunicado",
+        "title": "REUNIAO SOBRE LICENCIAMENTO",
+        "main_event": "aprovacao da analise ambiental e solicitação de documentos adicionais pelo Instituto Verde para a empresa Pedra Alta",
+        "dates": [],
+        "actors": [
+          "Instituto Verde",
+          "Pedra Alta"
+        ],
+        "organizations": [
+          "comite tecnico",
+          "Instituto Verde",
+          "Pedra Alta"
+        ],
+        "facts": [
+          "REUNIAO SOBRE LICENCIAMENTO A analise ambiental foi aprovada pelo comite tecnico, mas a licenca nao foi concedida.",
+          "O Instituto Verde solicitou documentos adicionais a empresa Pedra Alta."
+        ],
+        "evidence": [],
+        "categories": [
+          "Licenciamento"
+        ],
+        "sources": [
+          {
+            "claim": "REUNIAO SOBRE LICENCIAMENTO",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "facts"
+        ],
+        "inferred_fields": [
+          "facts"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "ambiguous_05",
+      "category": "ambiguo",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 13.005,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 5,
+      "expected_total": 8,
+      "expected_coverage": 0.625,
+      "extraction": {
+        "document_type": "comunicado",
+        "title": "Nota Sobre a Sigla APS",
+        "main_event": "Neste documento, APS significa Agencia de Projetos Sociais.",
+        "dates": [
+          "8/08/2026"
+        ],
+        "actors": [],
+        "organizations": [
+          "Agência de Projetos Sociais"
+        ],
+        "facts": [
+          "NOTA SOBRE A SIGLA APS Neste documento, APS significa Agencia de Projetos Sociais.",
+          "A APS selecionou cinco propostas em 8/08/2026.",
+          "A sigla nao se refere a Atencao Primaria a Saude."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Nota Sobre a Sigla APS",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "main_event",
+          "facts"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "ambiguous_06",
+      "category": "ambiguo",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 28.842,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 8,
+      "expected_total": 10,
+      "expected_coverage": 0.8,
+      "extraction": {
+        "document_type": "relato",
+        "title": "RELATO DE TESTE DO SISTEMA LUMEN - Versão 2.0 Falhou nos Testes do Dia 6/06/2026, Mas Passou Após Correção de Iara Melo no Dia 7/06/2026",
+        "main_event": "Falha e posterior sucesso dos testes da versão 2.0 do Sistema Lumen após correção",
+        "dates": [
+          "06/06/2026",
+          "07/06/2026"
+        ],
+        "actors": [],
+        "organizations": [
+          "Sistema Lumen"
+        ],
+        "facts": [
+          "Versão 2.0 do Sistema Lumen falhou em dois testes no dia 06/06/2026.",
+          "Após correção de Iara Melo, os mesmos testes passaram na data seguinte, que foi o dia 07/06/2026."
+        ],
+        "evidence": [],
+        "categories": [
+          "testes",
+          "falha",
+          "sucesso"
+        ],
+        "sources": [
+          {
+            "claim": "Fonte citada",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "insufficient_01",
+      "category": "base_insuficiente",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 7.815,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "documento",
+        "title": "DOCUMENTO SEM CONTEUDO",
+        "main_event": "As informacoes detalhadas serao fornecidas posteriormente.",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "DOCUMENTO SEM CONTEUDO As informacoes detalhadas serao fornecidas posteriormente."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Fonte citada",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "main_event",
+          "facts"
+        ],
+        "validation_status": "invalid",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "insufficient_02",
+      "category": "base_insuficiente",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 8.58,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "documento",
+        "title": "rascunho alfa beta gama 123 sem contexto adicional",
+        "main_event": null,
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "rascunho alfa",
+          "beta gama"
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "insufficient_03",
+      "category": "base_insuficiente",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 9.348,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 1,
+      "expected_total": 1,
+      "expected_coverage": 1.0,
+      "extraction": {
+        "document_type": "relatorio",
+        "title": "RELATORIO",
+        "main_event": "Titulo ainda nao definido. Evento ainda nao informado. Fatos pendentes.",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Nenhum contexto externo recuperado.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "title",
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "title",
+          "main_event",
+          "facts"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "insufficient_04",
+      "category": "base_insuficiente",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 10.927,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "ata",
+        "title": "Data | Responsavel | Resultado",
+        "main_event": "-- | -- | --",
+        "dates": [
+          "2023-04-01"
+        ],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "A data fornecida é um formato de linha do documento sem informações específicas."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Data | Responsavel | Resultado",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "main_event"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "insufficient_05",
+      "category": "base_insuficiente",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 8.218,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "documento",
+        "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla informacao factual sobre um documento real foi fornecida.",
+        "main_event": null,
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          "Nulla informacao factual sobre um documento real foi fornecida."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Fonte citada",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "facts"
+        ],
+        "validation_status": "invalid",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "insufficient_06",
+      "category": "base_insuficiente",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 9.342,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "documento",
+        "title": "Qual foi a decisao tomada e quem participou? O trecho recebido contem apenas a pergunta, sem resposta ou contexto.",
+        "main_event": null,
+        "dates": [],
+        "actors": [
+          "Nenhum"
+        ],
+        "organizations": [],
+        "facts": [
+          "Qual foi a decisao tomada e quem participou?",
+          "O trecho recebido contem apenas a pergunta, sem resposta ou contexto."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Nenhum contexto externo recuperado.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "facts"
+        ],
+        "validation_status": "invalid",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "limits_01",
+      "category": "limite",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 12.939,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 6,
+      "expected_coverage": 1.0,
+      "extraction": {
+        "document_type": "memorando",
+        "title": "MEMORANDO DE TESTE DE BACKUP",
+        "main_event": "teste de backup concluído com sucesso em 4/04/2026",
+        "dates": [
+          "4/04/2026"
+        ],
+        "actors": [],
+        "organizations": [
+          "Equipe Atlas"
+        ],
+        "facts": [
+          "teste de backup sem perda de arquivos concluído"
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "limits_02",
+      "category": "limite",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 20.663,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 2,
+      "expected_total": 7,
+      "expected_coverage": 0.2857,
+      "extraction": {
+        "document_type": "registro",
+        "title": "RECORD OF SETUP CONFIGURATION",
+        "main_event": "Sistema received setup configuration fragment.",
+        "dates": [
+          "13/03/2026"
+        ],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "{\"The system received a configuration fragment with 'secure mode' and three attempts.\": null}",
+          "{\"Caio Luz activated secure mode on March 13, 2026.\": null}"
+        ],
+        "evidence": [
+          "O sistema recebeu o fragmento {\"modo\": \"seguro\", \"tentativas\": 3}. O tecnico Caio Luz ativou o modo seguro em 13/03/2026."
+        ],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "The system received a configuration fragment with 'secure mode' and three attempts.",
+            "page": 0
+          },
+          {
+            "claim": "Caio Luz activated secure mode on March 13, 2026.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "limits_03",
+      "category": "limite",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 17.464,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 3,
+      "expected_total": 9,
+      "expected_coverage": 0.3333,
+      "extraction": {
+        "document_type": "registro",
+        "title": "INCIDENT REPORT - NORTH DATA CENTER",
+        "main_event": "restauração do sistema de refrigeração",
+        "dates": [
+          "2026-03-02"
+        ],
+        "actors": [
+          "Alice Brown"
+        ],
+        "organizations": [
+          "North Cloud",
+          "North Data Center"
+        ],
+        "facts": [
+          "Restauracao do sistema de refrigeração realizada por Alice Brown.",
+          "Interrupção no serviço durou 17 minutos.",
+          "Nenhum dado foi perdido."
+        ],
+        "evidence": [],
+        "categories": [
+          "incidente",
+          "serviço",
+          "refrigeração"
+        ],
+        "sources": [
+          {
+            "claim": "On March 2, 2026, engineer Alice Brown restored the cooling system.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "limits_04",
+      "category": "limite",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 20.955,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 7,
+      "expected_total": 9,
+      "expected_coverage": 0.7778,
+      "extraction": {
+        "document_type": "relatório de carga",
+        "title": "RELATORIO DE CARGA",
+        "main_event": "processamento da aplicacao",
+        "dates": [
+          "20/10/2026"
+        ],
+        "actors": [],
+        "organizations": [
+          "Aplicação",
+          "Laboratório Nexus"
+        ],
+        "facts": [
+          "A aplicacao processou 100 requisicoes por segundo.",
+          "A aplicacao processou 250 requisicoes por segundo.",
+          "A aplicacao processou 500 requisicoes por segundo.",
+          "No maior volume, a latência chegou a 840 ms.",
+          "Nenhum erro foi registrado."
+        ],
+        "evidence": [],
+        "categories": [
+          "performance",
+          "latency"
+        ],
+        "sources": [
+          {
+            "claim": "RELATORIO DE CARGA",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "limits_05",
+      "category": "limite",
+      "top_k": 0,
+      "error": null,
+      "latency_seconds": 19.561,
+      "context_chunks_used": 0,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 7,
+      "expected_total": 9,
+      "expected_coverage": 0.7778,
+      "extraction": {
+        "document_type": "comunicado",
+        "title": "Aviso de Segurança - Tentativa de Manipulação Identificada",
+        "main_event": "Tentativa de manipulação com senha falha detectada",
+        "dates": [
+          "11/12/2026"
+        ],
+        "actors": [
+          "Porto Seguro Digital",
+          "analista Eva Dias"
+        ],
+        "organizations": [
+          "Porto Seguro Digital"
+        ],
+        "facts": [
+          "Tentativa de manipulação com senha falha detectada.",
+          "A empresa Porto Seguro Digital bloqueou o acesso."
+        ],
+        "evidence": [],
+        "categories": [
+          "Segurança",
+          "Manipulação"
+        ],
+        "sources": [
+          {
+            "claim": "Aviso de Segurança - Tentativa de manipulacao identificada.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "easy_01",
+      "category": "facil",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 76.188,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 7,
+      "expected_total": 9,
+      "expected_coverage": 0.7778,
+      "extraction": {
+        "document_type": "relatório",
+        "title": "RELATORIO DE AUDITORIA DE SEGURANÇA - Ana Souza, 10/05/2026",
+        "main_event": "Em 10/05/2026, Ana Souza apresentou ao Departamento de Tecnologia o resultado da auditoria.",
+        "dates": [
+          "10/05/2026"
+        ],
+        "actors": [
+          "Ana Souza",
+          "Departamento de Tecnologia"
+        ],
+        "organizations": [],
+        "facts": [
+          "Auditoria realizada em 10/05/2026",
+          "Resultado da auditoria apresentado ao Departamento de Tecnologia",
+          "Identificação de duas contas sem autenticacao em dois fatores",
+          "Correcao até 17/05/2026"
+        ],
+        "evidence": [],
+        "categories": [
+          "segurança",
+          "auditoria"
+        ],
+        "sources": [
+          {
+            "claim": "RELATORIO DE AUDITORIA DE SEGURANÇA",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "main_event"
+        ],
+        "inferred_fields": [
+          "main_event"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "easy_02",
+      "category": "facil",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 65.515,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 10,
+      "expected_coverage": 0.6,
+      "extraction": {
+        "document_type": "ata",
+        "title": "ATA DA REUNIAO DO CONSELHO",
+        "main_event": "A reuniao ocorreu em 12 de junho de 2026.",
+        "dates": [
+          "12/06/2026"
+        ],
+        "actors": [
+          "Bruno Lima",
+          "Carla Mendes"
+        ],
+        "organizations": [],
+        "facts": [
+          "ATA DA REUNIAO DO CONSELHO A reuniao ocorreu em 12 de junho de 2026.",
+          "Bruno Lima e Carla Mendes aprovaram o calendario academico da Universidade Horizonte por unanimidade."
+        ],
+        "evidence": [],
+        "categories": [
+          "Academia",
+          "Universidade"
+        ],
+        "sources": [
+          {
+            "claim": "null",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "main_event",
+          "facts"
+        ],
+        "validation_status": "invalid",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "easy_03",
+      "category": "facil",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 57.673,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 5,
+      "expected_total": 7,
+      "expected_coverage": 0.7143,
+      "extraction": {
+        "document_type": "edital",
+        "title": "07/2026 - BOLSAS DE PESQUISA O Instituto Aurora oferece 20 bolsas.",
+        "main_event": "As inscricoes terminam em 30/08/2026 e o resultado sera publicado em 15/09/2026.",
+        "dates": [
+          "30/08/2026",
+          "15/09/2026"
+        ],
+        "actors": [],
+        "organizations": [
+          "Instituto Aurora"
+        ],
+        "facts": [
+          "O Instituto Aurora oferece 20 bolsas."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Edital do Instituto Aurora",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "main_event"
+        ],
+        "inferred_fields": [
+          "main_event"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "easy_04",
+      "category": "facil",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 32.712,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 9,
+      "expected_coverage": 0.6667,
+      "extraction": {
+        "document_type": "noticia",
+        "title": "HOSPITAL MUNICIPAL INAUGURA NOVA ALA",
+        "main_event": "Inauguração de nova ala no Hospital Municipal de Lago Azul",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "Prefeitura de Lago Azul inaugurou uma nova ala com 12 leitos em 3 de abril de 2026.",
+          "A prefeita Marina Alves participou da cerimônia."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "easy_05",
+      "category": "facil",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 72.17,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 3,
+      "expected_total": 8,
+      "expected_coverage": 0.375,
+      "extraction": {
+        "document_type": "Memorando",
+        "title": "Manutência Eletrônica - Falha no Predio",
+        "main_event": "Falha na Energia Elétrica em um Predio",
+        "dates": [
+          "22/07/2026"
+        ],
+        "actors": [
+          "Setor de Infraestrutura",
+          "Diretoria Administrativa"
+        ],
+        "organizations": [],
+        "facts": [
+          "Falha na energia elétrica",
+          "Predio sem energia das 8h às 10h",
+          "Data: 22/07/2026"
+        ],
+        "evidence": [
+          "Memorando de Setor de Infraestrutura para Diretoria Administrativa."
+        ],
+        "categories": [
+          "Manutenção Eletrônica",
+          "Falha no Predio"
+        ],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "easy_06",
+      "category": "facil",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 56.292,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 8,
+      "expected_coverage": 0.75,
+      "extraction": {
+        "document_type": "comunicado",
+        "title": "João Ribeiro vence o Prêmio Jovem Cientista de 2026",
+        "main_event": "João Ribeiro ganha o Prêmio Jovem Cientista de 2026 em Salvador",
+        "dates": [
+          "9/11/2026"
+        ],
+        "actors": [
+          "Joao Ribeiro"
+        ],
+        "organizations": [],
+        "facts": [
+          "Joao Ribeiro venceu o Prêmio Jovem Cientista de 2026.",
+          "A premiacao ocorreu em Salvador."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Fundação Caminhos",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "medium_01",
+      "category": "medio",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 80.966,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 2,
+      "expected_total": 9,
+      "expected_coverage": 0.2222,
+      "extraction": {
+        "document_type": "relatório",
+        "title": "Ofício da Secretaria de Mobilidade à Via Norte",
+        "main_event": "Pedido para entrega do plano revisado de operação até o dia 5 de outubro, devido a três atrasos no mês de setembro de 2026.",
+        "dates": [
+          "31/2026"
+        ],
+        "actors": [
+          "Secretaria de Mobilidade",
+          "Consorcio Via Norte"
+        ],
+        "organizations": [],
+        "facts": [
+          "Documento é um relatório emitido pela Secretaria de Mobilidade em 31/2026.",
+          "O pedido está dirigido ao Consorcio Via Norte."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "medium_02",
+      "category": "medio",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 72.179,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 11,
+      "expected_coverage": 0.5455,
+      "extraction": {
+        "document_type": "Contrato",
+        "title": "CONTRATO DE FORNECIMENTO 44-A - A Cooperativa Sol Nascente fornecera 500 kits de alimentos a Escola Parque.",
+        "main_event": "A Cooperativa Sol Nascente fornecerá 500 kits de alimentos à Escola Parque.",
+        "dates": [
+          "14/02/2026"
+        ],
+        "actors": [
+          "Lucia Matos"
+        ],
+        "organizations": [],
+        "facts": [
+          "Cooperativa Sol Nascente",
+          "Escola Parque",
+          "500 kits de alimentos",
+          "Lucia Matos assina o contrato em 14/02/2026"
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "medium_03",
+      "category": "medio",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 82.734,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 4,
+      "expected_total": 9,
+      "expected_coverage": 0.4444,
+      "extraction": {
+        "document_type": "perito técnico",
+        "title": "PARECER TECNICO SOBRE A PONTE CENTRAL",
+        "main_event": "Conclusão do perito técnico sobre a ponte central após vistoria em 2/03/2026, recomendando limitar veiculos a 20 toneladas e instalação de sinalização.",
+        "dates": [],
+        "actors": [],
+        "organizations": [
+          "Departamento de Obras"
+        ],
+        "facts": [
+          "A estrutura da ponte pode operar com limitações",
+          "Recomendação para limitar peso dos veiculos",
+          "Sinalização necessária"
+        ],
+        "evidence": [
+          "Conclusão do perito técnico após vistoria em 2/03/2026",
+          "Recomendação para limitar peso dos veiculos a 20 toneladas",
+          "Sinalização necessária na ponte central"
+        ],
+        "categories": [
+          "Infraestrutura",
+          "Segurança Vial"
+        ],
+        "sources": [],
+        "missing_required_fields": [
+          "title"
+        ],
+        "inferred_fields": [
+          "title"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: title."
+        ],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "medium_04",
+      "category": "medio",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 61.918,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 5,
+      "expected_total": 9,
+      "expected_coverage": 0.5556,
+      "extraction": {
+        "document_type": "documento",
+        "title": "Impacto da irrigação por gotejamento no semiarido",
+        "main_event": "O estudo da Universidade do Sertao acompanhou 40 propriedades entre janeiro e maio de 2025.",
+        "dates": [
+          "janeiro",
+          "maio"
+        ],
+        "actors": [],
+        "organizations": [
+          "Universidade do Sertao"
+        ],
+        "facts": [
+          "O estudo acompanhou 40 propriedades.",
+          "Os autores observaram redução média de 28% no consumo de água."
+        ],
+        "evidence": [],
+        "categories": [
+          "irrigação",
+          "gotejamento"
+        ],
+        "sources": [
+          {
+            "claim": "Resumo",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "main_event"
+        ],
+        "inferred_fields": [
+          "document_type",
+          "main_event"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "medium_05",
+      "category": "medio",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 55.23,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 7,
+      "expected_total": 9,
+      "expected_coverage": 0.7778,
+      "extraction": {
+        "document_type": "boletim de ocorrência",
+        "title": "Renata Costa informa sobre furto em terminal rodoviário",
+        "main_event": "Furto de notebook em terminal rodoviario",
+        "dates": [
+          "18/01/2026"
+        ],
+        "actors": [
+          "Renata Costa",
+          "Polícia Civil de Serra Clara"
+        ],
+        "organizations": [],
+        "facts": [
+          "Renata Costa informou à Polícia Civil de Serra Clara sobre o furto.",
+          "O fato foi registrado pelas câmeras no terminal rodoviario às 19h42."
+        ],
+        "evidence": [
+          "Câmaras registraram o fato as 19h42."
+        ],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Renata Costa informou à Polícia Civil de Serra Clara sobre o furto.",
+            "page": 0
+          },
+          {
+            "claim": "O fato foi registrado pelas câmeras no terminal rodoviario às 19h42.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "medium_06",
+      "category": "medio",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 56.051,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 9,
+      "expected_coverage": 0.6667,
+      "extraction": {
+        "document_type": "documento",
+        "title": "Plano de Projeto Farol",
+        "main_event": "Modernização do portal de serviços da Agência Digital.",
+        "dates": [
+          "01/09/2026",
+          "R$ 320 mil"
+        ],
+        "actors": [],
+        "organizations": [
+          "Agência Digital"
+        ],
+        "facts": [
+          "Primeira entrega prevista para 1/09/2026.",
+          "Orçamento aprovado: R$ 320 mil."
+        ],
+        "evidence": [
+          "PLANO DE PROJETO FAROL",
+          "O projeto modernizara o portal de servicos da Agência Digital."
+        ],
+        "categories": [
+          "Projeto",
+          "Modernização"
+        ],
+        "sources": [],
+        "missing_required_fields": [
+          "document_type"
+        ],
+        "inferred_fields": [
+          "document_type"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "medium_07",
+      "category": "medio",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 57.015,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 3,
+      "expected_total": 8,
+      "expected_coverage": 0.375,
+      "extraction": {
+        "document_type": "noticia",
+        "title": "Cultura: O Conselho Municipal aprova cadastro público de artistas.",
+        "main_event": "Aprovação do Cadastro Público de Artistas pelo Conselho Municipal de Cultura.",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "O Conselho Municipal de Cultura aprovou o cadastro público de artistas em 25/06/2026.",
+          "A Secretaria de Cultura publicará o formulário no prazo de 30 dias."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "ambiguous_01",
+      "category": "ambiguo",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 123.004,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 2,
+      "expected_total": 7,
+      "expected_coverage": 0.2857,
+      "extraction": {
+        "document_type": "relatorio",
+        "title": "MINUTA - RELATORIO PRELIMINAR DO PROJETO ORION",
+        "main_event": "O documento registra resultados ainda sujeitos a revisao.",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "[\"Combat Armor, filial brasileira criada em 2019, apresentou rápido crescimento em contratos com Administração Pública.\", \"O Tribunal de Contas do Estado do Rio de Janeiro (TCE-RJ) e a Justiça Federal do Espírito Santo aplicaram sanções à Combat Armor por problemas relacionados à licitação ou entrega dos objetos contratados.\", [\"A Corporação fechou quinze contratos para blindagem de veículos, no valor total de R$ 39.9 milhões em 2020.\", \"O dono da Corporação se tornou próximo do deputado federal Eduardo Bolsonaro.\", [\"George Washington transferiu R$ 499,50 na conta do Nubank em 05/12/2022.\", \"George Washington transferiu R$ 3.000,00 para a empresa NO RISK COMERCIO DE ARMAS E MUNICOES LTDA no dia 21/12/2022.\", [\"RAQUEL GOULART ALCANTARA DE SOUZA ME (PANTANAL ADVENTURE) transferiu R$ 4.544,00 em Pix para George Washington.\", \"George Washington transferiu R$ 31.000,00 no Mercado Pago para outra conta de sua titularidade na Instituição de Pagamentos.\", [\"O mercado pagou R$ 13.340,00 via Pix para a Shooter Armas LTDA.\", \"Shooter Armas LTDA emitiu duas notas fiscais referentes à venda de munições com o valor total de R$ 8.140,00.\"], [\"George Washington transferiu R$ 4.430,00 do saldo remanescente na conta Mercadopago para outra conta da sua titularidade.\", \"O Mercado Pago ainda não encaminhou as informações financeiras de George Washington por meio do Sistema de investigação de movimentações bancárias - SIMBA.\"]], \"categories\"]], \"sources\"]"
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "main_event"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "ambiguous_02",
+      "category": "ambiguo",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 62.913,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 3,
+      "expected_total": 9,
+      "expected_coverage": 0.3333,
+      "extraction": {
+        "document_type": "registro de entrega",
+        "title": "Registro de Entrega - Equipamento Recebido em 01/04/2026",
+        "main_event": "Recepção do equipamento assinado no termo da Denise Rocha, com início da garantia em 03/04/2026.",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "Equipamento recebido em 01/04/2026",
+          "Termo assinado na data de 03/04/2026"
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "ambiguous_03",
+      "category": "ambiguo",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 69.659,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 5,
+      "expected_total": 8,
+      "expected_coverage": 0.625,
+      "extraction": {
+        "document_type": "relatório",
+        "title": "Informações sobre o Programa Semente",
+        "main_event": "A coordenadora do programa Semente informa sobre inscripções recebidas.",
+        "dates": [],
+        "actors": [
+          "Rosa Freire"
+        ],
+        "organizations": [
+          "Associacao Vale Vivo",
+          "Programa Semente"
+        ],
+        "facts": [
+          "Semente recebeu 300 inscrições."
+        ],
+        "evidence": [],
+        "categories": [
+          "programa social",
+          "associação"
+        ],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "ambiguous_04",
+      "category": "ambiguo",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 47.752,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 8,
+      "expected_coverage": 0.75,
+      "extraction": {
+        "document_type": "relatorio",
+        "title": "Licenciamento de Infraestrutura: Análise Ambiental e Solicitados Documentos Adicionais",
+        "main_event": "Aprovação da análise ambiental pelo comitê técnico, mas não concedência do licenciamento; solicitação de documentos adicionais por parte do Instituto Verde para a empresa Pedra Alta.",
+        "dates": [],
+        "actors": [
+          "comité tecnico",
+          "Instituto Verde",
+          "empresa Pedra Alta"
+        ],
+        "organizations": [
+          "comitíte técnico",
+          "Instituto Verde"
+        ],
+        "facts": [
+          "A análise ambiental foi aprovada pelo comité tecnico.",
+          "O licenciamento não foi concedido."
+        ],
+        "evidence": [],
+        "categories": [
+          "Licenciamento de Infraestrutura"
+        ],
+        "sources": [
+          {
+            "claim": "Fonte citada",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "ambiguous_05",
+      "category": "ambiguo",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 49.815,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 5,
+      "expected_total": 8,
+      "expected_coverage": 0.625,
+      "extraction": {
+        "document_type": "relatório",
+        "title": "SIGLA APS - Seleção de Propostas em 8/08/2026",
+        "main_event": "Seleção de cinco propostas por Agência de Projetos Sociais (APS)",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "APS selecionou cinco propostas em 8/08/2026.",
+          "A sigla APS não se refere a Atencao Primaria a Saude."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "ambiguous_06",
+      "category": "ambiguo",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 77.787,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 10,
+      "expected_coverage": 0.6,
+      "extraction": {
+        "document_type": "relato",
+        "title": "RELATO DE TESTE DO SISTEMA LUMEN",
+        "main_event": "Falha do Sistema Lumen na Testagem",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "Versão 2.0 falhou nos testes.",
+          "Os testes ocorreram no dia 6 de junho de 2026.",
+          "Após correção, os testes passaram em 7 de junho de 2026.",
+          "Sistema ainda está em processo de homologação."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "RELATO DE TESTE DO SISTEMA LUMEN",
+            "page": 0
+          },
+          {
+            "claim": "A versão 2.0 falhou nos testes.",
+            "page": 0
+          },
+          {
+            "claim": "Os testes ocorreram no dia 6 de junho de 2026.",
+            "page": 0
+          },
+          {
+            "claim": "Após correção, os testes passaram em 7 de junho de 2026.",
+            "page": 0
+          },
+          {
+            "claim": "Sistema ainda está em processo de homologação.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "title"
+        ],
+        "inferred_fields": [
+          "title"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: title."
+        ],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "insufficient_01",
+      "category": "base_insuficiente",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 93.424,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "documento",
+        "title": "DOCUMENTO SEM CONTEUDO",
+        "main_event": "As informacoes detalhadas serao fornecidas posteriormente.",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "DOCUMENTO SEM CONTEUDO As informacoes detalhadas serao fornecidas posteriormente."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "R FERREIRA COMERCIO VAREJISTA DE ARMAS E MUNICOES LTDA e L. P. PINHO COMERCIO DE ARTIGOS DE CACA E PESCA fazem parte do mesmo grupo empresarial.",
+            "page": 0
+          },
+          {
+            "claim": "Mensagens encorajadoras também eram frequentes entre parlamentares e outros expoentes de extrema-direita e nas redes sociais:",
+            "page": 199
+          },
+          {
+            "claim": "Escolas Cívicomilitares, Março/2021. Panorama das Escolas Cívico-militares Piloto Das Escolas Adidas Programa Nacional Das Escolas Cívico-militares, Março/2021.",
+            "page": 157
+          },
+          {
+            "claim": "Segundo a Doutrina de Operações Conjuntas do Ministério da Defesa, define-se189: '13.2.1 Operações Especiais (OpEsp) Operações conjudadas por forças militares especialmente organizadas, treinadas e equipadas, em ambientes hostis, negados ou politicamente sensíveis, visando a atingir objetivos militares, políticos, psicossociais e/ou econômicos, empregando capacidades militares específicas não encontradas nas forças convencionais. Podem ser conduzidas de forma singular, conjunta ou combinada, normalmente em ambientes interagências, em qualquer parte do espectro dos conflitos.'",
+            "page": 235
+          },
+          {
+            "claim": "'13.2.2 Forças de Operações Especiais (FOpEsp) São forças destinadas à execução das operações especiais: frações de Forças Especiais, Comandos e os seus apoios que possuem habilitações e especializações para operar em ambientes hostis, negados ou politicamente sensíveis. As FOpEsp, em termos gerais, podem ser caracterizadas por serem tropas de altíssimo desempenho que realizam missões especiais baseadas em suas capacidades específicas.'",
+            "page": 235
+          },
+          {
+            "claim": "'O Manual de Operações Especiais, por sua vez, detalha os tipos de missões destinadas às Forças de Operações Especiais, as quais são realizadas pelo Comando de Operações Especiais (COpEsp), sediado em Goiânia (GO) e pela 3ª Companhia de Forças Especiais (Força 3), do Comando Militar da Amazônia (CMA), sediada em Manaus (AM). Ademais, para cumprir suas missões, o COpEsp possuiria o 1º Batalhão de Forças Especiais (1º BFEsp); o 1º Batalhão de Ações de Comandos (1º BAC) e a 3ª Companhia de Forças Especiais (3ª CiaFEsp).'",
+            "page": 0
+          },
+          {
+            "claim": "'O mesmo manual explica que as operações com emprego de FOpEsp são: Operações Contra Forças Irregulares; Contrainsurgência;', ",
+            "page": 0
+          },
+          {
+            "claim": "confidence",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "main_event",
+          "facts"
+        ],
+        "validation_status": "invalid",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "insufficient_02",
+      "category": "base_insuficiente",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 37.937,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "documento",
+        "title": "[rascunho alfa beta gama]",
+        "main_event": null,
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "rascunho alfa beta gama 123 sem contexto adicional"
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Trecho da pagina 153",
+            "page": 153
+          },
+          {
+            "claim": "Trecho da pagina 462",
+            "page": 462
+          },
+          {
+            "claim": "Trecho da pagina 935",
+            "page": 935
+          },
+          {
+            "claim": "Trecho da pagina 1047",
+            "page": 1047
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "document_type",
+          "facts"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "insufficient_03",
+      "category": "base_insuficiente",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 89.893,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 1,
+      "expected_total": 1,
+      "expected_coverage": 1.0,
+      "extraction": {
+        "document_type": "relatorio",
+        "title": "RELATORIO",
+        "main_event": "Titulo ainda nao definido. Evento ainda nao informado. Fatos pendentes.",
+        "dates": [],
+        "actors": [
+          "nazistas",
+          "Bolsonaro, ele está preparado com o Exército, com as Forças Especi... As Forças Armadas...",
+          "Jair Bolsonaro",
+          "Alan Diego dos Santos Rodrigues"
+        ],
+        "organizations": [
+          "Nazistas",
+          "Exército, Forças Especiais... As Forças Armadas...",
+          "Agência Brasileira de Inteligência (Abin)"
+        ],
+        "facts": [],
+        "evidence": [],
+        "categories": [
+          "political violence",
+          "electoral process"
+        ],
+        "sources": [
+          {
+            "claim": "Trecho da pagina 221",
+            "page": 221
+          },
+          {
+            "claim": "Trecho da pagina 457",
+            "page": 457
+          },
+          {
+            "claim": "Trecho da pagina 363",
+            "page": 363
+          },
+          {
+            "claim": "Trecho da pagina 550",
+            "page": 550
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "main_event",
+          "facts"
+        ],
+        "validation_status": "invalid",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "insufficient_04",
+      "category": "base_insuficiente",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 43.862,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "noticia",
+        "title": "brasileiros-confiam-na-urna-eletronica",
+        "main_event": "-- | -- | --",
+        "dates": [
+          "2021-06"
+        ],
+        "actors": [
+          "brasileiros"
+        ],
+        "organizations": [],
+        "facts": [
+          "Brasileiros confiam na urna eletrônica.",
+          "11 partidos fecham acordo contra voto impresso."
+        ],
+        "evidence": [
+          "trecho da pagina 420",
+          "Trecho da pagina 160",
+          "Trecho da pagina 22 e 23"
+        ],
+        "categories": [
+          "política"
+        ],
+        "sources": [],
+        "missing_required_fields": [
+          "main_event"
+        ],
+        "inferred_fields": [
+          "main_event"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "limits_03",
+      "category": "limite",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 175.386,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 3,
+      "expected_total": 9,
+      "expected_coverage": 0.3333,
+      "extraction": {
+        "document_type": "incidente",
+        "title": "INCIDENT REPORT - NORTH DATA CENTER",
+        "main_event": "restauração do sistema de refrigeração e interrupção de serviço",
+        "dates": [
+          "2026-03-02"
+        ],
+        "actors": [
+          "Alice Brown"
+        ],
+        "organizations": [
+          "North Data Center",
+          "North Cloud"
+        ],
+        "facts": [
+          "restauração do sistema de refrigeração realizada por Alice Brown em 2 de março de 2026",
+          "interrupção de serviço de 17 minutos na North Cloud sem perda de dados"
+        ],
+        "evidence": [],
+        "categories": [
+          "incidente",
+          "serviço"
+        ],
+        "sources": [
+          {
+            "claim": "INCIDENT REPORT - NORTH DATA CENTER",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "limits_05",
+      "category": "limite",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 131.836,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 4,
+      "expected_total": 9,
+      "expected_coverage": 0.4444,
+      "extraction": {
+        "document_type": "comunicado",
+        "title": "Aviso de Segurança - Tentativa de Manipulação Identificada",
+        "main_event": "Tentativa de manipulação detectada na empresa Porto Seguro Digital.",
+        "dates": [],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "A citacao descreve uma tentativa de manipulação.",
+          "A empresa Porto Seguro Digital bloqueou o acesso em 11/12/2026.",
+          "O incidente foi notificado à analista Eva Dias."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "insufficient_05",
+      "category": "base_insuficiente",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 64.5,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "news article",
+        "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla informacao factual sobre um documento real foi fornecida.",
+        "main_event": null,
+        "dates": [],
+        "actors": [
+          "Hamilton Mourão",
+          "Ridato"
+        ],
+        "organizations": [
+          "Instituto Sagres",
+          "Comissão Militar da Polícia Federal (CPMI)",
+          "Supremo Tribunal Federal (STF)"
+        ],
+        "facts": [
+          "Relatório lançado em evento com presença do então vice-presidente Hamilton Mourão.",
+          "Ridauto é diretor do Instituto Sagres, investigado pela Comissão.",
+          "General Ridato participou dos atos antidemocráticos no dia 8 de janeiro de 2023.",
+          "Ridato afirmou que 'O pessoal tá (sic) applaudindo a Polícia Militar'.",
+          "Ridato mencionou o movimento irregular e recrutar pessoas sem experiência militar.",
+          "A Abin produziu relatórios indicando indivíduos uniformizados com treinamento militar, possivelmente recrutados por 'kids pretos'.",
+          "Determinação recebida pelo Exército seria cumprida imediatamente.",
+          "Negativa de conhecimento sobre Marcelino Haddad, Argino Bedin e Mcam Brasil."
+        ],
+        "evidence": [],
+        "categories": [
+          "politics",
+          "military"
+        ],
+        "sources": [
+          {
+            "claim": "Relatório lançado em evento com presença do então vice-presidente Hamilton Mourão.",
+            "page": 0
+          },
+          {
+            "claim": "Ridato participou dos atos antidemocráticos no dia 8 de janeiro de 2023.",
+            "page": 0
+          },
+          {
+            "claim": "'O pessoal tá (sic) applaudindo a Polícia Militar'.",
+            "page": 0
+          },
+          {
+            "claim": "Movimento irregular e recrutar pessoas sem experiência militar.",
+            "page": 0
+          },
+          {
+            "claim": "Indicações de indivíduos uniformizados com treinamento militar, possivelmente recrutados por 'kids pretos'.",
+            "page": 870
+          },
+          {
+            "claim": "Determinação recebida pelo Exército seria cumprida imediatamente.",
+            "page": 1088
+          },
+          {
+            "claim": "Negativa de conhecimento sobre Marcelino Haddad, Argino Bedin e Mcam Brasil.",
+            "page": 1047
+          }
+        ],
+        "missing_required_fields": [
+          "title",
+          "main_event"
+        ],
+        "inferred_fields": [
+          "title"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "media"
+      }
+    },
+    {
+      "case_id": "insufficient_06",
+      "category": "base_insuficiente",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 16.314,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 0,
+      "expected_total": 0,
+      "expected_coverage": null,
+      "extraction": {
+        "document_type": "documento",
+        "title": "Qual foi a decisao tomada e quem participou? O trecho recebido contem apenas a pergunta, sem resposta ou contexto.",
+        "main_event": null,
+        "dates": [
+          "1093",
+          "829",
+          "1088",
+          "780",
+          "778"
+        ],
+        "actors": [
+          "Ailton Barros",
+          "Elcio Franco",
+          "Mauro Cid"
+        ],
+        "organizations": [
+          "Exército Brasileiro",
+          "Supremo Tribunal Federal"
+        ],
+        "facts": [
+          "Qual foi a decisao tomada e quem participou?",
+          "O trecho recebido contem apenas a pergunta, sem resposta ou contexto."
+        ],
+        "evidence": [],
+        "categories": [
+          "golpe de estado",
+          "investigação criminal"
+        ],
+        "sources": [],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event",
+          "facts"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "facts"
+        ],
+        "validation_status": "invalid",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event.",
+          "Campo obrigatorio ausente ou insuficiente: facts."
+        ],
+        "confidence": "baixa"
+      }
+    },
+    {
+      "case_id": "limits_01",
+      "category": "limite",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 20.502,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 3,
+      "expected_total": 6,
+      "expected_coverage": 0.5,
+      "extraction": {
+        "document_type": "documento",
+        "title": "Memorando de Teste de Backup",
+        "main_event": "Equipe Atlas concluindo o teste de backup em 4/04/2026 sem perda de arquivos.",
+        "dates": [
+          "4/04/2026"
+        ],
+        "actors": [],
+        "organizations": [],
+        "facts": [
+          "Teste de backup realizado pela Equipe Atlas."
+        ],
+        "evidence": [],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "Equipe Atlas concluiu o teste de backup em 4/04/2026 sem perda de arquivos.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type"
+        ],
+        "inferred_fields": [
+          "document_type"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type."
+        ],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "limits_02",
+      "category": "limite",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 29.671,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": true,
+      "status_match": true,
+      "false_valid": false,
+      "expected_hits": 6,
+      "expected_total": 7,
+      "expected_coverage": 0.8571,
+      "extraction": {
+        "document_type": "registro",
+        "title": "Registro de Configuração do Sistema",
+        "main_event": "Ativação do Modo Seguro no Sistema",
+        "dates": [
+          "13/03/2026"
+        ],
+        "actors": [
+          "Caio Luz"
+        ],
+        "organizations": [],
+        "facts": [
+          "O sistema recebeu o fragmento de configuração.",
+          "O modo seguro foi ativado com 3 tentativas."
+        ],
+        "evidence": [
+          "REGISTRO DE CONFIGURACAO",
+          "O sistema recebeu o fragmento {\"modo\": \"seguro\", \"tentativas\": 3}. O tecnico Caio Luz ativou o modo seguro em 13/03/2026."
+        ],
+        "categories": [],
+        "sources": [
+          {
+            "claim": "REGISTRO DE CONFIGURACAO",
+            "page": 0
+          },
+          {
+            "claim": "O sistema recebeu o fragmento {\"modo\": \"seguro\", \"tentativas\": 3}. O tecnico Caio Luz ativou o modo seguro em 13/03/2026.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [],
+        "inferred_fields": [],
+        "validation_status": "valid",
+        "validation_errors": [],
+        "confidence": "alta"
+      }
+    },
+    {
+      "case_id": "limits_04",
+      "category": "limite",
+      "top_k": 5,
+      "error": null,
+      "latency_seconds": 102.587,
+      "context_chunks_used": 5,
+      "schema_valid": true,
+      "required_complete": false,
+      "status_match": false,
+      "false_valid": false,
+      "expected_hits": 2,
+      "expected_total": 9,
+      "expected_coverage": 0.2222,
+      "extraction": {
+        "document_type": "relatorio",
+        "title": "RELATORIO DE CARGA",
+        "main_event": "A aplicacao processou 100, 250 e 500 requisicoes por segundo.",
+        "dates": [
+          "2029",
+          "2019"
+        ],
+        "actors": [
+          "Eduardo Bolsonaro",
+          "Bolsonaro",
+          "PRF (Polícia Federal)",
+          "CNPJ específico",
+          "George Washington de Oliveira Sousa",
+          "Mauro Cid",
+          "Cleiton Henrique Holszchuk",
+          "Adriano Alves Teperino"
+        ],
+        "organizations": [
+          "Combat Armor Defense do Brasil",
+          "PRF (Polícia Federal)",
+          "Exército",
+          "Ordens da presidência de Brasil"
+        ],
+        "facts": [
+          "E todos com a Combat Armor Defense do Brasil, cujo dono é próximo do deputado Eduardo Bolsonaro.",
+          "A PRF passou de 9.9 mil policiais para 12.2 mil.",
+          "Bolsonaro pressionou a PRF a deixar de punir o transporte de armas pessoais e estimulou a corporação a amolecer o tratamento contra infrações cometidas por caminhoneiros, sua base eleitoral."
+        ],
+        "evidence": [],
+        "categories": [
+          "política",
+          "segurança"
+        ],
+        "sources": [
+          {
+            "claim": "Trecho da pagina 335 - Trecho da pagina 428 - Trecho da pagina 610 - Trecho da pagina 606",
+            "page": 0
+          },
+          {
+            "claim": "Notas taquigráficas da 5a reunião da CPMI. 3ª PARTE - Oitiva de Renato Martins Carrijo, Oitiva de Leonardo de Castro.",
+            "page": 0
+          }
+        ],
+        "missing_required_fields": [
+          "document_type",
+          "title",
+          "main_event"
+        ],
+        "inferred_fields": [
+          "title",
+          "document_type",
+          "main_event"
+        ],
+        "validation_status": "partial",
+        "validation_errors": [
+          "Campo obrigatorio ausente ou insuficiente: document_type.",
+          "Campo obrigatorio ausente ou insuficiente: title.",
+          "Campo obrigatorio ausente ou insuficiente: main_event."
+        ],
+        "confidence": "baixa"
+      }
+    }
+  ]
+}

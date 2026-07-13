@@ -1,16 +1,24 @@
+"""PDF text loader using PyMuPDF."""
+
 import pymupdf
 from pymupdf import Document
-from domain.cpmidoc.models import CPMIDocPage
 from tqdm import tqdm
 
-class Loader:
-    def load(self, filepath: str) -> list[CPMIDocPage]:
+from core.models import Chunk
+
+
+class PDFLoader:
+    """Load text content from a PDF file, one page at a time."""
+
+    def load(self, filepath: str) -> list[Chunk]:
+        """Extract text from each page of the PDF.
+
+        Returns a list of Chunk objects (one per page, no embeddings yet).
+        """
         doc: Document = pymupdf.open(filepath)
-        return [
-            CPMIDocPage(
-                content=page.get_text('text'),
-                page=page.number,
-                embeddings=[]
-            )
-            for page in tqdm(doc)
-        ]
+        pages: list[Chunk] = []
+        for page in tqdm(doc, desc="Loading PDF pages"):
+            text = page.get_text("text")
+            if text.strip():  # Skip empty pages
+                pages.append(Chunk(content=text, page=page.number + 1, embeddings=[]))
+        return pages

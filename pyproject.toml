@@ -1,22 +1,97 @@
 [project]
 name = "trabia-llm"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.2.0"
+description = "RAG API sobre o Relatório da CPMI do 8 de Janeiro — FastAPI + Ollama + pgvector"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "click>=8.4.1",
-    "langchain-google-genai>=4.2.6",
-    "langchain-text-splitters>=1.1.2",
-    "numpy>=2.4.6",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
     "psycopg[binary,pool]>=3.3.4",
     "pydantic>=2.13.4",
     "pydantic-settings>=2.14.2",
     "pymupdf>=1.27.2.3",
-    "pytest>=9.1.1",
-    "pytest-cov>=7.1.0",
-    "spacy>=3.8.14",
+    "langchain-text-splitters>=1.1.2",
     "tqdm>=4.68.3",
-    "ty>=0.0.52",
-    "yoyo-migrations>=9.0.0",
+    "sqlalchemy[asyncio]>=2.0.51",
+    "asyncpg>=0.31.0",
+    "alembic>=1.18.5",
+    "pgvector>=0.5.0",
+    "python-multipart>=0.0.20",
+    "openai>=1.0.0",
+    "spacy>=3.8.14",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=0.25.0",
+    "pytest-cov>=7.1.0",
+    "httpx>=0.28.0",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+package = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+markers = [
+    "no_db: tests that do not require database cleanup",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-timeout>=2.4.0",
+    "ruff>=0.15.21",
+]
+
+[tool.ruff]
+# ── General ──────────────────────────────────────────────────────
+line-length = 100
+target-version = "py312"
+
+# ── Files to ignore ──────────────────────────────────────────────
+exclude = [
+    ".git",
+    ".venv",
+    ".tox",
+    "__pycache__",
+    "*.pyc",
+    "data/",
+    "docs/",
+    ".dockerignore",
+    "Dockerfile",
+    "Makefile",
+    "*.md",
+]
+
+[tool.ruff.lint]
+select = [
+    "F",   # pyflakes (unused imports, undefined names, etc.)
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "I",   # isort (organização de imports)
+]
+ignore = [
+    "E501", # line-too-long (enforced by ruff formatter instead)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[project.scripts]
+trabia-migrate = "scripts.migrate:main"
+trabia-ingest = "scripts.ingest:main"
