@@ -1,0 +1,128 @@
+@page {
+  size: A4;
+  margin: 18mm 17mm 20mm;
+
+  @bottom-center {
+    content: counter(page);
+    color: #555;
+    font: 9pt Arial, sans-serif;
+  }
+}
+
+html {
+  color: #1f2933;
+  font: 10.5pt/1.48 Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2 {
+  color: #172b4d;
+  font-weight: 700;
+  break-after: avoid-page;
+}
+
+h1 {
+  margin: 0 0 10mm;
+  font-size: 20pt;
+  line-height: 1.2;
+}
+
+h2 {
+  margin: 7mm 0 3mm;
+  padding-bottom: 1.5mm;
+  border-bottom: 0.5pt solid #b8c2cc;
+  font-size: 14pt;
+  line-height: 1.25;
+}
+
+p {
+  margin: 0 0 3.2mm;
+  break-inside: avoid-page;
+  orphans: 3;
+  widows: 3;
+}
+
+p:has(+ pre) {
+  break-after: avoid-page;
+}
+
+ul {
+  margin: 0 0 3.2mm;
+  padding-left: 6mm;
+}
+
+li {
+  margin-bottom: 1.2mm;
+}
+
+table {
+  width: 100%;
+  margin: 3mm 0 5mm;
+  border-collapse: collapse;
+  break-inside: avoid-page;
+  font-size: 9.2pt;
+}
+
+th,
+td {
+  padding: 1.6mm 2mm;
+  border: 0.5pt solid #aeb8c2;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #e8eef3;
+  color: #172b4d;
+  font-weight: 700;
+}
+
+tr:nth-child(even) td {
+  background: #f7f9fb;
+}
+
+code {
+  color: #7a2431;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  margin: 3mm 0 5mm;
+  padding: 3mm;
+  overflow-wrap: anywhere;
+  border: 0.5pt solid #c8d0d8;
+  background: #f4f6f8;
+  break-inside: avoid-page;
+  white-space: pre-wrap;
+}
+
+pre code {
+  color: #263238;
+}
+
+.keep-together {
+  break-inside: avoid-page;
+}
+
+blockquote {
+  margin: 3mm 0 5mm;
+  padding: 1mm 0 1mm 4mm;
+  border-left: 2pt solid #5b7694;
+  color: #3d4b59;
+}
+
+a {
+  color: #164b7a;
+  text-decoration: none;
+}
+
+body > p:first-of-type {
+  margin: -5mm 0 10mm;
+  color: #445566;
+  font-size: 11pt;
+}

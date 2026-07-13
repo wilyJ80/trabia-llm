@@ -109,7 +109,7 @@ def test_parse_extraction_with_null_confidence_defaults_to_baixa():
     assert extraction.confidence == "baixa"
 
 
-def test_extraction_fallbacks_fill_obvious_required_fields():
+def test_extraction_fallbacks_do_not_turn_missing_fields_into_valid_output():
     extraction = RAGService._parse_extraction('{"facts": []}')
     document_text = """Relatório: T3 IA
 Definição do Problema
@@ -120,8 +120,42 @@ A base documental consiste no relatório da CPMI de 8 de janeiro de 2023."""
     extraction = RAGService._apply_extraction_fallbacks(document_text, extraction)
     extraction = RAGService._validate_extraction(extraction)
 
-    assert extraction.validation_status == "valid"
+    assert extraction.validation_status == "invalid"
+    assert set(extraction.missing_required_fields) == {
+        "document_type",
+        "title",
+        "main_event",
+        "facts",
+    }
+    assert set(extraction.inferred_fields) == {
+        "document_type",
+        "title",
+        "main_event",
+        "facts",
+    }
     assert extraction.document_type == "relatorio"
     assert extraction.title == "Relatório: T3 IA"
     assert extraction.main_event.startswith("O problema consiste")
     assert extraction.facts
+
+
+def test_long_document_excerpt_samples_start_middle_and_end():
+    blocks = [f"[pagina {index}]\nConteudo marcador pagina {index}. " * 80 for index in range(1, 61)]
+
+    excerpt = RAGService._select_document_excerpt("\n\n".join(blocks))
+
+    assert len(excerpt) <= 24000
+    assert "marcador pagina 1" in excerpt
+    assert "marcador pagina 60" in excerpt
+    assert any(f"marcador pagina {index}" in excerpt for index in range(25, 36))
+
+
+def test_retrieval_query_samples_long_document():
+    document = "A" * 4000 + "B" * 4000 + "C" * 4000
+
+    query = RAGService._build_retrieval_query(document)
+
+    assert len(query) == 3002
+    assert "A" * 100 in query
+    assert "B" * 100 in query
+    assert "C" * 100 in query

@@ -34,3 +34,4 @@ def test_static_assets_are_served():
     assert "chunks-openai-count" in js_response.text
     assert "chunks-spacy-count" in js_response.text
     assert "chunks_by_embedder" in js_response.text
+    assert "reset_collection" in js_response.text

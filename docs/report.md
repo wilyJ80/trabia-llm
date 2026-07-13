@@ -17,18 +17,29 @@ a extração estruturada por uma resposta livre.
 
 ## Base Documental
 
-O grupo escolheu como base documental o relatório da CPMI dos atos de 8 de
-janeiro de 2023. O documento possui mais de mil páginas, linguagem institucional,
-registros de depoimentos, menções a órgãos públicos, pessoas, datas e fatos
-distribuídos ao longo de várias seções. Esse volume atende ao requisito da
-disciplina de trabalhar com uma base externa de conhecimento que justifique
-ingestão, vetorização e recuperação semântica.
+O trabalho usa dois conjuntos documentais com funções distintas. A **base
+documental do RAG** é o relatório da CPMI dos atos de 8 de janeiro de 2023. O
+**benchmark de avaliação** contém 30 textos curtos anotados. A tabela resume essa
+separação.
 
-O domínio escolhido favorece dois tipos de teste. No fluxo de consulta RAG, o
-sistema precisa localizar trechos específicos e citar páginas. No fluxo de
-extração estruturada, o sistema precisa identificar tipo de documento, título,
-evento principal, datas, atores, organizações, fatos, evidências, categorias,
-fontes e nível de confiança.
+| Conjunto | Conteúdo | Função | Ingerido no pgvector? |
+| --- | --- | --- | --- |
+| Base vetorial do RAG | PDF da CPMI, com 1.333 páginas | Fornecer chunks externos quando `top_k > 0` | Sim, 1.533 chunks |
+| Benchmark anotado | 30 textos de domínios administrativos variados | Servir como entrada da extração e referência para calcular as métricas | Não |
+
+O PDF da CPMI possui linguagem institucional, registros de depoimentos e menções
+a órgãos públicos, pessoas, datas e fatos distribuídos por várias seções. O
+volume atende ao requisito de usar uma base externa de conhecimento que justifique
+ingestão, vetorização e recuperação semântica. No fluxo de consulta RAG, o sistema
+localiza trechos desse relatório e cita as páginas de origem.
+
+Os 30 textos anotados não são páginas nem recortes do relatório da CPMI. O script
+envia cada texto diretamente para `POST /api/extract`, sem armazená-lo no
+pgvector. Cada caso informa os valores esperados nos campos estruturados e o
+status de validação esperado. O protocolo usa esses casos para medir a extração,
+enquanto a CPMI fornece o contexto externo recuperado. Como os dois conjuntos
+tratam de domínios diferentes, a comparação também mede o efeito de contexto fora
+do domínio.
 
 ## Pipeline de Ingestão
 
@@ -37,6 +48,12 @@ seleciona o embedder. A aplicação grava o arquivo em diretório temporário, e
 texto página por página com `PyMuPDF`, segmenta o conteúdo com
 `RecursiveCharacterTextSplitter`, gera embeddings para os chunks e salva o
 resultado no PostgreSQL com pgvector.
+
+A numeração registrada começa em 1, como nas páginas exibidas ao usuário. A
+ingestão calcula embeddings e grava os chunks em lotes. A opção
+`reset_collection` remove os vetores do embedder selecionado antes da nova
+ingestão; o protocolo experimental usa essa opção para impedir duplicatas e
+garantir que as versões consultem o mesmo corpus.
 
 A configuração padrão usa chunks de 2000 caracteres e overlap de 200 caracteres.
 O grupo escolheu esse tamanho após inspeção manual do documento da CPMI. Trechos
@@ -87,9 +104,14 @@ normalização, classificação e checagem.
 
 O fluxo principal do projeto 2 está em `POST /api/extract`. A rota aceita PDF,
 texto bruto ou ambos. Quando recebe PDF, a aplicação extrai o texto com
-`PDFLoader`. Em seguida, o serviço limita o texto enviado ao modelo, recupera
-contexto externo quando solicitado e monta um prompt que exige JSON válido.
+`PDFLoader`. Para PDFs longos, o serviço seleciona até 24 blocos distribuídos
+entre o início, o meio e o fim, respeitando o limite de 24.000 caracteres. A
+consulta vetorial combina trechos do início, do meio e do fim em até 3.000
+caracteres. Essa amostragem reduz o viés anterior, que considerava somente o
+começo do documento, mas ainda não equivale a uma leitura exaustiva de todas as
+páginas.
 
+::: keep-together
 O objeto de saída usa o seguinte formato:
 
 ```json
@@ -109,6 +131,7 @@ O objeto de saída usa o seguinte formato:
   "confidence": "baixa"
 }
 ```
+:::
 
 A aplicação valida a resposta em camadas. Primeiro, tenta interpretar a resposta
 com `json.loads`. Se o modelo devolver texto fora do JSON, o serviço procura o
@@ -118,9 +141,10 @@ português, converte listas, ajusta fontes e valida o resultado com Pydantic.
 
 Os campos obrigatórios são `document_type`, `title`, `main_event` e `facts`. A
 aplicação registra campos ausentes em `missing_required_fields` e classifica a
-saída como `valid`, `partial` ou `invalid`. O serviço ainda aplica regras
-determinísticas para preencher campos óbvios, como usar a primeira linha do
-documento como título ou reconhecer "relatório" nas primeiras linhas.
+saída como `valid`, `partial` ou `invalid`. O serviço valida a resposta do LLM
+antes de aplicar regras determinísticas. As regras ainda podem preencher campos
+óbvios para exibição, mas registram cada preenchimento em `inferred_fields`.
+Campos inferidos não transformam uma saída incompleta em `valid`.
 
 ## Interface Web
 
@@ -148,6 +172,8 @@ serviço compatível.
 Para embeddings, a configuração padrão usa `nomic-embed-text:latest` no Ollama,
 com vetores de 768 dimensões. O projeto também possui um embedder com
 `pt_core_news_lg` do spaCy, com vetores de 300 dimensões, usado para comparação.
+O adaptador baixa o modelo spaCy no primeiro uso e mantém uma única instância em
+memória por processo da API.
 
 As principais bibliotecas são FastAPI, SQLAlchemy assíncrono, asyncpg, pgvector,
 PyMuPDF, langchain-text-splitters, OpenAI SDK, Pydantic, Alembic e pytest. O
@@ -156,116 +182,153 @@ PostgreSQL e Ollama.
 
 ## Protocolo Experimental
 
-O grupo montou um conjunto com 30 casos de teste em `test_cases.json`. Os casos
-incluem perguntas fáceis, médias, ambíguas, perguntas cuja resposta não aparece
-na base e prompts que testam limites da aplicação. Os scripts `run_evaluation.py`
-e `run_evaluation_k15.py` executam os testes com valores diferentes de `top_k`.
+O experimento responde à seguinte pergunta: adicionar cinco chunks recuperados
+da CPMI altera a qualidade da extração estruturada dos 30 textos anotados? Ele
+avalia a saída do extrator, não a correção factual do relatório da CPMI nem a
+qualidade de respostas do endpoint de perguntas.
 
-A comparação principal avaliou o comportamento do RAG com `top_k=5` e `top_k=15`.
-O critério de pontuação atribuiu 1 para respostas consideradas corretas e 0 para
-respostas incorretas ou insuficientes.
+O benchmark em `extraction_test_cases.json` contém 6 casos fáceis, 7 médios, 6
+ambíguos, 6 com informação insuficiente e 5 que testam limites. Cada caso registra
+o texto de entrada, a categoria, os valores esperados por campo e o status de
+validação esperado. O script `run_extraction_evaluation.py` executa o protocolo
+em quatro etapas:
+
+1. limpa a coleção spaCy e ingere o PDF da CPMI com `chunk_size=2000` e overlap de 200 caracteres;
+2. envia cada um dos 30 textos para `POST /api/extract` com `top_k=0`, de modo que o LLM receba apenas o texto avaliado;
+3. envia os mesmos 30 textos com `top_k=5`, de modo que o LLM receba o texto avaliado e cinco chunks recuperados da CPMI;
+4. compara os campos e o status de cada resposta com as anotações do respectivo caso.
+
+Cada texto gera duas respostas independentes, uma por configuração. O total é de
+60 execuções: 30 sem recuperação e 30 com recuperação. As duas configurações usam
+o mesmo `phi4-mini:latest`, embedder spaCy, prompt, temperatura 0,1 e base vetorial
+com 1.533 chunks. O uso do contexto recuperado é a única variável da comparação.
+
+O avaliador calcula as métricas sobre cada resposta:
+
+- **JSON/schema válido:** a resposta segue os tipos e a estrutura esperados; essa métrica não verifica se o conteúdo está correto;
+- **campos obrigatórios completos:** `document_type`, `title`, `main_event` e `facts` estão preenchidos e não dependem de valores inferidos por fallback;
+- **status correto:** `valid`, `partial` ou `invalid` corresponde ao status anotado; nos casos esperados como `partial`, uma resposta `invalid` também indica que o sistema não aceitou informação insuficiente como válida;
+- **falso `valid`:** um dos seis casos insuficientes recebeu incorretamente o status `valid`;
+- **cobertura anotada:** proporção dos 206 valores esperados que aparecem nos campos retornados, após normalização de caixa, acentos e pontuação;
+- **latência e chunks usados:** tempo da requisição e quantidade de trechos recuperados da CPMI.
+
+A cobertura mede recall sobre os valores anotados. Ela não calcula precisão e,
+portanto, não penaliza todos os valores adicionais ou incorretos produzidos pelo
+modelo. O grupo precisa complementar essa métrica com inspeção humana das saídas.
+O JSON completo de cada execução fica em
+`docs/extraction_performance_results.json`.
 
 ## Resultados
 
-### Desempenho com top_k = 5
+Os resultados medem a extração estruturada dos 30 textos do benchmark. A coluna
+`top_k=0` mostra o desempenho quando o modelo recebeu apenas cada texto avaliado.
+A coluna `top_k=5` mostra o desempenho nos mesmos textos quando o modelo também
+recebeu cinco chunks da CPMI. Os números não representam perguntas respondidas
+sobre a CPMI.
 
-| Categoria | Acertos | Total |
+As 60 execuções terminaram sem erro de transporte ou da API. A tabela apresenta
+as contagens e os percentuais agregados de cada configuração.
+
+| Métrica | `top_k=0` | `top_k=5` |
 | --- | ---: | ---: |
-| Casos fáceis | 3 | 6 |
-| Casos médios | 4 | 7 |
-| Casos ambíguos | 3 | 6 |
-| Base de conhecimento insuficiente | 5 | 6 |
-| Limites da aplicação | 5 | 5 |
-| **Total** | **20** | **30** |
+| Execuções concluídas | 30 | 30 |
+| JSON/schema válidos | 30/30 (100,0%) | 30/30 (100,0%) |
+| Campos obrigatórios completos | 18/30 (60,0%) | 14/30 (46,7%) |
+| Status de validação correto | 24/30 (80,0%) | 20/30 (66,7%) |
+| Falsos `valid` em casos insuficientes | 0/6 (0,0%) | 0/6 (0,0%) |
+| Valores anotados recuperados | 148/206 (71,8%) | 112/206 (54,4%) |
+| Latência média | 18,86 s | 68,78 s |
+| Chunks de contexto médios | 0,0 | 5,0 |
 
-### Desempenho com top_k = 15
+O resultado de 100% em JSON/schema significa que as 60 respostas puderam ser
+interpretadas e validadas pela aplicação. Ele não significa que todos os campos
+estavam completos ou corretos. Sem RAG, 18 das 30 respostas preencheram os quatro
+campos obrigatórios sem depender de fallback; com cinco chunks da CPMI, esse total
+caiu para 14. O status coincidiu com o esperado em 24 casos sem RAG e em 20 casos
+com RAG. Nenhuma configuração classificou como `valid` os seis textos que tinham
+informação insuficiente.
 
-| Categoria | Acertos | Total |
-| --- | ---: | ---: |
-| Casos fáceis | 3 | 6 |
-| Casos médios | 6 | 7 |
-| Casos ambíguos | 2 | 6 |
-| Base de conhecimento insuficiente | 6 | 6 |
-| Limites da aplicação | 5 | 5 |
-| **Total** | **23** | **30** |
+As anotações contêm 206 valores esperados distribuídos pelos campos dos 30 casos.
+A configuração sem RAG recuperou 148 desses valores; a configuração com RAG
+recuperou 112. A diferença de 36 valores corresponde à queda de 17,4 pontos
+percentuais na cobertura. A latência média subiu de 18,86 para 68,78 segundos,
+aproximadamente 3,6 vezes.
 
-O aumento de `top_k` melhorou o resultado total, de 20 para 23 acertos. A melhora
-apareceu nos casos médios e nas perguntas com base insuficiente. Nos casos
-ambíguos, o desempenho caiu, indicando que mais contexto também pode introduzir
-trechos concorrentes e dificultar a resposta.
+| Categoria | Cobertura `k=0` | Cobertura `k=5` | Status `k=0` | Status `k=5` |
+| --- | ---: | ---: | ---: | ---: |
+| Fácil | 80,4% | 64,7% | 50,0% | 50,0% |
+| Médio | 73,4% | 51,6% | 85,7% | 57,1% |
+| Ambíguo | 68,0% | 54,0% | 66,7% | 66,7% |
+| Base insuficiente | 100,0% | 100,0% | 100,0% | 100,0% |
+| Limite | 62,5% | 45,0% | 100,0% | 60,0% |
 
-### Avaliação qualitativa da extração
+Na categoria de informação insuficiente, a cobertura de 100% corresponde a apenas
+um valor anotado, recuperado nas duas configurações. A métrica relevante para
+esses seis casos é a ausência de falsos `valid`, não a cobertura.
 
-O grupo também comparou a saída estruturada da interface com o PDF da CPMI, usando
-`top_k=5` e alternando entre os embedders `openai` e `spacy`. Nos dois casos, a
-aplicação retornou `validation_status=valid`, usou 5 chunks de contexto e
-identificou o tipo do documento, o título e o evento principal.
-
-O status da interface mostrou 1995 chunks na base do embedder `openai` e 1519
-chunks na base do embedder `spacy`. Como o projeto usa tabelas separadas para
-cada embedder, esses valores descrevem o estado das bases vetoriais no momento do
-teste. Eles não medem qualidade do embedding. Para comparar os embedders com maior
-controle, as duas tabelas precisam receber o mesmo corpus, com o mesmo
-`chunk_size`, o mesmo overlap e o mesmo processo de ingestão.
-
-Com o embedder `openai`, a interface indicou confiança baixa. A extração
-identificou atores como Olival Marques e André Fernandes, mas deixou datas,
-organizações, categorias e fontes sem identificação. O campo de fatos também
-mostrou um problema de normalização: parte das entradas apareceu como strings com
-estrutura de objeto, por exemplo contendo `fact` e `source` dentro do texto.
-
-Com o embedder `spacy`, a interface indicou confiança média. A extração preencheu
-mais campos, incluindo organizações, categorias, evidências e fontes. Ao mesmo
-tempo, a saída trouxe ruído: `Combat Armor` apareceu como ator, e alguns fatos
-vieram de trechos do sumário ou de títulos internos do documento, não de fatos
-substantivos.
-
-Essa amostra mostra que a troca de embedder altera o contexto recuperado e afeta a
-completude dos campos extraídos. Ela também mostra que o status `valid` mede a
-presença e o formato dos campos obrigatórios, enquanto a qualidade semântica dos
-valores exige análise humana ou métricas específicas por campo.
+Os resultados sustentam uma conclusão restrita ao protocolo executado: adicionar
+contexto da CPMI a textos de outros domínios introduziu ruído, reduziu a cobertura
+e aumentou o tempo de resposta. O experimento não demonstra que RAG prejudica a
+extração em geral. Para avaliar o benefício do RAG, o grupo ainda precisa repetir
+o protocolo com uma base externa do mesmo domínio dos textos avaliados ou com um
+limiar que rejeite chunks pouco similares. O relatório gerado automaticamente em
+`docs/extraction_performance_report.md` e o JSON completo permitem auditar cada
+caso.
 
 ## Testes e Reprodutibilidade
 
 O repositório inclui testes com pytest. Os testes unitários cobrem chunking,
-extração, validação, repositório e rotas HTTP. O arquivo `tests/test_static_ui.py`
-verifica se a interface web é servida em `/` e se os arquivos estáticos
-referenciam as rotas usadas no fluxo principal.
+extração, validação, métricas do experimento e interface estática. Os testes de
+repositório e das rotas HTTP são testes de integração e requerem PostgreSQL,
+Ollama e a API em execução.
 
 O grupo executou verificações direcionadas durante o desenvolvimento:
 
 ```bash
-uv run pytest tests/test_static_ui.py -q
-uv run ruff check `
-  src\api\main.py `
-  src\settings.py `
-  tests\conftest.py `
-  tests\test_static_ui.py
+uv run pytest tests/test_extract.py tests/test_extraction_evaluation.py \
+  tests/test_repository.py tests/test_static_ui.py -q
+uv run ruff check src tests run_extraction_evaluation.py
 python -m compileall src tests
 ```
 
-O grupo também validou manualmente o ciclo principal com um PDF de teste: a
-ingestão gravou chunks no banco e a extração seguinte retornou
-`context_chunks_used: 5`.
+::: keep-together
+O protocolo completo pode ser repetido com:
+
+```bash
+uv run python run_extraction_evaluation.py \
+  --prepare-corpus --embedder spacy --top-k 0,5
+```
+:::
+
+Esse comando recria a coleção, executa 60 extrações e gera os relatórios Markdown
+e JSON usados nesta seção.
 
 ## Análise Crítica
 
-O experimento mostra que a recuperação vetorial ajuda, mas o valor de `top_k`
-precisa combinar com o tipo de pergunta. Perguntas factuais se beneficiam de
-trechos adicionais quando a informação aparece dispersa. Perguntas ambíguas
-sofrem quando o sistema recupera passagens relacionadas, mas sem foco suficiente.
+O contexto RAG só ajuda a extração quando a base externa trata do mesmo domínio do
+documento recebido. Neste protocolo, os documentos curtos cobrem domínios
+administrativos variados, enquanto a base vetorial contém o relatório da CPMI.
+Essa escolha testa também o risco de contexto irrelevante. Uma implantação real
+deve separar coleções por domínio ou aplicar um limiar de similaridade antes de
+incluir chunks no prompt.
 
-A qualidade dos embeddings também limita o resultado. O embedder local do spaCy
-usa vetores estáticos e captura menos contexto semântico do que modelos baseados
-em Transformers. O embedder OpenAI-compatível com `nomic-embed-text` melhora a
-integração com o fluxo local em Docker, mas ainda depende da qualidade do chunking
-e da formulação da consulta.
+O embedder spaCy usa vetores estáticos e captura menos contexto semântico do que
+modelos baseados em Transformers. Ele foi mantido fixo nas duas versões porque o
+objetivo do experimento é isolar o efeito da recuperação, não comparar modelos de
+embedding. Uma comparação entre embedders exigiria repetir a ingestão do mesmo
+corpus e todas as 60 execuções sob as mesmas condições.
 
 Na extração estruturada, a principal dificuldade está na disciplina do LLM em
-retornar JSON válido e completo. A validação com Pydantic, o reparo automático e
-os fallbacks reduzem falhas operacionais. Mesmo assim, campos como `facts`,
-`evidence` e `sources` exigem revisão em documentos longos, porque o modelo pode
-selecionar fatos gerais e deixar de fora evidências mais específicas.
+retornar JSON válido e completo. A validação com Pydantic e o reparo automático
+reduzem falhas operacionais. Os fallbacks melhoram a apresentação, mas agora
+preservam a ausência original em `missing_required_fields` e registram a origem em
+`inferred_fields`. Essa distinção evita usar uma heurística como evidência de que
+o LLM extraiu corretamente o campo.
+
+A cobertura automática também tem limites. Ela confirma que os valores anotados
+aparecem na saída, mas não penaliza todas as entidades ou fatos adicionais. A
+equipe precisa revisar uma amostra das saídas completas antes da apresentação,
+sobretudo nos casos ambíguos, de prompt injection e de base insuficiente.
 
 A interface web melhorou a demonstração do projeto. O fluxo com um único upload
 evita que o usuário ingira um PDF e depois precise enviá-lo de novo em outra área
@@ -279,7 +342,8 @@ A equipe usou IA generativa como apoio em etapas pontuais. Agentes de IA ajudara
 na criação de casos de teste, no apoio aos scripts de comparação de `top_k`, na
 geração do diagrama de arquitetura em DOT e na revisão de partes da documentação.
 O grupo revisou o código gerado, executou testes e ajustou o comportamento da
-aplicação.
+aplicação. As anotações dos 30 casos ficam legíveis no JSON para que os integrantes
+confirmem cada valor esperado e defendam os critérios durante a apresentação.
 
 Na etapa da interface, a discussão começou com a seguinte pergunta feita ao
 assistente:
@@ -299,14 +363,19 @@ extração estruturada e validação. A arquitetura em portas e adaptadores faci
 a troca de embedders e provedores de LLM, enquanto a interface web concentra o
 fluxo de demonstração em uma experiência mais direta.
 
-Os experimentos indicam que o aumento de `top_k` melhora parte das respostas, mas
-também pode prejudicar perguntas ambíguas. Uma etapa futura do projeto deve
-avaliar a extração estruturada campo a campo, com métricas de completude,
-precisão das fontes e comparação entre embedders.
+O protocolo de 30 casos avalia diretamente a extração estruturada e compara a
+mesma solução com e sem recuperação vetorial. As anotações, o avaliador e as
+saídas completas permanecem no repositório, permitindo repetir os números e
+inspecionar falhas por campo. Neste experimento, o contexto fora do domínio
+reduziu cobertura, completude e acerto do status e aumentou a latência. A próxima
+etapa deve acrescentar uma métrica de precisão para valores não anotados e testar
+coleções externas do mesmo domínio de cada documento.
 
 ## Referências
 
 - Especificação do trabalho: `docs/T3_Especificacao_LLMs_RAG_Validacao.pdf`
+- Casos anotados: `extraction_test_cases.json`
+- Resultados completos: `docs/extraction_performance_results.json`
 - Documentação do pgvector: https://github.com/pgvector/pgvector
 - Modelos spaCy em português: https://spacy.io/models/pt
 - Ollama: https://ollama.com/

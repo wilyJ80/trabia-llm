@@ -20,5 +20,5 @@ class PDFLoader:
         for page in tqdm(doc, desc="Loading PDF pages"):
             text = page.get_text("text")
             if text.strip():  # Skip empty pages
-                pages.append(Chunk(content=text, page=page.number, embeddings=[]))
+                pages.append(Chunk(content=text, page=page.number + 1, embeddings=[]))
         return pages

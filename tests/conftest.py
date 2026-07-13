@@ -42,10 +42,16 @@ async def cleanup(request) -> AsyncGenerator[None, None]:
         yield
         return
 
-    repo: PgVectorRepository = request.getfixturevalue("repo")
-    await repo.delete_all()
-    yield
-    await repo.delete_all()
+    settings = Settings()  # type: ignore[call-arg]
+    async_dsn = settings.DAO_URL().replace("postgresql://", "postgresql+asyncpg://")
+    engine, factory = create_engine_and_session(async_dsn)
+    repo = PgVectorRepository(factory)
+    try:
+        await repo.delete_all()
+        yield
+    finally:
+        await repo.delete_all()
+        await engine.dispose()
 
 
 @pytest_asyncio.fixture

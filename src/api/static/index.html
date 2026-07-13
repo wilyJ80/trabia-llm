@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Trabia LLM | RAG</title>
-    <link rel="stylesheet" href="/static/styles.css?v=20260712-5" />
-    <script src="/static/app.js?v=20260712-5" defer></script>
+    <link rel="stylesheet" href="/static/styles.css?v=20260713-1" />
+    <script src="/static/app.js?v=20260713-1" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Ir para conteudo principal</a>
@@ -145,6 +145,11 @@
                       <span class="label-text">Chunk overlap</span>
                       <input name="chunk_overlap" type="number" min="0" max="1000" value="200" title="Sobreposicao de caracteres entre trechos consecutivos. Ajuda a nao perder contexto no limite entre chunks." />
                       <span class="field-hint">Sobreposicao entre trechos (0-1000)</span>
+                    </label>
+                    <label class="reset-collection-control">
+                      <input name="reset_collection" type="checkbox" checked />
+                      <span class="label-text">Substituir base</span>
+                      <span class="field-hint">Limpa a colecao do embedder antes da ingestao</span>
                     </label>
                   </div>
                 </details>

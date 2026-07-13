@@ -13,7 +13,8 @@ from core.port.repository_port import RepositoryPort
 from core.prompt import build_extraction_prompt, build_extraction_repair_prompt, build_rag_prompt
 
 REQUIRED_EXTRACTION_FIELDS = ("document_type", "title", "main_event", "facts")
-MAX_EXTRACTION_CHARS = 12000
+MAX_EXTRACTION_CHARS = 24000
+MAX_RETRIEVAL_QUERY_CHARS = 3000
 
 
 class RAGService:
@@ -56,8 +57,8 @@ class RAGService:
 
     async def extract(self, document_text: str, top_k: int = 5) -> tuple[ExtractedDocument, int]:
         """Extract structured fields from a document, with optional RAG support."""
-        trimmed_text = document_text.strip()[:MAX_EXTRACTION_CHARS]
-        if not trimmed_text:
+        document_text = document_text.strip()
+        if not document_text:
             extraction = ExtractedDocument(
                 missing_required_fields=list(REQUIRED_EXTRACTION_FIELDS),
                 validation_status="invalid",
@@ -68,11 +69,13 @@ class RAGService:
 
         results = []
         if top_k > 0:
-            query_vector = await self._embedder.embed_query(trimmed_text[:3000])
+            retrieval_query = self._build_retrieval_query(document_text)
+            query_vector = await self._embedder.embed_query(retrieval_query)
             results = await self._repository.search_similar(query_vector, top_k)
 
+        document_excerpt = self._select_document_excerpt(document_text)
         snippets = [f"--- Trecho da pagina {r.page} ---\n{r.snippet}" for r in results]
-        prompt = build_extraction_prompt(trimmed_text, snippets)
+        prompt = build_extraction_prompt(document_excerpt, snippets)
         raw_response = await self._llm.ask_text(prompt, max_tokens=4096, json_mode=True)
 
         extraction = self._parse_extraction(raw_response)
@@ -85,8 +88,8 @@ class RAGService:
             )
             extraction = self._parse_extraction(repaired_response)
 
-        extraction = self._apply_extraction_fallbacks(trimmed_text, extraction)
         extraction = self._validate_extraction(extraction)
+        extraction = self._apply_extraction_fallbacks(document_excerpt, extraction)
         return extraction, len(results)
 
     async def embed_and_store(self, chunks: list[Chunk]) -> None:
@@ -106,14 +109,67 @@ class RAGService:
             # Batch embed all texts in one call
             embeddings = await self._embedder.embed_texts(texts)
 
-            # Store each chunk immediately
+            embedded_chunks: list[Chunk] = []
             for chunk, emb in zip(batch, embeddings):
-                chunk.embeddings = emb
-                await self._repository.insert_chunk(chunk)
+                embedded_chunks.append(chunk.model_copy(update={"embeddings": emb}))
+            await self._repository.insert_chunks(embedded_chunks)
 
     async def chunk_count(self) -> int:
         """Return the total number of stored chunks."""
         return await self._repository.count_chunks()
+
+    async def clear_collection(self) -> None:
+        """Remove all chunks from the repository selected for this service."""
+        await self._repository.delete_all()
+
+    @staticmethod
+    def _select_document_excerpt(document_text: str) -> str:
+        """Select page blocks across a long document instead of keeping only its beginning."""
+        if len(document_text) <= MAX_EXTRACTION_CHARS:
+            return document_text
+
+        page_blocks = re.split(r"(?=\[pagina \d+\])", document_text, flags=re.IGNORECASE)
+        page_blocks = [block.strip() for block in page_blocks if block.strip()]
+        if len(page_blocks) < 2:
+            segment_size = MAX_EXTRACTION_CHARS // 3
+            middle_start = max((len(document_text) - segment_size) // 2, segment_size)
+            return "\n\n[trecho intermediario]\n".join(
+                (
+                    document_text[:segment_size],
+                    document_text[middle_start : middle_start + segment_size],
+                    document_text[-segment_size:],
+                )
+            )
+
+        selected: list[str] = []
+        selected_indexes: set[int] = set()
+        target_blocks = min(24, len(page_blocks))
+        separator_chars = 2 * (target_blocks - 1)
+        chars_per_block = (MAX_EXTRACTION_CHARS - separator_chars) // target_blocks
+        for position in range(target_blocks):
+            index = round(position * (len(page_blocks) - 1) / max(target_blocks - 1, 1))
+            if index in selected_indexes:
+                continue
+            selected.append(page_blocks[index][:chars_per_block])
+            selected_indexes.add(index)
+
+        return "\n\n".join(selected)
+
+    @staticmethod
+    def _build_retrieval_query(document_text: str) -> str:
+        """Build a bounded query with content from the start, middle and end."""
+        if len(document_text) <= MAX_RETRIEVAL_QUERY_CHARS:
+            return document_text
+
+        segment_size = MAX_RETRIEVAL_QUERY_CHARS // 3
+        middle_start = (len(document_text) - segment_size) // 2
+        return "\n".join(
+            (
+                document_text[:segment_size],
+                document_text[middle_start : middle_start + segment_size],
+                document_text[-segment_size:],
+            )
+        )
 
     @staticmethod
     def _parse_extraction(raw_response: str) -> ExtractedDocument:
@@ -319,6 +375,9 @@ class RAGService:
             fact_candidates = RAGService._sentence_candidates(full_text)
             updates["facts"] = fact_candidates[:3]
 
+        updates["inferred_fields"] = list(
+            dict.fromkeys([*extraction.inferred_fields, *updates.keys()])
+        )
         return extraction.model_copy(update=updates)
 
     @staticmethod
@@ -339,7 +398,7 @@ class RAGService:
         missing: list[str] = []
         for field in REQUIRED_EXTRACTION_FIELDS:
             value = getattr(extraction, field)
-            if value is None or value == "" or value == []:
+            if field in extraction.inferred_fields or value is None or value == "" or value == []:
                 missing.append(field)
 
         errors = list(extraction.validation_errors)

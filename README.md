@@ -185,6 +185,7 @@ Faz upload de um PDF, extrai texto, chunkifica, gera embeddings e armazena no ba
 | `file` | `File` | obrigatório | Arquivo PDF |
 | `chunk_size` | `int` | `2000` | Tamanho de cada chunk (500–8000) |
 | `chunk_overlap` | `int` | `200` | Sobreposição entre chunks (0–1000) |
+| `reset_collection` | `bool` | `false` | Limpa a coleção do embedder antes da ingestão |
 | `embedder` | `string` | `"openai"` | `"openai"` (768d) ou `"spacy"` (300d) |
 
 ```bash
@@ -192,6 +193,7 @@ curl -X POST http://localhost:8000/api/ingest \
   -F "file=@relatorio.pdf" \
   -F "chunk_size=1000" \
   -F "chunk_overlap=200" \
+  -F "reset_collection=true" \
   -F "embedder=openai"
 ```
 
@@ -204,6 +206,7 @@ Resposta:
     "filename": "relatorio.pdf",
     "chunk_size": 1000,
     "chunk_overlap": 200,
+    "reset_collection": true,
     "embedder": "openai"
   }
 }
@@ -341,6 +344,20 @@ curl http://localhost:8000/api/health?embedder=openai
 ## 🧪 Experimentos Comparativos
 
 A arquitetura foi projetada para permitir experimentos controlados comparando diferentes configurações.
+
+### Avaliação principal do projeto 2
+
+O conjunto `extraction_test_cases.json` contém 30 documentos anotados. O comando abaixo
+recria a coleção spaCy e compara a extração sem RAG (`top_k=0`) com a extração apoiada
+por cinco chunks (`top_k=5`):
+
+```bash
+uv run python run_extraction_evaluation.py \
+  --prepare-corpus --embedder spacy --top-k 0,5
+```
+
+O script gera `docs/extraction_performance_report.md` e
+`docs/extraction_performance_results.json`.
 
 ### Exemplo: Comparar chunk_size com o mesmo embedder
 

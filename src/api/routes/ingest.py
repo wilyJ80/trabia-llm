@@ -13,10 +13,12 @@ from api.dependencies import (
     get_session_factory,
 )
 from api.schemas.ingest import HealthResponse, IngestResponse
+from infra.llm_openai import OpenAILLM
 from infra.models import ChunkModel, ChunkSpacyModel
 from infra.repository import PgVectorRepository
 from ingest.chunker import TextChunker
 from ingest.loader import PDFLoader
+from settings import Settings
 
 router = APIRouter(prefix="/api", tags=["ingest"])
 
@@ -26,6 +28,10 @@ async def ingest(
     file: UploadFile = File(..., description="Arquivo PDF para ingestão"),
     chunk_size: int = Form(default=2000, ge=500, le=8000, description="Tamanho de cada chunk"),
     chunk_overlap: int = Form(default=200, ge=0, le=1000, description="Sobreposição entre chunks"),
+    reset_collection: bool = Form(
+        default=False,
+        description="Remove os chunks atuais do embedder antes da ingestao",
+    ),
     embedder: Literal["openai", "spacy"] = Form(
         default=EMBEDDER_OPENAI,
         description="Tipo de embedding: 'openai' (768d) ou 'spacy' (300d)",
@@ -69,6 +75,8 @@ async def ingest(
 
         # Build a service with the requested embedder
         service = build_service(session_factory, embedder_type=embedder)
+        if reset_collection:
+            await service.clear_collection()
         await service.embed_and_store(chunks)
 
         return IngestResponse(
@@ -78,6 +86,7 @@ async def ingest(
                 "filename": file.filename,
                 "chunk_size": chunk_size,
                 "chunk_overlap": chunk_overlap,
+                "reset_collection": reset_collection,
                 "embedder": embedder,
             },
         )
@@ -104,10 +113,17 @@ async def health(
             EMBEDDER_OPENAI: await openai_repository.count_chunks(),
             EMBEDDER_SPACY: await spacy_repository.count_chunks(),
         }
+        settings = Settings()  # type: ignore[call-arg]
+        llm = OpenAILLM(
+            model=settings.LLM_MODEL,
+            base_url=settings.LLM_BASE_URL,
+            api_key=settings.LLM_API_KEY,
+        )
+        llm_connected = await llm.is_reachable()
         return HealthResponse(
             status="ok",
             chunks_count=chunks_by_embedder[embedder],
-            llm_connected=True,
+            llm_connected=llm_connected,
             embedder_used=embedder,
             chunks_by_embedder=chunks_by_embedder,
         )

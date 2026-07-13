@@ -6,11 +6,11 @@ x-dev-variables: &dev
     PG_HOST: postgres
     PG_PORT: 5432
     # LLM (OpenAI-compatível) — defaults apontam pro Ollama local
-    LLM_BASE_URL: ${LLM_BASE_URL:-http://ollama:11434/v1}
+    LLM_BASE_URL: http://ollama:11434/v1
     LLM_API_KEY: ${LLM_API_KEY:-ollama}
     LLM_MODEL: ${LLM_MODEL:-phi4-mini:latest}
     # Embeddings (OpenAI-compatível)
-    EMBED_BASE_URL: ${EMBED_BASE_URL:-http://ollama:11434/v1}
+    EMBED_BASE_URL: http://ollama:11434/v1
     EMBED_API_KEY: ${EMBED_API_KEY:-ollama}
     EMBED_MODEL: ${EMBED_MODEL:-nomic-embed-text:latest}
     K: ${K:-5}

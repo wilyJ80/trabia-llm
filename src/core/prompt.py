@@ -69,6 +69,11 @@ Campos opcionais:
 Regras:
 - Nao invente informacoes.
 - Se o texto for insuficiente, deixe campos como null ou [] e indique baixa confianca.
+- Quando a primeira linha for um cabecalho explicito, copie esse cabecalho para title.
+- Derive document_type do cabecalho, usando uma categoria curta como relatorio, ata, edital,
+  noticia, memorando, contrato, parecer, oficio, comunicado ou registro.
+- Preencha main_event com a acao ou assunto central descrito no documento.
+- Nao deixe um campo obrigatorio nulo quando o proprio documento trouxer a informacao.
 - Use o contexto recuperado apenas para normalizacao, classificacao, checagem ou apoio. A extracao principal deve vir do documento recebido.
 - Inclua fontes para os fatos principais quando houver paginas ou trechos identificaveis.
 - Use apenas strings simples dentro das listas. Nao use objetos aninhados dentro de dates, actors, organizations, facts, evidence ou categories.

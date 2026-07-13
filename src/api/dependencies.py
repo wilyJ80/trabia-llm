@@ -1,5 +1,7 @@
 """FastAPI dependency providers for dependency injection."""
 
+from functools import lru_cache
+
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
@@ -13,6 +15,12 @@ from settings import Settings
 
 EMBEDDER_OPENAI = "openai"
 EMBEDDER_SPACY = "spacy"
+
+
+@lru_cache(maxsize=1)
+def get_spacy_embedder() -> SpacyEmbedder:
+    """Load the large spaCy model once per API process."""
+    return SpacyEmbedder()
 
 
 def build_service(
@@ -34,7 +42,7 @@ def build_service(
 
     # ── Embedder ──────────────────────────────────────────────────
     if embedder_type == EMBEDDER_SPACY:
-        embedder = SpacyEmbedder()
+        embedder = get_spacy_embedder()
     else:
         embedder = OpenAIEmbedder(
             model=settings.EMBED_MODEL,

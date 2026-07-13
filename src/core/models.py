@@ -82,6 +82,10 @@ class ExtractedDocument(BaseModel):
         default_factory=list,
         description="Campos obrigatorios ausentes ou insuficientes",
     )
+    inferred_fields: list[str] = Field(
+        default_factory=list,
+        description="Campos preenchidos por regras locais, sem confirmacao do LLM",
+    )
     validation_status: Literal["valid", "partial", "invalid"] = Field(
         default="partial",
         description="Resultado da validacao dos campos obrigatorios",

@@ -10,6 +10,7 @@ Works with any provider that exposes an OpenAI-compatible chat completions endpo
 
 import re
 
+import httpx
 from openai import AsyncOpenAI
 
 from core.models import AIAnswer, Source
@@ -30,6 +31,8 @@ class OpenAILLM(LLMPort):
         api_key: str = "ollama",
     ):
         self._model = model
+        self._base_url = base_url.rstrip("/")
+        self._api_key = api_key
         self._client = AsyncOpenAI(base_url=base_url, api_key=api_key)
 
     async def ask(self, prompt: str) -> AIAnswer:
@@ -63,6 +66,19 @@ class OpenAILLM(LLMPort):
             response = await self._client.chat.completions.create(**request)
 
         return response.choices[0].message.content or ""
+
+    async def is_reachable(self) -> bool:
+        """Return whether the configured OpenAI-compatible provider responds."""
+        try:
+            async with httpx.AsyncClient(timeout=5) as client:
+                response = await client.get(
+                    f"{self._base_url}/models",
+                    headers={"Authorization": f"Bearer {self._api_key}"},
+                )
+                response.raise_for_status()
+        except Exception:
+            return False
+        return True
 
     # ------------------------------------------------------------------
     # Response parsing — shared with the old OllamaLLM adapter

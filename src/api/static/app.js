@@ -289,6 +289,12 @@ function renderExtraction(data) {
 
   extractResult.append(summary, fieldGrid, sourceField);
 
+  if (extraction.inferred_fields?.length) {
+    extractResult.append(
+      createField("Campos inferidos por regra", extraction.inferred_fields, "full"),
+    );
+  }
+
   if (extraction.validation_errors?.length) {
     extractResult.append(createField("Problemas de validacao", extraction.validation_errors, "full"));
     extractResult.lastElementChild.classList.add("validation-list");
@@ -492,6 +498,10 @@ extractForm.addEventListener("submit", async (event) => {
       ingestPayload.append("embedder", embedder);
       ingestPayload.append("chunk_size", String(sourceData.get("chunk_size") || 2000));
       ingestPayload.append("chunk_overlap", String(sourceData.get("chunk_overlap") || 200));
+      ingestPayload.append(
+        "reset_collection",
+        sourceData.get("reset_collection") === "on" ? "true" : "false",
+      );
 
       await fetch("/api/ingest", {
         method: "POST",

@@ -5,7 +5,7 @@ with a lightweight static embedding (spaCy) vs a transformer-based embedding
 (OpenAI-compatible), then compare RAG quality.
 
 If the model is not installed, it will be downloaded automatically on first use
-(``spacy download``).  The Docker image pre-downloads it at build time.
+(``spacy download``) and cached by the container while it remains available.
 """
 
 import subprocess

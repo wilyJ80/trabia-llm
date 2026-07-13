@@ -525,6 +525,23 @@ input[type="number"] {
   font-weight: 500;
 }
 
+.advanced-body .reset-collection-control {
+  grid-template-columns: 18px 1fr;
+  align-content: center;
+  align-items: center;
+}
+
+.reset-collection-control input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--primary);
+}
+
+.reset-collection-control .field-hint {
+  grid-column: 2;
+}
+
 /* ============================================
    Control Grid
    ============================================ */

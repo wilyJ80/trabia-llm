@@ -37,15 +37,21 @@ class PgVectorRepository(RepositoryPort):
         self._model = model_class
 
     async def insert_chunk(self, chunk: Chunk) -> int:
+        return await self.insert_chunks([chunk])
+
+    async def insert_chunks(self, chunks: list[Chunk]) -> int:
         async with self._session_factory() as session:
-            model = self._model(
-                snippet=chunk.content,
-                embedding=chunk.embeddings,
-                page=chunk.page or 0,
-            )
-            session.add(model)
+            models = [
+                self._model(
+                    snippet=chunk.content,
+                    embedding=chunk.embeddings,
+                    page=chunk.page or 1,
+                )
+                for chunk in chunks
+            ]
+            session.add_all(models)
             await session.commit()
-            return 1
+            return len(models)
 
     async def search_similar(self, query_embedding: list[float], limit: int) -> list[ChunkResult]:
         async with self._session_factory() as session:

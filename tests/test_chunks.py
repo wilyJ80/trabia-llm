@@ -15,6 +15,7 @@ def test_loader_returns_pages():
     assert len(pages) > 0
     assert all(isinstance(p, Chunk) for p in pages)
     assert all(p.page is not None for p in pages)
+    assert pages[0].page == 1
     assert all(len(p.content) > 0 for p in pages)
     assert len(pages) == 1333
 

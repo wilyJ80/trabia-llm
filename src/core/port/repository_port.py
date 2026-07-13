@@ -14,6 +14,11 @@ class RepositoryPort(ABC):
         ...
 
     @abstractmethod
+    async def insert_chunks(self, chunks: list[Chunk]) -> int:
+        """Store a batch of chunks in one transaction."""
+        ...
+
+    @abstractmethod
     async def search_similar(self, query_embedding: list[float], limit: int) -> list[ChunkResult]:
         """Find the most similar chunks to a query embedding."""
         ...

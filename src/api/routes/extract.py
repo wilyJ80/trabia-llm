@@ -58,7 +58,7 @@ async def extract(
                 tmp_path = tmp.name
 
             pages = PDFLoader().load(tmp_path)
-            pdf_text = "\n\n".join(f"[pagina {page.page or 0}]\n{page.content}" for page in pages)
+            pdf_text = "\n\n".join(f"[pagina {page.page or 1}]\n{page.content}" for page in pages)
             if pdf_text.strip():
                 document_parts.append(pdf_text)
             source_names.append(file.filename)
